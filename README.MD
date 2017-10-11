@@ -47,6 +47,8 @@ http://lpffan.iteye.com/blog/1456546
 https://zhuanlan.zhihu.com/p/22909985
 
 
+参考文档
+http://blog.csdn.net/banketree/article/details/8852046
 	
 
 总结一下以 androidpn 为典型的开源 Android Push 方案会存在的问题：
