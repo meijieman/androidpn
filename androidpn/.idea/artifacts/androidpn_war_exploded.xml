@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="androidpn:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/androidpn_war_exploded</output-path>
+    <root id="archive" name="androidpn_war exploded.war">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="androidpn" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="lib" />
+          <element id="library" level="project" name="lib1" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="androidpn/web/Web" />
+    </root>
+  </artifact>
+</component>
