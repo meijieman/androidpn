@@ -1,4 +1,7 @@
-
+# AndroidPN
+基于Androidpn的推送服务器方案，加入断线重连、心跳包、离线推送、标签推送、富文本推送。用于实现Android推送服务，博客和知乎专栏上有详细源码解释。 
+博客：https://xuyusong.github.io/ 
+知乎专栏：https://zhuanlan.zhihu.com/c_51051095
 
 ## 原项目地址
 https://github.com/xuyusong/AndroidPN
@@ -81,7 +84,8 @@ http://blog.csdn.net/banketree/article/details/8852046
 使用CompressionFilter对数据内容进行压缩。 
 用SSLFilter对传输数据进行加密。 
 
-
+mina框架详解
+http://blog.csdn.net/ljx8928358/article/details/7759024/
 
 
 XMPP协议
