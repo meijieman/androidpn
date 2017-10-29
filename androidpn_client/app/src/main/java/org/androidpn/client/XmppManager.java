@@ -50,7 +50,7 @@ public class XmppManager{
 
     private static final String LOGTAG = LogUtil.makeLogTag(XmppManager.class);
 
-    private static final String XMPP_RESOURCE_NAME = "AndroidpnClient";
+    private static final String XMPP_RESOURCE_NAME = "AndroidpnClient_pgk1";
 
     private Context context;
 

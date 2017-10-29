@@ -22,6 +22,8 @@ import org.apache.commons.configuration.ConfigurationFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.File;
+
 /** 
  * This class is to manage the applicatin configruation.
  *
@@ -70,7 +72,7 @@ public class ConfigManager {
             ConfigurationFactory factory = new ConfigurationFactory(
                     configFileName);
             config = factory.getConfiguration();
-            log.info("Configuration loaded: " + configFileName);
+            log.info("Configuration loaded: " + configFileName + ", " + new File(configFileName).getAbsolutePath());
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
             throw new RuntimeException("Configuration loading error: "

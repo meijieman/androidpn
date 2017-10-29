@@ -32,6 +32,8 @@ https://github.com/dannytiehui/androidpn
 15. 客户端网络连接的策略
 16. 服务端权限管理
 
+17. 客户端给服务端发送消息
+
 
 ## buglist
 1. 当服务端连续发送多条通知时，客户端都是显示同一条通知内容。
@@ -88,7 +90,19 @@ XMPP协议
 Iq是(Info/Query)的缩写, 是三种通讯原语之一，其他两个为message和presence. 
 该原语应用于”请求-应答”机制。 
 
-
+com.kenai.jbosh：XMPP BOSH规范的Java实现
 
 
 MyEclipse 需要使用 jdk7的，使用8的有问题
+
+
+
+
+
+
+idea
+问题：成功运行 tomcat 但没有初始化 spring
+解决：Projcet Structure -> Modules -> Web -> Source Roots 需要勾选 src 和 resources
+
+java.lang.RuntimeException: Configuration loading error: config.xml
+Projcet Structure -> Modules -> Web -> Source Roots 需要勾选 resources
