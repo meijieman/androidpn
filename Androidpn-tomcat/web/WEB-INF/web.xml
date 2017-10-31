@@ -7,9 +7,7 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			/WEB-INF/applicationContext*.xml
-        </param-value>
+		<param-value>classpath:spring-config.xml</param-value>
 	</context-param>
 
 	<filter>
@@ -55,6 +53,7 @@
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
 
+	<!--会话超时-->
 	<session-config>
 		<session-timeout>30</session-timeout>
 	</session-config>
