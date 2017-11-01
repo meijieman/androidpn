@@ -110,3 +110,11 @@ idea
 
 java.lang.RuntimeException: Configuration loading error: config.xml
 Projcet Structure -> Modules -> Web -> Source Roots 需要勾选 resources
+
+
+问题：java.lang.RuntimeException: Configuration loading error: config.xml
+
+解决办法：由于当前项目 resources/ 与 src/ 同一级别，导致生成 artifacts 时没有将 resources/ 编译，需要在 Projcet Structure ->aritfacts -> WEB-INF -> classes -> 点击添加，添加 Directory Contents -> 指向 resources/
+
+resource(s)目录也是classpath，和src目录一样，里面的文件都会放在classes目录下面
+
