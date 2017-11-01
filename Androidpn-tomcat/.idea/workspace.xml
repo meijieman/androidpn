@@ -7,50 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="103317f6-a67d-4b6f-93b7-cf60504049b5" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/artifacts/Androidpn_tomcat_war_exploded.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Androidpn-tomcat.iml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/Androidpn-tomcat.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/aopalliance-1.0.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/commons-logging-1.1.1.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/commons-logging-1.2.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/jstl.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-aop-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-aspects-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-beans-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-context-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-context-support-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-core-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-expression-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-instrument-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-instrument-tomcat-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-jdbc-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-jms-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-messaging-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-orm-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-oxm-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-test-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-tx-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-web-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-webmvc-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-webmvc-portlet-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-websocket-4.3.12.RELEASE.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/spring-ws.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/libspring/standard.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/IQsetAliasHandler/IQAuthHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/IQsetAliasHandler/IQHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/IQsetAliasHandler/IQRegisterHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/IQsetAliasHandler/IQRosterHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/IQsetAliasHandler/IQdeliverConfirmHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/IQsetAliasHandler/PresenceUpdateHandler.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/IQsetAliasHandler/package.html" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../README.MD" afterPath="$PROJECT_DIR$/../README.MD" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -373,6 +330,23 @@
               <item name="Androidpn-tomcat" type="b2602c69:ProjectViewProjectNode" />
               <item name="Androidpn-tomcat" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
             </path>
+            <path>
+              <item name="Androidpn-tomcat" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Androidpn-tomcat" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Androidpn-tomcat" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Androidpn-tomcat" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="META-INF" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Androidpn-tomcat" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Androidpn-tomcat" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="org" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -534,12 +508,20 @@
       <workItem from="1509467145469" duration="838000" />
       <workItem from="1509468011104" duration="2430000" />
       <workItem from="1509471064828" duration="589000" />
-      <workItem from="1509494474184" duration="528000" />
+      <workItem from="1509494474184" duration="625000" />
     </task>
+    <task id="LOCAL-00001" summary="调整项目设置">
+      <created>1509495051111</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1509495051111</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4744000" />
+    <option name="totallyTimeSpent" value="4841000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -617,6 +599,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="调整项目设置" />
+    <option name="LAST_COMMIT_MESSAGE" value="调整项目设置" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -781,6 +767,14 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/META-INF/MANIFEST.MF">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
