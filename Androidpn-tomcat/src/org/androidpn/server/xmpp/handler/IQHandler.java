@@ -52,7 +52,7 @@ public abstract class IQHandler {
     public void process(Packet packet) {
         IQ iq = (IQ) packet;
         try {
-            IQ reply = handleIQ(iq);
+            IQ reply = handleIQ(iq); // 处理 IQ
             if (reply != null) {
                 PacketDeliverer.deliver(reply);
             }

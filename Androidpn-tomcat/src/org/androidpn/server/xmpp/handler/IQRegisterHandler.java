@@ -137,7 +137,7 @@ public class IQRegisterHandler extends IQHandler {
                     user.setName(name);
                     userService.saveUser(user);
 
-                    reply = IQ.createResultIQ(packet);
+                    reply = IQ.createResultIQ(packet); // 响应
                 }
             } catch (Exception ex) {
                 log.error(ex);
@@ -159,7 +159,7 @@ public class IQRegisterHandler extends IQHandler {
 
         // Send the response directly to the session
         if (reply != null) {
-            session.process(reply);
+            session.process(reply); // 发送响应
         }
         return null;
     }

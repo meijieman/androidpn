@@ -29,7 +29,7 @@ import org.jivesoftware.openfire.nio.XMLLightweightParser;
  *
  * @author Sehwan Noh (devnoh@gmail.com)
  */
-public class XmppDecoder extends CumulativeProtocolDecoder {
+public class XmppDecoder extends CumulativeProtocolDecoder { // CumulativeProtocolDecoder 内容累加解码器
 
     // private final Log log = LogFactory.getLog(XmppDecoder.class);
 

@@ -17,12 +17,13 @@
  */
 package org.androidpn.server.xmpp.codec;
 
+import org.androidpn.server.xmpp.net.Connection;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 
 /** 
- *  Encoder class that does nothing (to the already encoded data). 
+ *  Encoder class that does nothing (to the already encoded data).  在 {@link Connection#deliverRawText(java.lang.String, boolean) 加密}
  *
  * @author Sehwan Noh (devnoh@gmail.com)
  */

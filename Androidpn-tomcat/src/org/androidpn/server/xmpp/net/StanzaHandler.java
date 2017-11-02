@@ -17,10 +17,6 @@
  */
 package org.androidpn.server.xmpp.net;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Random;
-
 import org.androidpn.server.util.Config;
 import org.androidpn.server.xmpp.router.PacketRouter;
 import org.androidpn.server.xmpp.session.ClientSession;
@@ -32,12 +28,11 @@ import org.dom4j.io.XMPPPacketReader;
 import org.jivesoftware.openfire.net.MXParser;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmpp.packet.IQ;
-import org.xmpp.packet.Message;
-import org.xmpp.packet.PacketError;
-import org.xmpp.packet.Presence;
-import org.xmpp.packet.Roster;
-import org.xmpp.packet.StreamError;
+import org.xmpp.packet.*;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.Random;
 
 /** 
  * This class is to handle incoming XML stanzas.
@@ -81,7 +76,7 @@ public class StanzaHandler {
      */
     public void process(String stanza, XMPPPacketReader reader)
             throws Exception {
-        boolean initialStream = stanza.startsWith("<stream:stream");
+        boolean initialStream = stanza.startsWith("<stream:stream"); // 初始化连接
         if (!sessionCreated || initialStream) {
             if (!initialStream) {
                 return; // Ignore <?xml version="1.0"?>
@@ -90,7 +85,7 @@ public class StanzaHandler {
                 sessionCreated = true;
                 MXParser parser = reader.getXPPParser();
                 parser.setInput(new StringReader(stanza));
-                createSession(parser);
+                createSession(parser); // 创建会话
             } else if (startedTLS) {
                 startedTLS = false;
                 tlsNegotiated();
@@ -121,12 +116,12 @@ public class StanzaHandler {
                 connection.close();
                 session = null;
             }
-        } else if ("message".equals(tag)) {
+        } else if ("message".equals(tag)) { // 聊天内容
             processMessage(doc);
-        } else if ("presence".equals(tag)) {
+        } else if ("presence".equals(tag)) { // 在线状态
             log.debug("presence...");
             processPresence(doc);
-        } else if ("iq".equals(tag)) {
+        } else if ("iq".equals(tag)) { // 处理注册
             log.debug("iq...");
             processIQ(doc);
         } else {
@@ -218,7 +213,7 @@ public class StanzaHandler {
         //        }
 
         packet.setFrom(session.getAddress());
-        router.route(packet);
+        router.route(packet); // 路由
         session.incrementClientPacketCount();
     }
 
@@ -239,7 +234,7 @@ public class StanzaHandler {
         // Create the correct session based on the sent namespace
         String namespace = xpp.getNamespace(null);
         if ("jabber:client".equals(namespace)) {
-            session = ClientSession.createSession(serverName, connection, xpp);
+            session = ClientSession.createSession(serverName, connection, xpp); // 创建会话
             if (session == null) {
                 StringBuilder sb = new StringBuilder(250);
                 sb.append("<?xml version='1.0' encoding='UTF-8'?>");
@@ -254,7 +249,7 @@ public class StanzaHandler {
                 StreamError error = new StreamError(
                         StreamError.Condition.bad_namespace_prefix);
                 sb.append(error.toXML());
-                connection.deliverRawText(sb.toString());
+                connection.deliverRawText(sb.toString()); // 响应
                 connection.close();
                 log
                         .warn("Closing session due to bad_namespace_prefix in stream header: "
