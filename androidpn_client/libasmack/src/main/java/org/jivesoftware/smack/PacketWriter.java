@@ -93,7 +93,7 @@ class PacketWriter{
                 return;
             }
             synchronized(queue){
-                queue.notifyAll();
+                queue.notifyAll(); // 唤醒发送数据
             }
 
             // Process packet writer listeners. Note that we're using the sending
@@ -153,10 +153,10 @@ class PacketWriter{
     private void writePackets(Thread thisThread){
         try{
             // Open the stream.
-            openStream();
+            openStream(); // 建立初始化连接请求
             // Write out packets from the queue.
             while(!done && (writerThread == thisThread)){
-                Packet packet = nextPacket();
+                Packet packet = nextPacket();  // 阻塞方法
                 if(packet != null){
                     writer.write(packet.toXML());
                     if(queue.isEmpty()){

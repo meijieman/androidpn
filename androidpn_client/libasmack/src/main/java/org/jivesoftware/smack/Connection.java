@@ -843,7 +843,7 @@ public abstract class Connection{
          */
         public void notifyListener(Packet packet){
             if(packetFilter == null || packetFilter.accept(packet)){
-                packetListener.processPacket(packet);
+                packetListener.processPacket(packet); // 解析 packet
             }
         }
     }

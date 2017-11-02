@@ -117,7 +117,7 @@ class PacketReader{
                             continue;
                         }
                         processPacket(packet);
-                    } else if(parser.getName().equals("iq")){
+                    } else if(parser.getName().equals("iq")){ // iq 消息
                         IQ iq;
                         try{
                             iq = PacketParserUtils.parseIQ(parser, connection);
@@ -129,7 +129,7 @@ class PacketReader{
                             }
                             continue;
                         }
-                        processPacket(iq);
+                        processPacket(iq); // 处理 iq
                     } else if(parser.getName().equals("presence")){
                         Presence presence;
                         try{
@@ -146,7 +146,7 @@ class PacketReader{
                     }
                     // We found an opening stream. Record information about it, then notify
                     // the connectionID lock so that the packet reader startup can finish.
-                    else if(parser.getName().equals("stream")){
+                    else if(parser.getName().equals("stream")){ // 初始化连接
                         // Ensure the correct jabber:client namespace is being used.
                         if("jabber:client".equals(parser.getNamespace(null))){
                             // Get the connection id.
@@ -270,7 +270,7 @@ class PacketReader{
         }
 
         // Deliver the incoming packet to listeners.
-        listenerExecutor.submit(new ListenerNotification(packet));
+        listenerExecutor.submit(new ListenerNotification(packet)); // 回调
     }
 
     /**

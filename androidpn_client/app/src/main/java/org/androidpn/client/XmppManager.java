@@ -326,7 +326,7 @@ public class XmppManager{
                     ProviderManager.getInstance().addIQProvider("notification",
                             "androidpn:iq:notification",
                             new NotificationIQProvider());
-                    xmppManager.runTask();
+                    xmppManager.runTask(); // 执行下一个任务
                 } catch(XMPPException e){
                     Log.e(LOGTAG, "XMPP connection failed", e);
                     xmppManager.dropTask(2);
@@ -361,10 +361,10 @@ public class XmppManager{
             if(!xmppManager.isRegistered()){
                 isRegister = false;
                 hasDropTask = false;
-                final String newUsername = newRandomUUID();
+                final String newUsername = newRandomUUID(); // 随机帐号密码
                 final String newPassword = newRandomUUID();
 
-                Registration registration = new Registration();
+                Registration registration = new Registration(); // Registration -> IQ -> Packet
 
                 PacketFilter packetFilter = new AndFilter(new PacketIDFilter(
                         registration.getPacketID()), new PacketTypeFilter(
@@ -413,7 +413,7 @@ public class XmppManager{
                     }
                 };
 
-                connection.addPacketListener(packetListener, packetFilter);
+                connection.addPacketListener(packetListener, packetFilter); // 等待监听
 
                 registration.setType(IQ.Type.SET);
                 // registration.setTo(xmppHost);
@@ -423,7 +423,7 @@ public class XmppManager{
                 // registration.setAttributes(attributes);
                 registration.addAttribute("username", newUsername);
                 registration.addAttribute("password", newPassword);
-                connection.sendPacket(registration);
+                connection.sendPacket(registration); // 发送注册
                 //注册失败时
                 try{
                     Thread.sleep(10 * 1000);
