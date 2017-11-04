@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 
 	<!-- =============================================================== -->
@@ -132,15 +126,16 @@
 	</bean>
 
 	<bean id="ioAcceptor" class="org.apache.mina.transport.socket.nio.NioSocketAcceptor"
-		init-method="bind" destroy-method="unbind">
-		<property name="defaultLocalAddress" value=":5222" />
-		<property name="handler" ref="xmppHandler" />
-		<property name="filterChainBuilder" ref="filterChainBuilder" />
-		<property name="reuseAddress" value="true" />
+		  init-method="bind" destroy-method="unbind">
+		<property name="defaultLocalAddress" value=":5222"/>
+		<property name="handler" ref="xmppHandler"/>
+		<property name="filterChainBuilder" ref="filterChainBuilder"/>
+		<property name="reuseAddress" value="true"/>
 	</bean>
 
-<!-- 空闲处理,用于客服端掉线检测 -->
-	<bean id = "getSessionConfig" factory-bean="ioAcceptor" factory-method="getSessionConfig" >
-		<property name="readerIdleTime" value="30"></property>
+	<!-- 空闲处理，检测客户端掉线 -->
+	<!-- idle 设置为心跳包间隔的三倍 -->
+	<bean id="getSessionConfig" factory-bean="ioAcceptor" factory-method="getSessionConfig">
+		<property name="readerIdleTime" value="30"/>
 	</bean>
 </beans>
