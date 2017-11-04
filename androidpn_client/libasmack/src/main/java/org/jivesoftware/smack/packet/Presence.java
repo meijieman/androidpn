@@ -183,7 +183,7 @@ public class Presence extends Packet{
     }
 
     public String toXML(){
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // 在线状态
         buf.append("<presence");
         if(getXmlns() != null){
             buf.append(" xmlns=\"").append(getXmlns()).append("\"");

@@ -38,7 +38,6 @@ public class ReconnectionThread extends Thread{
 
     public void run(){
         try{
-            //断线重连优化
             while(!isInterrupted() && !xmppManager.getConnection().isAuthenticated()){
                 Log.d(LOGTAG, "Trying to reconnect in " + waiting()
                               + " seconds");
@@ -57,11 +56,11 @@ public class ReconnectionThread extends Thread{
 
     private int waiting(){
         if(waiting > 20){
-            return 600;
+            return 600; // 10min
         }
         if(waiting > 13){
-            return 300;
+            return 300;  // 5min
         }
-        return waiting <= 7 ? 10 : 60;
+        return waiting <= 7 ? 10 : 60; // 小于 7 次，间隔 10s 重试
     }
 }

@@ -283,7 +283,7 @@ public class XMPPConnection extends Connection{
 
         // Set presence to online.
         if(config.isSendPresence()){
-            packetWriter.sendPacket(new Presence(Presence.Type.available));
+            packetWriter.sendPacket(new Presence(Presence.Type.available)); // 发送在线状态
         }
 
         // Stores the authentication for future reconnection
@@ -1071,10 +1071,12 @@ public class XMPPConnection extends Connection{
         }
     }
 
-    //心跳包
+    /**
+     * 心跳包
+     */
     public void startHeartBeat(){
         if(packetWriter != null){
-            packetWriter.startHeartBeat();
+            packetWriter.startHeartBeatThread();
         }
     }
 }

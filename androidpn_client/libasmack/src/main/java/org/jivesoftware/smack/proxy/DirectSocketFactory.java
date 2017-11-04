@@ -43,9 +43,9 @@ class DirectSocketFactory
             throws IOException, UnknownHostException{
         Socket newSocket = new Socket(Proxy.NO_PROXY);
         InetAddress resolved[] = InetAddress.getAllByName(host);
-        newSocket.connect(new InetSocketAddress(resolved[(roundrobin++) % resolved.length], port));
-        //设置超时时间，如果不设置那么如果连接不上服务器 Android会在3分钟后才能抛出socket连接错误，因此设置socket超时时间
-        //newSocket.connect(new InetSocketAddress(resolved[(roundrobin++) % resolved.length],port),10*1000);
+//        newSocket.connect(new InetSocketAddress(resolved[(roundrobin++) % resolved.length], port));
+        //设置超时时间，如果不设置那么当连接不上服务器 Android 会在3分钟后才能抛出socket连接错误，因此设置socket超时时间
+        newSocket.connect(new InetSocketAddress(resolved[(roundrobin++) % resolved.length], port), 20 * 1000);
         return newSocket;
     }
 

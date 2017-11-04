@@ -168,11 +168,13 @@ public class XmppManager{
         return notificationPacketListener;
     }
 
+    /**
+     * 断线重连
+     */
     public void startReconnectionThread(){
         synchronized(reconnection){
-            //优化断线重连
             if(reconnection == null || !reconnection.isAlive()){
-                reconnection = new ReconnectionThread(this);
+                reconnection = new ReconnectionThread(this); // 新创建一个线程
                 reconnection.setName("Xmpp Reconnection Thread");
                 reconnection.start();
             }
@@ -254,7 +256,7 @@ public class XmppManager{
 
     private void addTask(Runnable runnable){
         Log.d(LOGTAG, "addTask(runnable)...");
-        taskTracker.increase();
+        taskTracker.increase(); // 计数器
         synchronized(taskList){
             if(taskList.isEmpty() && !running){
                 running = true;
@@ -333,7 +335,6 @@ public class XmppManager{
                     xmppManager.runTask();
                     xmppManager.startReconnectionThread();
                 }
-
             } else {
                 Log.i(LOGTAG, "XMPP connected already");
                 xmppManager.runTask();
@@ -373,7 +374,7 @@ public class XmppManager{
                 PacketListener packetListener = new PacketListener(){
 
                     public void processPacket(Packet packet){
-                        synchronized(xmppManager){
+                        synchronized(xmppManager){ // 处理服务器返回消息具体逻辑
                             Log.d("RegisterTask.PacketListener",
                                     "processPacket().....");
                             Log.d("RegisterTask.PacketListener", "packet="
@@ -481,14 +482,13 @@ public class XmppManager{
                     // packet listener
                     PacketListener packetListener = xmppManager
                             .getNotificationPacketListener();
-                    connection.addPacketListener(packetListener, packetFilter);
+                    connection.addPacketListener(packetListener, packetFilter); // 过滤推送消息
                     //心跳包的发送
                     connection.startHeartBeat();
-                    //释放cmppManager
+                    //释放xmppManager
                     synchronized(xmppManager){
                         xmppManager.notifyAll();
                     }
-
                 } catch(XMPPException e){
                     Log.e(LOGTAG, "LoginTask.run()... xmpp error");
                     Log.e(LOGTAG, "Failed to login to xmpp server. Caused by: "
@@ -511,7 +511,6 @@ public class XmppManager{
                 } finally {
                     xmppManager.runTask();
                 }
-
             } else {
                 Log.i(LOGTAG, "Logged in already");
                 xmppManager.runTask();

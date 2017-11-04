@@ -45,7 +45,7 @@ class PacketWriter{
     private Writer writer;
     private XMPPConnection connection;
     private final BlockingQueue<Packet> queue;
-    volatile boolean done;
+    volatile boolean done; // 连接是否结束
 
     /**
      * Creates a new packet writer with the specified connection.
@@ -226,25 +226,24 @@ class PacketWriter{
     }
 
     /**
-     * 心跳包
+     * 发送心跳包
      */
-    public void startHeartBeat(){
-        HeartBeat heartBeat = new HeartBeat();
-        heartBeat.start();
+    public void startHeartBeatThread(){
+        HeartBeatThread heartBeatThread = new HeartBeatThread();
+        heartBeatThread.start();
     }
 
-    class HeartBeat extends Thread{
-
+    private class HeartBeatThread extends Thread{
         @Override
         public void run(){
             while(!done){
                 try{
-                    writer.write(" ");
+                    writer.write(" "); // 发送一个空格
                     writer.flush();
                     Log.d("TAG", "心跳包发送成功");
-                    sleep(10 * 1000);
+                    Thread.sleep(10 * 1000); // 心跳包间隔
                 } catch(Exception e){
-                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                     Log.d("heart", "心跳包发送异常");
                     if(!(done || connection.isSocketClosed())){
                         done = true;
