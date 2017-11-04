@@ -17,10 +17,6 @@
  */
 package org.androidpn.server.xmpp.push;
 
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
 import org.androidpn.server.model.Notification;
 import org.androidpn.server.model.User;
 import org.androidpn.server.service.NotificationService;
@@ -35,6 +31,10 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.QName;
 import org.xmpp.packet.IQ;
+
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 /** 
  * This class is to manage sending the notifcations to the users.  
@@ -77,13 +77,26 @@ public class NotificationManager {
         for (User user : users) {
         	Random random = new Random();
         	String id = Integer.toHexString(random.nextInt());
-        	IQ notificationIQ = createNotificationIQ(id,apiKey, title, message, uri);
-			ClientSession session = sessionManager.getSession(user.getUsername());
-			if(session != null&&session.getPresence().isAvailable()){
-				notificationIQ.setTo(session.getAddress());
+            IQ notificationIQ = createNotificationIQ(id, apiKey, title, message, uri);
+            ClientSession session = sessionManager.getSession(user.getUsername());
+            if (session != null && session.getPresence().isAvailable()) {
+                notificationIQ.setTo(session.getAddress());
                 session.deliver(notificationIQ);
-			}
-			saveNotification(apiKey, user.getUsername(), title, message, uri, id);
+            }
+            saveNotification(apiKey, user.getUsername(), title, message, uri, id);
+        }
+    }
+
+    // 为在线用户推送消息，离线用户不推送
+    public void sendBroadcast2Presence(String apkKey, String title, String message, String uri) {
+        log.debug("sendBroadcast() 2 presence... ");
+        for (ClientSession session : sessionManager.getSessions()) {
+            String id = Integer.toHexString(new Random().nextInt());
+            IQ notificationIQ = createNotificationIQ(id, apkKey, title, message, uri);
+            if (session.getPresence().isAvailable()) {
+                notificationIQ.setTo(session.getAddress());
+                session.deliver(notificationIQ);
+            }
         }
     }
 
@@ -100,12 +113,12 @@ public class NotificationManager {
         log.debug("sendNotifcationToUser()...");
         Random random = new Random();
         String id = Integer.toHexString(random.nextInt());
-        IQ notificationIQ = createNotificationIQ(id,apiKey, title, message, uri);
+        IQ notificationIQ = createNotificationIQ(id,apiKey, title, message, uri); // 创建推送
         ClientSession session = sessionManager.getSession(username);
         if (session != null) {
             if (session.getPresence().isAvailable()) {
                 notificationIQ.setTo(session.getAddress());
-                session.deliver(notificationIQ);
+                session.deliver(notificationIQ); // 发送推送
             }
         }
     	try {
@@ -114,7 +127,6 @@ public class NotificationManager {
 				saveNotification(apiKey, username, title, message, uri, id);
 			}
 		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }

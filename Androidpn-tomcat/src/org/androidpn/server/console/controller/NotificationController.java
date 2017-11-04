@@ -17,14 +17,14 @@
  */
 package org.androidpn.server.console.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.androidpn.server.util.Config;
 import org.androidpn.server.xmpp.push.NotificationManager;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /** 
  * A controller class to process the notification related requests.  
@@ -48,7 +48,7 @@ public class NotificationController extends MultiActionController {
     }
 
     public ModelAndView send(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+            HttpServletResponse response) throws Exception { // 发送推送消息
         String broadcast = ServletRequestUtils.getStringParameter(request,
                 "broadcast", "0");
         String username = ServletRequestUtils.getStringParameter(request,
@@ -63,9 +63,9 @@ public class NotificationController extends MultiActionController {
         String apiKey = Config.getString("apiKey", "");
         logger.debug("apiKey=" + apiKey);
 
-        if (broadcast.equalsIgnoreCase("0")) {
+        if (broadcast.equalsIgnoreCase("0")) { // broadcast
             notificationManager.sendBroadcast(apiKey, title, message, uri);
-        } else if(broadcast.equalsIgnoreCase("1")) {
+        } else if(broadcast.equalsIgnoreCase("1")) { // by username
             notificationManager.sendNotifcationToUser(apiKey, username, title,
                     message, uri,true);
         }else if(broadcast.equalsIgnoreCase("2")){
@@ -75,7 +75,7 @@ public class NotificationController extends MultiActionController {
         }
 
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("redirect:notification.do");
+        mav.setViewName("redirect:notification.do"); // 重定向
         return mav;
     }
 

@@ -89,7 +89,7 @@ public class IQAuthHandler extends IQHandler {
                 if (username != null) {
                     queryResponse.element("username").setText(username);
                 }
-                reply = IQ.createResultIQ(packet);
+                reply = IQ.createResultIQ(packet); //获取登录协议列表
                 reply.setChildElement(queryResponse);
                 if (session.getStatus() != Session.STATUS_AUTHENTICATED) {
                     reply.setTo((JID) null);
@@ -131,7 +131,7 @@ public class IQAuthHandler extends IQHandler {
 
                 // Verify that username and password are correct
                 AuthToken token = null;
-                if (password != null && AuthManager.isPlainSupported()) {
+                if (password != null && AuthManager.isPlainSupported()) { // 明文认证
                     token = AuthManager.authenticate(username, password);
                 } else if (digest != null && AuthManager.isDigestSupported()) {
                     token = AuthManager.authenticate(username, session
