@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package org.androidpn.demoapp;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -24,11 +24,15 @@ import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 
+import com.hongfans.push.Constants;
+import com.hongfans.push.logutil.LogUtil;
+
 /**
  * Activity for displaying the notification setting view.
  *
  * @author Sehwan Noh (devnoh@gmail.com)
  */
+@Deprecated
 public class NotificationSettingsActivity extends PreferenceActivity{
 
     private static final String LOGTAG = LogUtil

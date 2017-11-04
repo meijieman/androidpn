@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push;
 
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.hongfans.push.logutil.LogUtil;
 
 /**
  * A listener class for monitoring changes in phone connection states.

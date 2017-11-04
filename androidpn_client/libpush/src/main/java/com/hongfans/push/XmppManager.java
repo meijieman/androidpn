@@ -13,13 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Handler;
 import android.util.Log;
+
+import com.hongfans.push.iq.NotificationIQ;
+import com.hongfans.push.iq.provider.NotificationIQProvider;
+import com.hongfans.push.logutil.LogUtil;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
@@ -99,7 +103,7 @@ public class XmppManager{
         notificationPacketListener = new NotificationPacketListener(this);
 
         handler = new Handler();
-        taskList = new ArrayList<Runnable>();
+        taskList = new ArrayList<>();
         reconnection = new ReconnectionThread(this);
     }
 
@@ -517,5 +521,16 @@ public class XmppManager{
             }
 
         }
+    }
+
+    private Class<? extends HFIntentService> mIntentService;
+
+    public void reg(Class<? extends HFIntentService> clazz) {
+        LogUtil.i("reg IntentService success");
+        mIntentService = clazz;
+    }
+
+    Class<? extends HFIntentService> getIntentService(){
+        return mIntentService;
     }
 }

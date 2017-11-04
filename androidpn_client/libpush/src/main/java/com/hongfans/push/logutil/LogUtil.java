@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push.logutil;
+
+import android.util.Log;
 
 /**
  * Utility class for LogCat.
@@ -22,9 +24,18 @@ package org.androidpn.client;
  */
 public class LogUtil{
 
-    @SuppressWarnings("unchecked")
-    public static String makeLogTag(Class cls){
-        return "Androidpn_" + cls.getSimpleName();
+    public static final String TAG = "LogUtil_";
+
+    public static boolean mIsDebug = true;
+
+    public static String makeLogTag(Class cls) {
+        return TAG + cls.getSimpleName();
+    }
+
+    public static void i(String msg) {
+        if (mIsDebug) {
+            Log.i(TAG, msg);
+        }
     }
 
 }

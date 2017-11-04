@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -26,6 +26,8 @@ import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+import com.hongfans.push.logutil.LogUtil;
 
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -41,8 +43,7 @@ import java.util.concurrent.Future;
  */
 public class NotificationService extends Service{
 
-    private static final String LOGTAG = LogUtil
-            .makeLogTag(NotificationService.class);
+    private static final String LOGTAG = LogUtil.makeLogTag(NotificationService.class);
 
     public static final String SERVICE_NAME = "org.androidpn.client.NotificationService";
 
@@ -54,7 +55,7 @@ public class NotificationService extends Service{
     //
     //    private ConnectivityManager connectivityManager;
 
-    private BroadcastReceiver notificationReceiver;
+//    private BroadcastReceiver notificationReceiver;
 
     private BroadcastReceiver connectivityReceiver;
 
@@ -73,7 +74,7 @@ public class NotificationService extends Service{
     private String deviceId;
 
     public NotificationService(){
-        notificationReceiver = new NotificationReceiver();
+//        notificationReceiver = new NotificationReceiver();
         connectivityReceiver = new ConnectivityReceiver(this);
         phoneStateListener = new PhoneStateChangeListener(this);
         executorService = Executors.newSingleThreadExecutor();
@@ -94,8 +95,7 @@ public class NotificationService extends Service{
         // wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         // connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        sharedPrefs = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME,
-                Context.MODE_PRIVATE);
+        sharedPrefs = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
 
         // Get deviceId
         deviceId = telephonyManager.getDeviceId();
@@ -204,17 +204,17 @@ public class NotificationService extends Service{
         });
     }
 
-    private void registerNotificationReceiver(){
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Constants.ACTION_SHOW_NOTIFICATION);
-        filter.addAction(Constants.ACTION_NOTIFICATION_CLICKED);
-        filter.addAction(Constants.ACTION_NOTIFICATION_CLEARED);
-        registerReceiver(notificationReceiver, filter);
-    }
+//    private void registerNotificationReceiver(){
+//        IntentFilter filter = new IntentFilter();
+//        filter.addAction(Constants.ACTION_SHOW_NOTIFICATION);
+//        filter.addAction(Constants.ACTION_NOTIFICATION_CLICKED);
+//        filter.addAction(Constants.ACTION_NOTIFICATION_CLEARED);
+//        registerReceiver(notificationReceiver, filter);
+//    }
 
-    private void unregisterNotificationReceiver(){
-        unregisterReceiver(notificationReceiver);
-    }
+//    private void unregisterNotificationReceiver(){
+//        unregisterReceiver(notificationReceiver);
+//    }
 
     private void registerConnectivityReceiver(){
         Log.d(LOGTAG, "registerConnectivityReceiver()...");
@@ -235,7 +235,7 @@ public class NotificationService extends Service{
 
     private void start(){
         Log.d(LOGTAG, "start()...");
-        registerNotificationReceiver();
+//        registerNotificationReceiver();
         registerConnectivityReceiver();
         // Intent intent = getIntent();
         // startService(intent);
@@ -244,7 +244,7 @@ public class NotificationService extends Service{
 
     private void stop(){
         Log.d(LOGTAG, "stop()...");
-        unregisterNotificationReceiver();
+//        unregisterNotificationReceiver();
         unregisterConnectivityReceiver();
         xmppManager.disconnect();
         executorService.shutdown();

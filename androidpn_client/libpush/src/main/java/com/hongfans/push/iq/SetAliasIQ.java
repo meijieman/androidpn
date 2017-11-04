@@ -1,4 +1,4 @@
-package org.androidpn.client;
+package com.hongfans.push.iq;
 
 import org.jivesoftware.smack.packet.IQ;
 

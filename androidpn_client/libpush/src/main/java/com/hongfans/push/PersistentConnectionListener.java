@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push;
 
 import android.util.Log;
+
+import com.hongfans.push.logutil.LogUtil;
 
 import org.jivesoftware.smack.ConnectionListener;
 

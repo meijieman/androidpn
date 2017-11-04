@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push;
 
 import android.content.Intent;
 import android.util.Log;
+
+import com.hongfans.push.iq.DeliverConfirmIQ;
+import com.hongfans.push.iq.NotificationIQ;
+import com.hongfans.push.logutil.LogUtil;
 
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.IQ;
@@ -46,31 +50,40 @@ public class NotificationPacketListener implements PacketListener{
         if(packet instanceof NotificationIQ){
             NotificationIQ notification = (NotificationIQ)packet;
 
-            if(notification.getChildElementXML().contains(
-                    "androidpn:iq:notification")){
+            if(notification.getChildElementXML().contains("androidpn:iq:notification")){
                 String notificationId = notification.getId();
-                String notificationApiKey = notification.getApiKey();
+                /*String notificationApiKey = notification.getApiKey();
                 String notificationTitle = notification.getTitle();
                 String notificationMessage = notification.getMessage();
                 //                String notificationTicker = notification.getTicker();
-                String notificationUri = notification.getUri();
+                String notificationUri = notification.getUri();*/
 
-                Intent intent = new Intent(Constants.ACTION_SHOW_NOTIFICATION);
+                Notification noti = new Notification();
+                noti.setId(notification.getId());
+                noti.setApiKey(notification.getApiKey());
+                noti.setTitle(notification.getTitle());
+                noti.setMessage(notification.getMessage());
+                noti.setUri(notification.getUri());
+                Class<? extends HFIntentService> intentService = xmppManager.getIntentService();
+                if (intentService != null) {
+                    Intent service = new Intent(xmppManager.getContext(), intentService);
+                    service.setAction(HFIntentService.ACTION_RCVD);
+                    service.putExtra(HFIntentService.TRANSMIT_DATA, noti);
+                    xmppManager.getContext().startService(service);
+                }
+
+                /*Intent intent = new Intent(Constants.ACTION_SHOW_NOTIFICATION);
                 intent.putExtra(Constants.NOTIFICATION_ID, notificationId);
-                intent.putExtra(Constants.NOTIFICATION_API_KEY,
-                        notificationApiKey);
-                intent
-                        .putExtra(Constants.NOTIFICATION_TITLE,
-                                notificationTitle);
-                intent.putExtra(Constants.NOTIFICATION_MESSAGE,
-                        notificationMessage);
+                intent.putExtra(Constants.NOTIFICATION_API_KEY, notificationApiKey);
+                intent.putExtra(Constants.NOTIFICATION_TITLE, notificationTitle);
+                intent.putExtra(Constants.NOTIFICATION_MESSAGE, notificationMessage);
                 intent.putExtra(Constants.NOTIFICATION_URI, notificationUri);
                 //                intent.setData(Uri.parse((new StringBuilder(
                 //                        "notif://notification.androidpn.org/")).append(
                 //                        notificationApiKey).append("/").append(
                 //                        System.currentTimeMillis()).toString()));
 
-                xmppManager.getContext().sendBroadcast(intent);
+                xmppManager.getContext().sendBroadcast(intent);*/
                 //发送消息回执
                 DeliverConfirmIQ deliverConfirmIQ = new DeliverConfirmIQ();
                 deliverConfirmIQ.setUuid(notificationId);

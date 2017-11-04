@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push.display;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -23,6 +23,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.hongfans.push.Constants;
+import com.hongfans.push.NotificationDetailsActivity;
+import com.hongfans.push.logutil.LogUtil;
 
 import java.util.Random;
 
@@ -45,14 +49,11 @@ public class Notifier{
 
     public Notifier(Context context){
         this.context = context;
-        this.sharedPrefs = context.getSharedPreferences(
-                Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        this.notificationManager = (NotificationManager)context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
+        this.sharedPrefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public void notify(String notificationId, String apiKey, String title,
-            String message, String uri){
+    public void notify(String notificationId, String apiKey, String title, String message, String uri){
         Log.d(LOGTAG, "notify()...");
 
         Log.d(LOGTAG, "notificationId=" + notificationId);
@@ -98,8 +99,7 @@ public class Notifier{
             //                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             //            }
 
-            Intent intent = new Intent(context,
-                    NotificationDetailsActivity.class);
+            Intent intent = new Intent(context, NotificationDetailsActivity.class);
             intent.putExtra(Constants.NOTIFICATION_ID, notificationId);
             intent.putExtra(Constants.NOTIFICATION_API_KEY, apiKey);
             intent.putExtra(Constants.NOTIFICATION_TITLE, title);
@@ -161,8 +161,7 @@ public class Notifier{
     }
 
     private boolean isNotificationEnabled(){
-        return sharedPrefs.getBoolean(Constants.SETTINGS_NOTIFICATION_ENABLED,
-                true);
+        return sharedPrefs.getBoolean(Constants.SETTINGS_NOTIFICATION_ENABLED, true);
     }
 
     private boolean isNotificationSoundEnabled(){
@@ -177,4 +176,19 @@ public class Notifier{
         return sharedPrefs.getBoolean(Constants.SETTINGS_TOAST_ENABLED, false);
     }
 
+    public void setNotificationEnabled(boolean isEnable){
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS_NOTIFICATION_ENABLED, isEnable).commit();
+    }
+
+    public void setNotificationSoundEnabled(boolean isEnable){
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS_SOUND_ENABLED, isEnable).commit();
+    }
+
+    public void setNotificationVibrateEnabled(boolean isEnable){
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS_VIBRATE_ENABLED, isEnable).commit();
+    }
+
+    public void setNotificationToastEnabled(boolean isEnable){
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS_TOAST_ENABLED, isEnable).commit();
+    }
 }

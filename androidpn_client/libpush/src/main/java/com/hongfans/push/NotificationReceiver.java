@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import com.hongfans.push.display.Notifier;
+import com.hongfans.push.logutil.LogUtil;
 
 /**
  * Broadcast receiver that handles push notification messages from the server.
@@ -26,6 +29,7 @@ import android.util.Log;
  *
  * @author Sehwan Noh (devnoh@gmail.com)
  */
+@Deprecated
 public final class NotificationReceiver extends BroadcastReceiver{
 
     private static final String LOGTAG = LogUtil

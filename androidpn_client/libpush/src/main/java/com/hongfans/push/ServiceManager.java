@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +22,9 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.hongfans.push.iq.SetAliasIQ;
+import com.hongfans.push.logutil.LogUtil;
 
 import org.jivesoftware.smack.packet.IQ;
 
@@ -34,8 +37,7 @@ import java.util.Properties;
  */
 public final class ServiceManager{
 
-    private static final String LOGTAG = LogUtil
-            .makeLogTag(ServiceManager.class);
+    private static final String LOGTAG = LogUtil.makeLogTag(ServiceManager.class);
 
     private Context context;
 
@@ -192,11 +194,10 @@ public final class ServiceManager{
     //        context.startActivity(intent);
     //    }
 
-    public static void viewNotificationSettings(Context context){
-        Intent intent = new Intent().setClass(context,
-                NotificationSettingsActivity.class);
+   /* public static void viewNotificationSettings(Context context){
+        Intent intent = new Intent().setClass(context, NotificationSettingsActivity.class);
         context.startActivity(intent);
-    }
+    }*/
 
     //设置别名
     public void setAlias(final String alias){
@@ -205,13 +206,11 @@ public final class ServiceManager{
             return;
         }
         new Thread(new Runnable(){
-
             @Override
             public void run(){
                 try{
                     Thread.sleep(500);
                 } catch(InterruptedException e){
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 NotificationService notificationService = NotificationService.getNotification();
@@ -223,7 +222,6 @@ public final class ServiceManager{
                                 Log.d("TAG", "wait for authenticate");
                                 xmppManager.wait();
                             } catch(InterruptedException e){
-                                // TODO Auto-generated catch block
                                 e.printStackTrace();
                             }
                         }
@@ -235,6 +233,35 @@ public final class ServiceManager{
                     setAliasIQ.setAlias(alias);
                     Log.d("TAG", "username" + username + "alias" + alias);
                     xmppManager.getConnection().sendPacket(setAliasIQ);
+                }
+            }
+        }).start();
+    }
+
+    public <T extends HFIntentService> void registerPushIntentService(final Class<T> service) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                XmppManager xmppManager = NotificationService.getNotification().getXmppManager();
+                if (xmppManager != null) {
+                    if (!xmppManager.isAuthenticated()) {
+                        synchronized (xmppManager) {
+                            try {
+                                Log.d("TAG", "wait for authenticate");
+                                xmppManager.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    Log.d("TAG", "authenticated");
+
+                    xmppManager.reg(service);
                 }
             }
         }).start();

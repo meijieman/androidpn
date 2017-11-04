@@ -16,12 +16,13 @@
 package org.androidpn.demoapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import org.androidpn.client.ServiceManager;
+import com.hongfans.push.ServiceManager;
 
 /**
  * This is an androidpn client demo application.
@@ -41,7 +42,9 @@ public class DemoAppActivity extends Activity{
         Button okButton = (Button)findViewById(R.id.btn_settings);
         okButton.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                ServiceManager.viewNotificationSettings(DemoAppActivity.this);
+//                ServiceManager.viewNotificationSettings(DemoAppActivity.this);
+                Intent intent = new Intent().setClass(DemoAppActivity.this, NotificationSettingsActivity.class);
+                startActivity(intent);
             }
         });
         // Start the service
@@ -49,6 +52,7 @@ public class DemoAppActivity extends Activity{
         serviceManager.setNotificationIcon(R.drawable.notification);
         serviceManager.startService();
         serviceManager.setAlias("xuyusong");
+        serviceManager.registerPushIntentService(DemoIntentService.class); // 需要 startService 后 invoke
     }
 
 }

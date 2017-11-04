@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,6 +28,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.hongfans.push.logutil.LogUtil;
 
 /**
  * Activity for displaying the notification details view.

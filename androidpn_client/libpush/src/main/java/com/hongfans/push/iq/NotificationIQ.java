@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push.iq;
 
 import org.jivesoftware.smack.packet.IQ;
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.androidpn.client;
+package com.hongfans.push;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,6 +21,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+
+import com.hongfans.push.logutil.LogUtil;
 
 /**
  * A broadcast receiver to handle the changes in network connectiion states.
