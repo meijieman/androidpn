@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hongfans.push.display;
+package com.hongfans.push.util;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.hongfans.push.Constants;
-import com.hongfans.push.NotificationDetailsActivity;
-import com.hongfans.push.logutil.LogUtil;
 
+import java.io.Serializable;
 import java.util.Random;
+
+import static android.os.Looper.getMainLooper;
 
 /**
  * This class is to notify the user of messages with NotificationManager.
@@ -42,6 +45,7 @@ public class Notifier{
     private static final Random random = new Random(System.currentTimeMillis());
 
     private Context context;
+    private Handler mHandler = new Handler(getMainLooper());
 
     private SharedPreferences sharedPrefs;
 
@@ -53,19 +57,20 @@ public class Notifier{
         this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public void notify(String notificationId, String apiKey, String title, String message, String uri){
+    public void notify(final com.hongfans.push.message.Notification note){
         Log.d(LOGTAG, "notify()...");
 
-        Log.d(LOGTAG, "notificationId=" + notificationId);
-        Log.d(LOGTAG, "notificationApiKey=" + apiKey);
-        Log.d(LOGTAG, "notificationTitle=" + title);
-        Log.d(LOGTAG, "notificationMessage=" + message);
-        Log.d(LOGTAG, "notificationUri=" + uri);
+        Log.d(LOGTAG, "notification=" + note);
 
         if(isNotificationEnabled()){
             // Show the toast
             if(isNotificationToastEnabled()){
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                mHandler.post(new Runnable(){
+                    @Override
+                    public void run(){
+                        Toast.makeText(context, note.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
             }
 
             // Notification
@@ -80,7 +85,7 @@ public class Notifier{
             }
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             notification.when = System.currentTimeMillis();
-            notification.tickerText = message;
+            notification.tickerText = note.getMessage();
 
             //            Intent intent;
             //            if (uri != null
@@ -99,27 +104,29 @@ public class Notifier{
             //                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             //            }
 
-            Intent intent = new Intent(context, NotificationDetailsActivity.class);
-            intent.putExtra(Constants.NOTIFICATION_ID, notificationId);
-            intent.putExtra(Constants.NOTIFICATION_API_KEY, apiKey);
-            intent.putExtra(Constants.NOTIFICATION_TITLE, title);
-            intent.putExtra(Constants.NOTIFICATION_MESSAGE, message);
-            intent.putExtra(Constants.NOTIFICATION_URI, uri);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Intent intent = new Intent();
+            if(mOpen != null){
+                intent.setClass(context, mOpen);
+                intent.putExtra(NOTIFICATION, note);
+//                intent.putExtra(Constants.NOTIFICATION_ID, note.getId());
+//                intent.putExtra(Constants.NOTIFICATION_API_KEY, apiKey);
+//                intent.putExtra(Constants.NOTIFICATION_TITLE, note.getTitle());
+//                intent.putExtra(Constants.NOTIFICATION_MESSAGE, message);
+//                intent.putExtra(Constants.NOTIFICATION_URI, note.getUri());
 
-//            PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
-//                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            }
+
+//          PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             // bugfix 当服务端连续发送多条通知时，客户端都是显示同一条通知内容。
-            PendingIntent contentIntent = PendingIntent.getActivity(context, new Random().nextInt(),
-                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent contentIntent = PendingIntent.getActivity(context, new Random().nextInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            notification.setLatestEventInfo(context, note.getTitle(), note.getMessage(), contentIntent);
 
-            notification.setLatestEventInfo(context, title, message,
-                    contentIntent);
             notificationManager.notify(random.nextInt(), notification);
 
             //            Intent clickIntent = new Intent(
@@ -157,7 +164,8 @@ public class Notifier{
     }
 
     private int getNotificationIcon(){
-        return sharedPrefs.getInt(Constants.NOTIFICATION_ICON, 0);
+        int id = context.getResources().getIdentifier("notification", "drawable", context.getPackageName());
+        return sharedPrefs.getInt(Constants.NOTIFICATION_ICON, id);
     }
 
     private boolean isNotificationEnabled(){
@@ -190,5 +198,25 @@ public class Notifier{
 
     public void setNotificationToastEnabled(boolean isEnable){
         sharedPrefs.edit().putBoolean(Constants.SETTINGS_TOAST_ENABLED, isEnable).commit();
+    }
+
+    public void setNotificationIcon(int iconId){
+        sharedPrefs.edit().putInt(Constants.NOTIFICATION_ICON, iconId).commit();
+    }
+
+    private Class mOpen; // 点击时打开的 activity
+
+    public void setOpen(Class<? extends Activity> open){
+        mOpen = open;
+    }
+
+    private static final String NOTIFICATION = "notification";
+
+    public static com.hongfans.push.message.Notification getNotification(Intent intent){
+        Serializable extra = intent.getSerializableExtra(NOTIFICATION);
+        if(extra instanceof com.hongfans.push.message.Notification){
+            return (com.hongfans.push.message.Notification)extra;
+        }
+        return null;
     }
 }

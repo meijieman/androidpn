@@ -6,6 +6,24 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:supportsRtl="true">
+
+        <service
+            android:name="com.hongfans.push.NotificationService"
+            android:enabled="true"
+            android:label="NotificationService">
+            <intent-filter>
+                <action android:name="org.androidpn.client.NotificationService"/>
+            </intent-filter>
+        </service>
+
     </application>
 
+    <!---push 添加权限 start-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!---push 添加权限 end-->
 </manifest>

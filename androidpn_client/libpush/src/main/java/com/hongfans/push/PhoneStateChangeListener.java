@@ -19,7 +19,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.hongfans.push.logutil.LogUtil;
+import com.hongfans.push.util.LogUtil;
 
 /**
  * A listener class for monitoring changes in phone connection states.

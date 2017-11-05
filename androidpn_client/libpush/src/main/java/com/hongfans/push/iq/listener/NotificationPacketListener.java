@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hongfans.push;
+package com.hongfans.push.iq.listener;
 
 import android.content.Intent;
 import android.util.Log;
 
+import com.hongfans.push.HFIntentService;
+import com.hongfans.push.XmppManager;
 import com.hongfans.push.iq.DeliverConfirmIQ;
 import com.hongfans.push.iq.NotificationIQ;
-import com.hongfans.push.logutil.LogUtil;
+import com.hongfans.push.message.Notification;
+import com.hongfans.push.message.Payload;
+import com.hongfans.push.util.LogUtil;
 
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.IQ;
@@ -33,8 +37,7 @@ import org.jivesoftware.smack.packet.Packet;
  */
 public class NotificationPacketListener implements PacketListener{
 
-    private static final String LOGTAG = LogUtil
-            .makeLogTag(NotificationPacketListener.class);
+    private static final String LOGTAG = LogUtil.makeLogTag(NotificationPacketListener.class);
 
     private final XmppManager xmppManager;
 
@@ -64,6 +67,23 @@ public class NotificationPacketListener implements PacketListener{
                 noti.setTitle(notification.getTitle());
                 noti.setMessage(notification.getMessage());
                 noti.setUri(notification.getUri());
+
+                // 测试 payload
+                if(notification.getTitle().startsWith("payload")){
+                    Payload payload = new Payload();
+                    payload.setId(notification.getId());
+                    payload.setApiKey(notification.getApiKey());
+                    payload.setMessage(notification.getMessage());
+
+                    Class<? extends HFIntentService> intentService = xmppManager.getIntentService();
+                    if(intentService != null){
+                        Intent service = new Intent(xmppManager.getContext(), intentService);
+                        service.setAction(HFIntentService.ACTION_RCVD);
+                        service.putExtra(HFIntentService.TRANSMIT_DATA, payload);
+                        xmppManager.getContext().startService(service);
+                    }
+                }
+
                 Class<? extends HFIntentService> intentService = xmppManager.getIntentService();
                 if (intentService != null) {
                     Intent service = new Intent(xmppManager.getContext(), intentService);

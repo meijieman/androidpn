@@ -4,7 +4,11 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 
-import com.hongfans.push.logutil.LogUtil;
+import com.hongfans.push.message.Notification;
+import com.hongfans.push.message.Payload;
+import com.hongfans.push.util.LogUtil;
+
+import java.io.Serializable;
 
 /**
  * 封装消息
@@ -19,17 +23,19 @@ public abstract class HFIntentService extends IntentService {
         super("HFIntentService");
     }
 
-
     @Override
     protected void onHandleIntent(Intent intent) {
         LogUtil.i("onHandleIntent intent " + intent);
-        if (intent != null) {
+        if(intent != null){
             final String action = intent.getAction();
-            if (action != null) {
-                switch (action) {
-                    case ACTION_RCVD:
-                        onReceiveMessageData(this, (Notification) intent.getSerializableExtra(TRANSMIT_DATA));
-                        break;
+            if(action != null){
+                if(ACTION_RCVD.equals(action)){
+                    Serializable extra = intent.getSerializableExtra(TRANSMIT_DATA);
+                    if(extra instanceof Notification){
+                        onReceiveNotification(this, (Notification)extra);
+                    } else if(extra instanceof Payload){
+                        onReceivePayload(this, (Payload)extra);
+                    }
                 }
             }
         }
@@ -39,7 +45,15 @@ public abstract class HFIntentService extends IntentService {
 
 //    public abstract void onReceiveClientId(Context var1, String var2);
 
-    public abstract void onReceiveMessageData(Context ctx, Notification notification);
+    /**
+     * 通知
+     */
+    public abstract void onReceiveNotification(Context ctx, Notification note);
+
+    /**
+     * 穿透消息
+     */
+    public abstract void onReceivePayload(Context ctx, Payload payload);
 
 //    public abstract void onReceiveOnlineState(Context var1, boolean var2);
 

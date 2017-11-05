@@ -25,7 +25,7 @@ import android.preference.PreferenceScreen;
 import android.util.Log;
 
 import com.hongfans.push.Constants;
-import com.hongfans.push.logutil.LogUtil;
+import com.hongfans.push.util.LogUtil;
 
 /**
  * Activity for displaying the notification setting view.

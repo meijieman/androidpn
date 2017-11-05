@@ -27,7 +27,8 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.hongfans.push.logutil.LogUtil;
+import com.hongfans.push.receiver.ConnectivityReceiver;
+import com.hongfans.push.util.LogUtil;
 
 import java.util.Random;
 import java.util.concurrent.ExecutorService;

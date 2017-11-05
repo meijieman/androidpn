@@ -15,7 +15,6 @@
  */
 package com.hongfans.push;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,7 +23,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.hongfans.push.iq.SetAliasIQ;
-import com.hongfans.push.logutil.LogUtil;
+import com.hongfans.push.iq.SetTagsIQ;
+import com.hongfans.push.util.LogUtil;
 
 import org.jivesoftware.smack.packet.IQ;
 
@@ -45,7 +45,7 @@ public final class ServiceManager{
 
     private Properties props;
 
-    private String version = "0.5.0";
+    private String version;
 
     private String apiKey;
 
@@ -53,19 +53,19 @@ public final class ServiceManager{
 
     private String xmppPort;
 
-    private String callbackActivityPackageName;
+//    private String callbackActivityPackageName;
 
-    private String callbackActivityClassName;
+//    private String callbackActivityClassName;
 
     public ServiceManager(Context context){
         this.context = context;
 
-        if(context instanceof Activity){
-            Log.i(LOGTAG, "Callback Activity...");
-            Activity callbackActivity = (Activity)context;
-            callbackActivityPackageName = callbackActivity.getPackageName();
-            callbackActivityClassName = callbackActivity.getClass().getName();
-        }
+//        if(context instanceof Activity){
+//            Log.i(LOGTAG, "Callback Activity...");
+//            Activity callbackActivity = (Activity)context;
+//            callbackActivityPackageName = callbackActivity.getPackageName();
+//            callbackActivityClassName = callbackActivity.getClass().getName();
+//        }
 
         //        apiKey = getMetaDataValue("ANDROIDPN_API_KEY");
         //        Log.i(LOGTAG, "apiKey=" + apiKey);
@@ -78,9 +78,11 @@ public final class ServiceManager{
         apiKey = props.getProperty("apiKey", "");
         xmppHost = props.getProperty("xmppHost", "127.0.0.1");
         xmppPort = props.getProperty("xmppPort", "5222");
+        version = props.getProperty("version", "0.5.0");
         Log.i(LOGTAG, "apiKey=" + apiKey);
         Log.i(LOGTAG, "xmppHost=" + xmppHost);
         Log.i(LOGTAG, "xmppPort=" + xmppPort);
+        Log.i(LOGTAG, "version=" + version);
 
         sharedPrefs = context.getSharedPreferences(
                 Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -89,23 +91,23 @@ public final class ServiceManager{
         editor.putString(Constants.VERSION, version);
         editor.putString(Constants.XMPP_HOST, xmppHost);
         editor.putInt(Constants.XMPP_PORT, Integer.parseInt(xmppPort));
-        editor.putString(Constants.CALLBACK_ACTIVITY_PACKAGE_NAME,
-                callbackActivityPackageName);
-        editor.putString(Constants.CALLBACK_ACTIVITY_CLASS_NAME,
-                callbackActivityClassName);
+//        editor.putString(Constants.CALLBACK_ACTIVITY_PACKAGE_NAME,
+//                callbackActivityPackageName);
+//        editor.putString(Constants.CALLBACK_ACTIVITY_CLASS_NAME,
+//                callbackActivityClassName);
         editor.commit();
         // Log.i(LOGTAG, "sharedPrefs=" + sharedPrefs.toString());
     }
 
     public void startService(){
-        Thread serviceThread = new Thread(new Runnable(){
-            @Override
-            public void run(){
+//        Thread serviceThread = new Thread(new Runnable(){
+//            @Override
+//            public void run(){
                 Intent intent = NotificationService.getIntent();
                 context.startService(intent);
-            }
-        });
-        serviceThread.start();
+//            }
+//        });
+//        serviceThread.start();
     }
 
     public void stopService(){
@@ -164,8 +166,7 @@ public final class ServiceManager{
 
         Properties props = new Properties();
         try{
-            int id = context.getResources().getIdentifier("androidpn", "raw",
-                    context.getPackageName());
+            int id = context.getResources().getIdentifier("androidpn", "raw", context.getPackageName());
             props.load(context.getResources().openRawResource(id));
         } catch(Exception e){
             Log.e(LOGTAG, "Could not find the properties file.", e);
@@ -182,11 +183,11 @@ public final class ServiceManager{
     //        return apiKey;
     //    }
 
-    public void setNotificationIcon(int iconId){
-        Editor editor = sharedPrefs.edit();
-        editor.putInt(Constants.NOTIFICATION_ICON, iconId);
-        editor.commit();
-    }
+//    public void setNotificationIcon(int iconId){
+//        Editor editor = sharedPrefs.edit();
+//        editor.putInt(Constants.NOTIFICATION_ICON, iconId);
+//        editor.commit();
+//    }
 
     //    public void viewNotificationSettings() {
     //        Intent intent = new Intent().setClass(context,
@@ -262,6 +263,46 @@ public final class ServiceManager{
                     Log.d("TAG", "authenticated");
 
                     xmppManager.reg(service);
+                }
+            }
+        }).start();
+    }
+
+    public void setTags(final String[] tags){
+        if(tags == null || tags.length == 0){
+            return;
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                StringBuilder sb = new StringBuilder();
+                for(String tag : tags){
+                    sb.append(tag).append(",");
+                }
+                String tmp = sb.toString();
+                String tag = tmp.substring(0, tmp.length() - 1);
+                XmppManager xmppManager = NotificationService.getNotification().getXmppManager();
+                if (xmppManager != null) {
+                    if (!xmppManager.isAuthenticated()) {
+                        synchronized (xmppManager) {
+                            try {
+                                Log.d("TAG", "wait for authenticate");
+                                xmppManager.wait();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    Log.d("TAG", "authenticated");
+                    SetTagsIQ iq = new SetTagsIQ();
+                    iq.setTags(tag);
+                    xmppManager.getConnection().sendPacket(iq);
                 }
             }
         }).start();

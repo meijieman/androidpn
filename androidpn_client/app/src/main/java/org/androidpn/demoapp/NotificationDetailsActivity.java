@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hongfans.push;
+package org.androidpn.demoapp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,7 +27,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hongfans.push.logutil.LogUtil;
+import com.hongfans.push.message.Notification;
+import com.hongfans.push.util.LogUtil;
+import com.hongfans.push.util.Notifier;
 
 /**
  * Activity for displaying the notification details view.
@@ -40,9 +40,9 @@ public class NotificationDetailsActivity extends Activity{
 
     private static final String LOGTAG = LogUtil.makeLogTag(NotificationDetailsActivity.class);
 
-    private String callbackActivityPackageName;
+//    private String callbackActivityPackageName;
 
-    private String callbackActivityClassName;
+//    private String callbackActivityClassName;
 
     public NotificationDetailsActivity(){
     }
@@ -51,30 +51,31 @@ public class NotificationDetailsActivity extends Activity{
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        SharedPreferences sharedPrefs = this.getSharedPreferences(
-                Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        callbackActivityPackageName = sharedPrefs.getString(
-                Constants.CALLBACK_ACTIVITY_PACKAGE_NAME, "");
-        callbackActivityClassName = sharedPrefs.getString(
-                Constants.CALLBACK_ACTIVITY_CLASS_NAME, "");
+//        SharedPreferences sharedPrefs = this.getSharedPreferences(
+//                Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+//        callbackActivityPackageName = sharedPrefs.getString(
+//                Constants.CALLBACK_ACTIVITY_PACKAGE_NAME, "");
+//        callbackActivityClassName = sharedPrefs.getString(
+//                Constants.CALLBACK_ACTIVITY_CLASS_NAME, "");
 
-        Intent intent = getIntent();
-        String notificationId = intent
-                .getStringExtra(Constants.NOTIFICATION_ID);
-        String notificationApiKey = intent
-                .getStringExtra(Constants.NOTIFICATION_API_KEY);
-        String notificationTitle = intent
-                .getStringExtra(Constants.NOTIFICATION_TITLE);
-        String notificationMessage = intent
-                .getStringExtra(Constants.NOTIFICATION_MESSAGE);
-        String notificationUri = intent
-                .getStringExtra(Constants.NOTIFICATION_URI);
-
-        Log.d(LOGTAG, "notificationId=" + notificationId);
-        Log.d(LOGTAG, "notificationApiKey=" + notificationApiKey);
-        Log.d(LOGTAG, "notificationTitle=" + notificationTitle);
-        Log.d(LOGTAG, "notificationMessage=" + notificationMessage);
-        Log.d(LOGTAG, "notificationUri=" + notificationUri);
+//        Intent intent = getIntent();
+//        String notificationId = intent
+//                .getStringExtra(Constants.NOTIFICATION_ID);
+//        String notificationApiKey = intent
+//                .getStringExtra(Constants.NOTIFICATION_API_KEY);
+//        String notificationTitle = intent
+//                .getStringExtra(Constants.NOTIFICATION_TITLE);
+//        String notificationMessage = intent
+//                .getStringExtra(Constants.NOTIFICATION_MESSAGE);
+//        String notificationUri = intent
+//                .getStringExtra(Constants.NOTIFICATION_URI);
+        Notification notification = Notifier.getNotification(getIntent());
+        Log.d(LOGTAG, "notification=" + notification);
+//        Log.d(LOGTAG, "notificationId=" + notificationId);
+//        Log.d(LOGTAG, "notificationApiKey=" + notificationApiKey);
+//        Log.d(LOGTAG, "notificationTitle=" + notificationTitle);
+//        Log.d(LOGTAG, "notificationMessage=" + notificationMessage);
+//        Log.d(LOGTAG, "notificationUri=" + notificationUri);
 
         //        Display display = getWindowManager().getDefaultDisplay();
         //        View rootView;
@@ -84,8 +85,12 @@ public class NotificationDetailsActivity extends Activity{
         //            rootView = null;
         //        }
 
-        View rootView = createView(notificationTitle, notificationMessage,
-                notificationUri);
+        View rootView;
+        if(notification != null){
+            rootView = createView(notification.getTitle(), notification.getMessage(), notification.getUri());
+        } else {
+            rootView = createView("传递的信息为 null", null, null);
+        }
         setContentView(rootView);
     }
 
@@ -144,9 +149,7 @@ public class NotificationDetailsActivity extends Activity{
                                .startsWith("geo:"))){
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 } else {
-                    intent = new Intent().setClassName(
-                            callbackActivityPackageName,
-                            callbackActivityClassName);
+                    intent = new Intent(NotificationDetailsActivity.this, DemoAppActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

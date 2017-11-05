@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hongfans.push;
+package com.hongfans.push.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.hongfans.push.display.Notifier;
-import com.hongfans.push.logutil.LogUtil;
+import com.hongfans.push.Constants;
+import com.hongfans.push.message.Notification;
+import com.hongfans.push.util.LogUtil;
+import com.hongfans.push.util.Notifier;
 
 /**
  * Broadcast receiver that handles push notification messages from the server.
@@ -69,8 +71,13 @@ public final class NotificationReceiver extends BroadcastReceiver{
             Log.d(LOGTAG, "notificationUri=" + notificationUri);
 
             Notifier notifier = new Notifier(context);
-            notifier.notify(notificationId, notificationApiKey,
-                    notificationTitle, notificationMessage, notificationUri);
+            Notification note = new Notification();
+            note.setId(notificationId);
+            note.setApiKey(notificationApiKey);
+            note.setTitle(notificationTitle);
+            note.setMessage(notificationMessage);
+            note.setUri(notificationUri);
+            notifier.notify(note);
         }
 
         //        } else if (Constants.ACTION_NOTIFICATION_CLICKED.equals(action)) {

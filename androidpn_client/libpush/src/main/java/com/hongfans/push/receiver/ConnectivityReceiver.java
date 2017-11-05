@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.hongfans.push;
+package com.hongfans.push.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,7 +22,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.hongfans.push.logutil.LogUtil;
+import com.hongfans.push.NotificationService;
+import com.hongfans.push.util.LogUtil;
 
 /**
  * A broadcast receiver to handle the changes in network connectiion states.
@@ -31,8 +32,7 @@ import com.hongfans.push.logutil.LogUtil;
  */
 public class ConnectivityReceiver extends BroadcastReceiver{
 
-    private static final String LOGTAG = LogUtil
-            .makeLogTag(ConnectivityReceiver.class);
+    private static final String LOGTAG = LogUtil.makeLogTag(ConnectivityReceiver.class);
 
     private NotificationService notificationService;
 

@@ -22,8 +22,9 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.hongfans.push.iq.NotificationIQ;
+import com.hongfans.push.iq.listener.NotificationPacketListener;
 import com.hongfans.push.iq.provider.NotificationIQProvider;
-import com.hongfans.push.logutil.LogUtil;
+import com.hongfans.push.util.LogUtil;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
@@ -530,7 +531,7 @@ public class XmppManager{
         mIntentService = clazz;
     }
 
-    Class<? extends HFIntentService> getIntentService(){
+    public Class<? extends HFIntentService> getIntentService(){
         return mIntentService;
     }
 }

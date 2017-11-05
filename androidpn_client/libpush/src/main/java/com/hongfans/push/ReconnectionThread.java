@@ -17,7 +17,7 @@ package com.hongfans.push;
 
 import android.util.Log;
 
-import com.hongfans.push.logutil.LogUtil;
+import com.hongfans.push.util.LogUtil;
 
 /**
  * A thread class for recennecting the server.
