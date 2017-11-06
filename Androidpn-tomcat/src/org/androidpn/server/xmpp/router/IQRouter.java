@@ -17,17 +17,7 @@
  */
 package org.androidpn.server.xmpp.router;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.androidpn.server.xmpp.handler.IQAuthHandler;
-import org.androidpn.server.xmpp.handler.IQHandler;
-import org.androidpn.server.xmpp.handler.IQRegisterHandler;
-import org.androidpn.server.xmpp.handler.IQRosterHandler;
-import org.androidpn.server.xmpp.handler.IQdeliverConfirmHandler;
-import org.androidpn.server.xmpp.handler.IQsetAliasHandler;
+import org.androidpn.server.xmpp.handler.*;
 import org.androidpn.server.xmpp.session.ClientSession;
 import org.androidpn.server.xmpp.session.Session;
 import org.androidpn.server.xmpp.session.SessionManager;
@@ -37,6 +27,11 @@ import org.dom4j.Element;
 import org.xmpp.packet.IQ;
 import org.xmpp.packet.JID;
 import org.xmpp.packet.PacketError;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /** 
  * This class is to route IQ packets to their corresponding handler.
@@ -61,7 +56,7 @@ public class IQRouter {
         iqHandlers.add(new IQAuthHandler());
         iqHandlers.add(new IQRegisterHandler());
         iqHandlers.add(new IQRosterHandler());
-        iqHandlers.add(new IQdeliverConfirmHandler());
+        iqHandlers.add(new IQDeliverConfirmHandler());
         iqHandlers.add(new IQsetAliasHandler());
     }
 
@@ -76,14 +71,12 @@ public class IQRouter {
         }
         JID sender = packet.getFrom();
         ClientSession session = sessionManager.getSession(sender);
-
+        log.info("tag_route " + packet.getChildElement().getNamespaceURI());
         if (session == null
                 || session.getStatus() == Session.STATUS_AUTHENTICATED
-                || ("jabber:iq:auth".equals(packet.getChildElement()
-                        .getNamespaceURI())
-                        || "jabber:iq:register".equals(packet.getChildElement()
-                                .getNamespaceURI()) || "urn:ietf:params:xml:ns:xmpp-bind"
-                        .equals(packet.getChildElement().getNamespaceURI()))) {
+                || ("jabber:iq:auth".equals(packet.getChildElement().getNamespaceURI())
+                || "jabber:iq:register".equals(packet.getChildElement().getNamespaceURI())
+                || "urn:ietf:params:xml:ns:xmpp-bind".equals(packet.getChildElement().getNamespaceURI()))) {
             handle(packet);
         } else {
             IQ reply = IQ.createResultIQ(packet);

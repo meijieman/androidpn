@@ -36,7 +36,15 @@ public class NotificationDaoHibernate extends HibernateDaoSupport implements Not
 
 	@Override
 	public List<Notification> getNotifications() {
-//		return getHibernateTemplate().find("from Notification n order by n.createdDate desc");
-		return getHibernateTemplate().find("from Notification");
+		return getHibernateTemplate().find("from Notification n order by n.createdDate desc");
+	}
+
+	@Override
+	public Notification getNotificationByUuid(String UUID) {
+		List<Notification> list = getHibernateTemplate().find("from Notification where uuid=?", UUID);
+		if (list != null && list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
 	}
 }

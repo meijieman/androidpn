@@ -125,8 +125,7 @@ public class StanzaHandler {
             log.debug("iq...");
             processIQ(doc);
         } else {
-            log.warn("Unexpected packet tag (not message, iq, presence)"
-                    + doc.asXML());
+            log.warn("Unexpected packet tag (not message, iq, presence)" + doc.asXML());
             session.close();
         }
 
@@ -251,9 +250,7 @@ public class StanzaHandler {
                 sb.append(error.toXML());
                 connection.deliverRawText(sb.toString()); // 响应
                 connection.close();
-                log
-                        .warn("Closing session due to bad_namespace_prefix in stream header: "
-                                + namespace);
+                log.warn("Closing session due to bad_namespace_prefix in stream header: " + namespace);
             }
         }
     }
@@ -274,8 +271,7 @@ public class StanzaHandler {
             startTLS();
         } catch (Exception e) {
             log.error("Error while negotiating TLS", e);
-            connection
-                    .deliverRawText("<failure xmlns=\"urn:ietf:params:xml:ns:xmpp-tls\">");
+            connection.deliverRawText("<failure xmlns=\"urn:ietf:params:xml:ns:xmpp-tls\">");
             connection.close();
             return false;
         }

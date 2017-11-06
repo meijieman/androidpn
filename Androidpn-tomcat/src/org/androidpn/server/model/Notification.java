@@ -3,17 +3,11 @@ package org.androidpn.server.model;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+import javax.persistence.*;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 /**
- * 离线消息推送
+ * 通知推送，穿透消息
  * @author xuyusong
  *
  */
@@ -30,7 +24,7 @@ public class Notification {
 	
 	@Column(name = "api_key",length = 64)
 	private String apiKey;
-	//一个用户可以拥有多条离线消息
+
 	@Column(name = "user_name", length = 64)
 	private String username;
 	
@@ -44,7 +38,7 @@ public class Notification {
 	private String uri;
 
 	@Column(name = "push_to")
-	private String pushTo;
+	private String pushTo; // 推送目标用户 all 全部，tag 标签，username 指定，group 分组
 
 	@Column(name = "push_Type")
 	private String pushType; // 推送类型 notification， payload
@@ -52,8 +46,13 @@ public class Notification {
 	@Column(name = "created_date", updatable = false)
 	private Date createdDate = new Date();
 
+	@Column(name = "delivered_date")
+	private Date deliveredDate; // 发送时间，一般和创建时间相同，离线消息发送时间稍晚
+
 	@Column(name = "valid_time")
 	private Long validTime; // 有效时间，从创建时间计算，单位 s
+
+	// private String laterAction; // 点击通知栏的后续操作，启动应用，打开连接，下载应用
 
 	public long getId() {
 		return id;
@@ -133,6 +132,14 @@ public class Notification {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public Date getDeliveredDate() {
+		return deliveredDate;
+	}
+
+	public void setDeliveredDate(Date deliveredDate) {
+		this.deliveredDate = deliveredDate;
 	}
 
 	public Long getValidTime() {

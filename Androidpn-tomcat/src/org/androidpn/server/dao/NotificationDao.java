@@ -1,8 +1,8 @@
 package org.androidpn.server.dao;
 
-import java.util.List;
-
 import org.androidpn.server.model.Notification;
+
+import java.util.List;
 
 public interface NotificationDao {
 
@@ -15,4 +15,6 @@ public interface NotificationDao {
 	void deleteNotificationByUuid(String UUID);
 
 	List<Notification> getNotifications();
+
+	Notification getNotificationByUuid(String UUID);
 }

@@ -60,7 +60,7 @@ public class NotificationController extends MultiActionController {
         logger.debug("apiKey=" + apiKey);
 
         if (broadcast.equalsIgnoreCase("0")) { // broadcast
-            notificationManager.sendBroadcast(apiKey, title, message, uri, "broadcast", "notif");
+            notificationManager.sendBroadcast(apiKey, title, message, uri, "broadcast", "notification");
 //            notificationManager.sendBroadcast(apiKey, title, message, uri);
         } else if(broadcast.equalsIgnoreCase("1")) { // by username
             notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri, "username", "payload", true);

@@ -41,6 +41,10 @@
                    class="<c:if test="${topMenu eq 'notificationrecord'}"><c:out value="current" /></c:if>">Notification
                     Record</a>
             </li>
+            <li>
+                <a href="/pushdetail.do"
+                   class="<c:if test="${topMenu eq 'pushdetail'}"><c:out value="current" /></c:if>">Push Detail</a>
+            </li>
         </ul>
         <div id="tabcontent">
             <decorator:body/>

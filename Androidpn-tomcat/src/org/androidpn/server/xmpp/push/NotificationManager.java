@@ -18,11 +18,9 @@
 package org.androidpn.server.xmpp.push;
 
 import org.androidpn.server.model.Notification;
+import org.androidpn.server.model.PushDetail;
 import org.androidpn.server.model.User;
-import org.androidpn.server.service.NotificationService;
-import org.androidpn.server.service.ServiceLocator;
-import org.androidpn.server.service.UserNotFoundException;
-import org.androidpn.server.service.UserService;
+import org.androidpn.server.service.*;
 import org.androidpn.server.xmpp.session.ClientSession;
 import org.androidpn.server.xmpp.session.SessionManager;
 import org.apache.commons.logging.Log;
@@ -32,6 +30,7 @@ import org.dom4j.Element;
 import org.dom4j.QName;
 import org.xmpp.packet.IQ;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -53,6 +52,8 @@ public class NotificationManager {
 
     private UserService userService;
 
+    private PushDetailService mPushDetailService;
+
     /**
      * Constructor.
      */
@@ -60,6 +61,7 @@ public class NotificationManager {
         sessionManager = SessionManager.getInstance();
         notificationService = ServiceLocator.getNotificationService();
         userService = ServiceLocator.getUserService();
+        mPushDetailService = ServiceLocator.getPushDetailService();
     }
 
     /**
@@ -86,24 +88,46 @@ public class NotificationManager {
         }
     }
 
+    /**
+     * 判断是否有用户
+     */
+    private boolean hasUser(){
+        List<User> users = userService.getUsers();
+        return users != null && !users.isEmpty();
+    }
+
     public void sendBroadcast(String apiKey, String title, String message, String uri, String pushTo, String pushType) {
         log.debug("sendBroadcast()...");
+        if (!hasUser()) {
+            log.debug("sendBroadcast() no user, finish broadcast");
+            return;
+        }
+
         Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
         notificationService.saveNotification(notif);
 
+        PushDetail pd = new PushDetail();
+        pd.setUuid(notif.getUuid());
+
+        log.info("tag_pd 将要发送推送 ");
         List<User> users = userService.getUsers();
         for (User user : users) {
+            pd.setUsername(user.getUsername());
+            pd.setCreatedDate(new Date()); // fixme 每次都 new 时间
+            PushDetail pd1 = mPushDetailService.savePushDetail(pd);
+            log.info("tag_pd 保存推送 pd " + pd);
+
             IQ notificationIQ = createNotificationIQ(notif);
             ClientSession session = sessionManager.getSession(user.getUsername());
             if (session != null && session.getPresence().isAvailable()) {
                 notificationIQ.setTo(session.getAddress());
                 session.deliver(notificationIQ);
             }
-            notif.setUsername(user.getUsername());
         }
     }
 
-    private Notification createNotification(String apiKey, String title, String message, String uri, String pushTo, String pushType){
+    private Notification createNotification(String apiKey, String title, String message, String uri,
+                                            String pushTo, String pushType){
         Notification notif = new Notification();
         notif.setApiKey(apiKey);
         notif.setTitle(title);
@@ -115,6 +139,9 @@ public class NotificationManager {
         Random random = new Random();
         String uuid = Integer.toHexString(random.nextInt());
         notif.setUuid(uuid);
+        Date date = new Date();
+        notif.setCreatedDate(date);
+        notif.setDeliveredDate(date);
         return notif;
     }
 
@@ -139,7 +166,8 @@ public class NotificationManager {
      * @param message the message details
      * @param uri     the uri
      */
-    public void sendNotifcationToUser(String apiKey, String username, String title, String message, String uri, boolean shouldSave) {
+    public void sendNotifcationToUser(String apiKey, String username, String title, String message,
+                                      String uri, boolean shouldSave) {
         log.debug("sendNotifcationToUser()...");
         Random random = new Random();
         String id = Integer.toHexString(random.nextInt());
@@ -161,7 +189,8 @@ public class NotificationManager {
         }
     }
 
-    public void sendNotifcationToUser(String apiKey, String username, String title, String message, String uri, String pushTo, String pushType, boolean shouldSave) {
+    public void sendNotifcationToUser(String apiKey, String username, String title, String message, String uri,
+                                      String pushTo, String pushType, boolean shouldSave) {
         log.debug("sendNotifcationToUser()...");
         Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
 
@@ -177,6 +206,39 @@ public class NotificationManager {
             User user = userService.getUserByUsername(username);
             if (user != null && shouldSave) {
                 notificationService.saveNotification(notif);
+
+                PushDetail pd = new PushDetail();
+                pd.setUuid(notif.getUuid());
+                pd.setUsername(user.getUsername());
+                pd.setCreatedDate(new Date());
+                mPushDetailService.savePushDetail(pd);
+            }
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendNotifcationToUser(Notification notif, boolean shouldSave) {
+        log.debug("sendNotifcationToUser()...");
+
+        IQ notificationIQ = createNotificationIQ(notif); // 创建推送
+        ClientSession session = sessionManager.getSession(notif.getUsername());
+        if (session != null) {
+            if (session.getPresence().isAvailable()) {
+                notificationIQ.setTo(session.getAddress());
+                session.deliver(notificationIQ); // 发送推送
+            }
+        }
+        try {
+            User user = userService.getUserByUsername(notif.getUsername());
+            if (user != null && shouldSave) {
+                notificationService.saveNotification(notif);
+
+                PushDetail pd = new PushDetail();
+                pd.setUuid(notif.getUuid());
+                pd.setUsername(user.getUsername());
+                pd.setCreatedDate(new Date());
+                mPushDetailService.savePushDetail(pd);
             }
         } catch (UserNotFoundException e) {
             e.printStackTrace();
@@ -184,18 +246,16 @@ public class NotificationManager {
     }
 
     //通过别名发送通知
-    public void sendNotificationByAlias(String alias, String apiKey,
-                                        String title, String message, String uri, boolean
-                                                 shouldsave) {
+    public void sendNotificationByAlias(String alias, String apiKey, String title, String message,
+                                        String uri, boolean shouldsave) {
         String username = sessionManager.getUsernameByAlias(alias);
         if (username != null) {
             sendNotifcationToUser(apiKey, username, title, message, uri, shouldsave);
         }
     }
 
-    public void sendNotificationByAlias(String alias, String apiKey,
-                                         String title, String message, String uri, String pushTo, String pushType, boolean
-                                                 shouldsave) {
+    public void sendNotificationByAlias(String alias, String apiKey, String title, String message,
+                                        String uri, String pushTo, String pushType, boolean shouldsave) {
         String username = sessionManager.getUsernameByAlias(alias);
         if (username != null) {
             sendNotifcationToUser(apiKey, username, title, message, uri, pushTo, pushType, shouldsave);

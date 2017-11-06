@@ -17,9 +17,6 @@
  */
 package org.androidpn.server.xmpp.handler;
 
-import java.util.List;
-import java.util.ServiceLoader;
-
 import org.androidpn.server.model.Notification;
 import org.androidpn.server.service.NotificationService;
 import org.androidpn.server.service.ServiceLocator;
@@ -34,6 +31,9 @@ import org.xmpp.packet.JID;
 import org.xmpp.packet.Packet;
 import org.xmpp.packet.PacketError;
 import org.xmpp.packet.Presence;
+
+import java.util.Date;
+import java.util.List;
 
 
 /** 
@@ -90,13 +90,16 @@ public class PresenceUpdateHandler {
                     //发送离线消息给用户
                     if(notifications!=null&&notifications.size()>0){
 	                    for (Notification notification : notifications) {
-							String apiKey = notification.getApiKey();
-							String username = notification.getUsername();
-							String message = notification.getMessage();
-							String uri = notification.getUri();
-							String title = notification.getTitle();
-							notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri,false);
-							notificationService.deleteNotification(notification);
+//							String apiKey = notification.getApiKey();
+//							String username = notification.getUsername();
+//							String message = notification.getMessage();
+//							String uri = notification.getUri();
+//							String title = notification.getTitle();
+							// FIXME
+                            notification.setDeliveredDate(new Date());
+                            notificationManager.sendNotifcationToUser(notification, false);
+//                            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri, false);
+//							notificationService.deleteNotification(notification);
 						}
                     }
                 }

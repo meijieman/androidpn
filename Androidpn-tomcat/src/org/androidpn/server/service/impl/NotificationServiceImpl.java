@@ -1,10 +1,10 @@
 package org.androidpn.server.service.impl;
 
-import java.util.List;
-
 import org.androidpn.server.dao.NotificationDao;
 import org.androidpn.server.model.Notification;
 import org.androidpn.server.service.NotificationService;
+
+import java.util.List;
 
 public class NotificationServiceImpl implements NotificationService {
 
@@ -37,5 +37,10 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	public List<Notification> getNotifications() {
 		return notificationDao.getNotifications();
+	}
+
+	@Override
+	public Notification getNotificationByUuid(String UUID) {
+		return notificationDao.getNotificationByUuid(UUID);
 	}
 }

@@ -15,4 +15,6 @@ public interface NotificationService {
 	void deleteNotification(String uuid);
 
 	List<Notification> getNotifications();
+
+	Notification getNotificationByUuid(String UUID);
 }

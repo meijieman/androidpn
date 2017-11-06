@@ -28,6 +28,7 @@ public class ServiceLocator {
 
     public static String USER_SERVICE = "userService";
     public static String NOTIFICATION_SERVICE = "notificationService";
+    public static String PUSH_DETAIL_SERVICE = "pushDetailService";
     /**
      * Generic method to obtain a service object for a given name. 
      * 
@@ -53,5 +54,9 @@ public class ServiceLocator {
      */
     public static NotificationService getNotificationService(){
     	return (NotificationService)XmppServer.getInstance().getBean(NOTIFICATION_SERVICE);
+    }
+
+    public static PushDetailService getPushDetailService(){
+        return (PushDetailService)XmppServer.getInstance().getBean(PUSH_DETAIL_SERVICE);
     }
 }

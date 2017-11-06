@@ -13,6 +13,7 @@
                 /session.do=sessionController
                 /notification.do=notificationController
                 /notificationrecord.do=notificationRecordController
+                /pushdetail.do=pushdetailController
             </value>
         </property>
         <property name="order" value="1"/>
@@ -27,6 +28,10 @@
     </bean>
 
     <bean id="filenameController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>
+
+    <bean id="pushdetailController" class="org.androidpn.server.console.controller.PushDetailController">
+        <property name="methodNameResolver" ref="paramResolver"/>
+    </bean>
 
     <bean id="notificationRecordController" class="org.androidpn.server.console.controller.NotificationRecordController">
         <property name="methodNameResolver" ref="paramResolver"/>
