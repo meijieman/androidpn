@@ -64,6 +64,12 @@ public class User implements Serializable {
     @Column(name = "updated_date")
     private Date updatedDate;
 
+    @Column(name = "alias")
+    private String alias;
+
+    @Column(name = "tag")
+    private String tag;
+
     @Transient
     private boolean online;
 
@@ -128,6 +134,22 @@ public class User implements Serializable {
 
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public boolean isOnline() {

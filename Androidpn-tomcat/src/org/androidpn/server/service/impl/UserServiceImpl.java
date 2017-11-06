@@ -47,7 +47,14 @@ public class UserServiceImpl implements UserService {
     }
 
     public User getUser(String userId) {
-        return userDao.getUser(new Long(userId));
+        Long id = null;
+        try {
+            id = new Long(userId);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            log.error(e);
+        }
+        return userDao.getUser(id);
     }
 
     public List<User> getUsers() {

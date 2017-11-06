@@ -30,18 +30,18 @@ import org.androidpn.server.service.UserNotFoundException;
  */
 public interface UserDao {
 
-    public User getUser(Long id);
+    User getUser(Long id);
 
-    public User saveUser(User user);
+    User saveUser(User user);
 
-    public void removeUser(Long id);
+    void removeUser(Long id);
 
-    public boolean exists(Long id);
+    boolean exists(Long id);
     
-    public List<User> getUsers();
+    List<User> getUsers();
     
-    public List<User> getUsersFromCreatedDate(Date createDate);
+    List<User> getUsersFromCreatedDate(Date createDate);
 
-    public User getUserByUsername(String username) throws UserNotFoundException;
+    User getUserByUsername(String username) throws UserNotFoundException;
 
 }

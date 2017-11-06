@@ -29,6 +29,8 @@
 			<th>Name</th>
 			<th>Email</th>
 			<th>Created</th>
+			<th>Alias</th>
+			<th>Tag</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -48,6 +50,9 @@
 				<td><c:out value="${user.name}" /></td>
 				<td><c:out value="${user.email}" /></td>
 				<td align="center"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${user.createdDate}" /></td>
+				<td><c:out value="${user.alias}" /></td>
+				<td><c:out value="${user.tag}" /></td>
+
 			</tr>
 		</c:forEach>
 	</tbody>

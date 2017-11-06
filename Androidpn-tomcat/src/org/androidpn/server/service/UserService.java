@@ -17,10 +17,10 @@
  */
 package org.androidpn.server.service;
 
+import org.androidpn.server.model.User;
+
 import java.util.Date;
 import java.util.List;
-
-import org.androidpn.server.model.User;
 
 /** 
  * Business service interface for the user management.
@@ -29,16 +29,16 @@ import org.androidpn.server.model.User;
  */
 public interface UserService {
 
-    public User getUser(String userId);
+    User getUser(String userId);
 
-    public List<User> getUsers();
-    
-    public List<User> getUsersFromCreatedDate(Date createDate);
+    List<User> getUsers();
 
-    public User saveUser(User user) throws UserExistsException;
+    List<User> getUsersFromCreatedDate(Date createDate);
 
-    public User getUserByUsername(String username) throws UserNotFoundException;
+    User saveUser(User user) throws UserExistsException;
 
-    public void removeUser(Long userId);
+    User getUserByUsername(String username) throws UserNotFoundException;
+
+    void removeUser(Long userId);
 
 }
