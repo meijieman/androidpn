@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Admin Console</title>
-<meta name="menu" content="user" />
+<meta name="menu" content="notificationrecord" />
 <link rel="stylesheet" type="text/css" href="<c:url value='/styles/tablesorter/style.css'/>" />
 <script type="text/javascript" src="<c:url value='/scripts/jquery.tablesorter.js'/>"></script>
 </head>
