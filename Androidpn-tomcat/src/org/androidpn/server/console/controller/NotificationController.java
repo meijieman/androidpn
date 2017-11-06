@@ -47,31 +47,28 @@ public class NotificationController extends MultiActionController {
         return mav;
     }
 
-    public ModelAndView send(HttpServletRequest request,
-            HttpServletResponse response) throws Exception { // 发送推送消息
-        String broadcast = ServletRequestUtils.getStringParameter(request,
-                "broadcast", "0");
-        String username = ServletRequestUtils.getStringParameter(request,
-                "username");
-        String alias = ServletRequestUtils.getStringParameter(request,
-                "alias");
+    public ModelAndView send(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // 发送推送消息
+        String broadcast = ServletRequestUtils.getStringParameter(request, "broadcast", "0");
+        String username = ServletRequestUtils.getStringParameter(request, "username");
+        String alias = ServletRequestUtils.getStringParameter(request, "alias");
         String title = ServletRequestUtils.getStringParameter(request, "title");
-        String message = ServletRequestUtils.getStringParameter(request,
-                "message");
+        String message = ServletRequestUtils.getStringParameter(request, "message");
         String uri = ServletRequestUtils.getStringParameter(request, "uri");
 
         String apiKey = Config.getString("apiKey", "");
         logger.debug("apiKey=" + apiKey);
 
         if (broadcast.equalsIgnoreCase("0")) { // broadcast
-            notificationManager.sendBroadcast(apiKey, title, message, uri);
+            notificationManager.sendBroadcast(apiKey, title, message, uri, "broadcast", "notif");
+//            notificationManager.sendBroadcast(apiKey, title, message, uri);
         } else if(broadcast.equalsIgnoreCase("1")) { // by username
-            notificationManager.sendNotifcationToUser(apiKey, username, title,
-                    message, uri,true);
+            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri, "username", "payload", true);
+//            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri,true);
         }else if(broadcast.equalsIgnoreCase("2")){
         	//别名推送
-        	notificationManager.sendNotificatoionByalias(alias, apiKey, title,
-        			message, uri, false);
+            notificationManager.sendNotificationByAlias(alias, apiKey, title, message, uri, "alias", "payload", false);
+//        	notificationManager.sendNotificationByAlias(alias, apiKey, title, message, uri, false);
         }
 
         ModelAndView mav = new ModelAndView();

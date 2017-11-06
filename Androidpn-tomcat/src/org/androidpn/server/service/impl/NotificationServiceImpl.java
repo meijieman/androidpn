@@ -33,4 +33,9 @@ public class NotificationServiceImpl implements NotificationService {
 	public void deleteNotification(String uuid) {
 		notificationDao.deleteNotificationByUuid(uuid);
 	}
+
+	@Override
+	public List<Notification> getNotifications() {
+		return notificationDao.getNotifications();
+	}
 }

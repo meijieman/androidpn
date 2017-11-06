@@ -1,11 +1,10 @@
 package org.androidpn.server.dao.hibernate;
 
-import java.util.List;
-
 import org.androidpn.server.dao.NotificationDao;
 import org.androidpn.server.model.Notification;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import java.util.List;
 
 public class NotificationDaoHibernate extends HibernateDaoSupport implements NotificationDao {
 
@@ -35,4 +34,9 @@ public class NotificationDaoHibernate extends HibernateDaoSupport implements Not
 		}
 	}
 
+	@Override
+	public List<Notification> getNotifications() {
+//		return getHibernateTemplate().find("from Notification n order by n.createdDate desc");
+		return getHibernateTemplate().find("from Notification");
+	}
 }

@@ -1,16 +1,18 @@
 package org.androidpn.server.service;
 
-import java.util.List;
-
 import org.androidpn.server.model.Notification;
+
+import java.util.List;
 
 public interface NotificationService {
 
-	public void saveNotification(Notification notification);
-	
-	public List<Notification> findNotificationsByUsername(String username);
-	
-	public void deleteNotification(Notification notification);
-	
-	public void deleteNotification(String uuid);
+	void saveNotification(Notification notification);
+
+	List<Notification> findNotificationsByUsername(String username);
+
+	void deleteNotification(Notification notification);
+
+	void deleteNotification(String uuid);
+
+	List<Notification> getNotifications();
 }
