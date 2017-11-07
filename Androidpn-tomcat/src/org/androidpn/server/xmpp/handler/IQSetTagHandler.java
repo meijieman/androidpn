@@ -5,7 +5,7 @@ import org.androidpn.server.service.ServiceLocator;
 import org.androidpn.server.service.UserExistsException;
 import org.androidpn.server.service.UserNotFoundException;
 import org.androidpn.server.service.UserService;
-import org.androidpn.server.util.StringUtil;
+import org.androidpn.server.util.CommonUtil;
 import org.androidpn.server.xmpp.UnauthorizedException;
 import org.androidpn.server.xmpp.session.ClientSession;
 import org.androidpn.server.xmpp.session.Session;
@@ -48,7 +48,7 @@ public class IQSetTagHandler extends IQHandler {
                 Element element = packet.getChildElement();
                 String username = element.elementText("username");
                 String tag = element.elementText("tag");
-                if (StringUtil.isNotEmpty(username) && StringUtil.isNotEmpty(tag))
+                if (CommonUtil.isNotEmpty(username) && CommonUtil.isNotEmpty(tag))
                     sessionManager.setUserTag(username, tag);
                 try {
                     User user = userService.getUser(session.getUsername());

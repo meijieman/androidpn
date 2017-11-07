@@ -115,7 +115,7 @@ public class NotificationManager {
             pd.setUsername(user.getUsername());
             pd.setCreatedDate(new Date()); // fixme 每次都 new 时间
             PushDetail pd1 = mPushDetailService.savePushDetail(pd);
-            log.info("tag_pd 保存推送 pd " + pd);
+            log.info("tag_pd 保存推送 pd " + pd1);
 
             IQ notificationIQ = createNotificationIQ(notif);
             ClientSession session = sessionManager.getSession(user.getUsername());

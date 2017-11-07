@@ -1,3 +1,4 @@
+<%@ page import="java.util.Date" %>
 <%@ page language="java" errorPage="/WEB-INF/pages/error.jsp" pageEncoding="UTF-8" contentType="text/html;charset=UTF-8"%>
 <%@ include file="/includes/taglibs.jsp"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -33,11 +34,12 @@
 </tr>
 <tr>
 	<td>Title:</td>
-	<td><input type="text" id="title" name="title" value="Dokdo Island" style="width:380px;" /></td>
+	<td><input type="text" id="title" name="title" value="车悦宝" style="width:380px;" /></td>
 </tr>
 <tr>
 	<td>Message:</td>
-	<td><textarea id="message" name="message" style="width:380px; height:80px;" >Dokdo is a Korean island, the far east of the Korean territory. No doubt! No question! Don't mention it any more!</textarea></td>
+	<td><textarea id="message" name="message" style="width:380px; height:80px;" >车载在线互动娱乐平台。随车行乐，听你想听!
+<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="<%=new Date()%>" /></textarea></td>
 </tr>
 <%--
 <tr>
