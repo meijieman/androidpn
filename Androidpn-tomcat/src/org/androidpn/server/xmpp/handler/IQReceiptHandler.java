@@ -1,9 +1,9 @@
 package org.androidpn.server.xmpp.handler;
 
 import org.androidpn.server.model.PushDetail;
-import org.androidpn.server.service.NotificationService;
 import org.androidpn.server.service.PushDetailService;
 import org.androidpn.server.service.ServiceLocator;
+import org.androidpn.server.service.UserNotFoundException;
 import org.androidpn.server.xmpp.UnauthorizedException;
 import org.androidpn.server.xmpp.session.ClientSession;
 import org.androidpn.server.xmpp.session.Session;
@@ -14,15 +14,13 @@ import org.xmpp.packet.PacketError;
 import java.util.Date;
 
 
-public class IQDeliverConfirmHandler extends IQHandler {
+public class IQReceiptHandler extends IQHandler {
 
-    private static final String NAMESPACE = "androidpn:iq:deliverconfirm";
+    private static final String NAMESPACE = "androidpn:iq:receipt";
 
-    private NotificationService notificationService;
     private PushDetailService mPushDetailService;
 
-    public IQDeliverConfirmHandler() {
-        notificationService = ServiceLocator.getNotificationService();
+    public IQReceiptHandler() {
         mPushDetailService = ServiceLocator.getPushDetailService();
     }
 
@@ -42,12 +40,15 @@ public class IQDeliverConfirmHandler extends IQHandler {
             if (IQ.Type.set.equals(packet.getType())) {
                 Element element = packet.getChildElement();
                 String uuid = element.elementText("uuid");
-//        		notificationService.deleteNotification(uuid);
-                // FIXME: 2017/11/7 根据用户名和消息 uuid 更新消息状态, uuid 有问题，username 没有
-                PushDetail pushDetail = mPushDetailService.getPushDetail("9744f50237f54c37808736ff37808a78", uuid);
-                if (pushDetail != null) {
-                    pushDetail.setReceiptDate(new Date());
-                    mPushDetailService.savePushDetail(pushDetail);
+                try {
+                    // 根据用户名和消息的 uuid 更新消息状态（即回执时间）
+                    PushDetail pushDetail = mPushDetailService.getPushDetail(session.getUsername(), uuid);
+                    if (pushDetail != null) {
+                        pushDetail.setReceiptDate(new Date());
+                        mPushDetailService.savePushDetail(pushDetail);
+                    }
+                } catch (UserNotFoundException e) {
+                    e.printStackTrace();
                 }
             }
         }

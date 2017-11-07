@@ -332,6 +332,7 @@ public class NotificationManager {
         Element notification = DocumentHelper.createElement(QName.get("notification",
                 NOTIFICATION_NAMESPACE));
         notification.addElement("id").setText(String.valueOf(notif.getId()));
+        notification.addElement("uuid").setText(String.valueOf(notif.getUuid()));
         notification.addElement("apiKey").setText(notif.getApiKey());
         notification.addElement("title").setText(notif.getTitle());
         notification.addElement("message").setText(notif.getMessage());

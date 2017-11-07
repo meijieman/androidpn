@@ -30,7 +30,7 @@ public class PushDetailServiceImpl implements PushDetailService {
 
     @Override
     public PushDetail getPushDetail(String username, String UUID) {
-        log.debug("tag_route 根据 username 和 uuid 获取发送的消息 " + dao.getPushDetail(username, UUID));
+        log.debug("tag_route 根据 username 和 uuid 获取发送的消息 " + dao.getPushDetail(username, UUID) + "\n UUID " + UUID + ", username " + username);
         return dao.getPushDetail(username, UUID);
     }
 
