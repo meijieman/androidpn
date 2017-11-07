@@ -18,7 +18,7 @@ public class PushDetailDaoHibernate extends HibernateDaoSupport implements PushD
 
     @Override
     public List<PushDetail> getPushDetails() {
-        return getHibernateTemplate().find("from PushDetail pd order by pd.createdDate");
+        return getHibernateTemplate().find("from PushDetail pd order by pd.createdDate desc");
     }
 
     @Override
