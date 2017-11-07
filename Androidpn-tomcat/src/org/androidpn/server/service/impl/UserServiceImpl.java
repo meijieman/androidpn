@@ -90,4 +90,14 @@ public class UserServiceImpl implements UserService {
         userDao.removeUser(userId);
     }
 
+    @Override
+    public String getUsernameByAlias(String alias) throws UserNotFoundException {
+        return userDao.getUsernameByAlias(alias);
+    }
+
+    @Override
+    public List<String> getUsernamesByTag(String tag) {
+        return userDao.getUsernamesByTag(tag);
+    }
+
 }

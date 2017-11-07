@@ -41,4 +41,7 @@ public interface UserService {
 
     void removeUser(Long userId);
 
+    String getUsernameByAlias(String alias) throws UserNotFoundException;
+
+    List<String> getUsernamesByTag(String tag);
 }

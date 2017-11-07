@@ -15,17 +15,16 @@ import org.xmpp.packet.IQ;
 import org.xmpp.packet.PacketError;
 
 /**
- * TODO
- * Created by MEI on 2017/11/6.
+ * 设置别名，一个名字对应一个别名，别名不能重复
  */
-public class IQSetTagHandler extends IQHandler {
+public class IQSetAliasHandler extends IQHandler {
 
-    private static final String NAMESPACE = "androidpn:iq:settag";
+    private static final String NAMESPACE = "androidpn:iq:setalias";
 
     private SessionManager sessionManager;
     private UserService userService;
 
-    public IQSetTagHandler() {
+    public IQSetAliasHandler() {
         userService = ServiceLocator.getUserService();
         sessionManager = sessionManager.getInstance();
     }
@@ -40,22 +39,23 @@ public class IQSetTagHandler extends IQHandler {
             reply = IQ.createResultIQ(packet);
             reply.setChildElement(packet.getChildElement().createCopy());
             reply.setError(PacketError.Condition.internal_server_error);
+
             return reply;
         }
-
         if (session.getStatus() == Session.STATUS_AUTHENTICATED) {
             if (IQ.Type.set.equals(packet.getType())) {
                 Element element = packet.getChildElement();
-                String username = element.elementText("username");
-                String tag = element.elementText("tag");
-                if (CommonUtil.isNotEmpty(username) && CommonUtil.isNotEmpty(tag))
-                    sessionManager.setUserTag(username, tag);
-                try {
-                    User user = userService.getUser(session.getUsername());
-                    user.setTag(tag);
-                    userService.saveUser(user);
-                } catch (UserNotFoundException | UserExistsException e) {
-                    e.printStackTrace();
+//                String username = element.elementText("username");
+                String alias = element.elementText("alias");
+                if (/*CommonUtil.isNotEmpty(username) && */CommonUtil.isNotEmpty(alias)) {
+                    try {
+                        User user = userService.getUserByUsername(session.getUsername());
+                        log.debug("save alias to db. user " + user);
+                        user.setAlias(alias);
+                        userService.saveUser(user);
+                    } catch (UserNotFoundException | UserExistsException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

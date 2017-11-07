@@ -44,4 +44,7 @@ public interface UserDao {
 
     User getUserByUsername(String username) throws UserNotFoundException;
 
+    String getUsernameByAlias(String alias) throws UserNotFoundException;
+
+    List<String> getUsernamesByTag(String tag);
 }

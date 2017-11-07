@@ -57,7 +57,8 @@ public class IQRouter {
         iqHandlers.add(new IQRegisterHandler());
         iqHandlers.add(new IQRosterHandler());
         iqHandlers.add(new IQDeliverConfirmHandler());
-        iqHandlers.add(new IQsetAliasHandler());
+        iqHandlers.add(new IQSetAliasHandler());
+        iqHandlers.add(new IQSetTagsHandler());
     }
 
     /**

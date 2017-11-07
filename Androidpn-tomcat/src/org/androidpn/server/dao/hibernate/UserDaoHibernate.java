@@ -17,13 +17,13 @@
  */
 package org.androidpn.server.dao.hibernate;
 
-import java.util.Date;
-import java.util.List;
-
 import org.androidpn.server.dao.UserDao;
 import org.androidpn.server.model.User;
 import org.androidpn.server.service.UserNotFoundException;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * This class is the implementation of UserDAO using Spring's HibernateTemplate.
@@ -73,6 +73,21 @@ public class UserDaoHibernate extends HibernateDaoSupport implements UserDao {
 		} else {
 			return (User) users.get(0);
 		}
+	}
+
+	@Override
+	public String getUsernameByAlias(String alias) throws UserNotFoundException{
+		List users = getHibernateTemplate().find("from User where alias=?", alias);
+		if (users == null || users.isEmpty()) {
+			throw new UserNotFoundException("User '" + alias + "' not found");
+		} else {
+			return ((User) users.get(0)).getUsername();
+		}
+	}
+
+	@Override
+	public List<String> getUsernamesByTag(String tag) {
+		return getHibernateTemplate().find("from User where tag like %?%", tag);
 	}
 
 	// @SuppressWarnings("unchecked")

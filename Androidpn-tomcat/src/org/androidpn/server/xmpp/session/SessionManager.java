@@ -58,10 +58,10 @@ public class SessionManager {
     private Map<String, ClientSession> clientSessions = new ConcurrentHashMap<String, ClientSession>();
 
     //别名
-    private Map<String, String> aliasUsernameMap = new ConcurrentHashMap<String, String>();
+//    private Map<String, String> aliasUsernameMap = new ConcurrentHashMap<String, String>();
     
     //标签
-    private Map<String,ConcurrentHashSet<String>> tagUserMap = new HashMap<String, ConcurrentHashSet<String>>();
+//    private Map<String,ConcurrentHashSet<String>> tagUserMap = new HashMap<String, ConcurrentHashSet<String>>();
     
     private final AtomicInteger connectionsCounter = new AtomicInteger(0);
 
@@ -226,25 +226,11 @@ public class SessionManager {
         }
     }
     //hashmap 操作接口
-    public void setUserAlias(String username,String alias){
-    	aliasUsernameMap.put(alias, username);
-    }
-    public String getUsernameByAlias(String alias){
-    	String username = aliasUsernameMap.get(alias);
-    	return username;
-    }
-    
-    public void setUserTag(String username,String tag){
-    	ConcurrentHashSet<String> hashSet = tagUserMap.get(tag);
-    	if(hashSet==null){
-    		ConcurrentHashSet<String> set = new ConcurrentHashSet<String>();
-    		set.add(username);
-    		tagUserMap.put(tag, set);
-    	}else{
-    		hashSet.add(username);
-    	}
-    }
-    public Set<String> getUsernamesBytag( String tag){
-    	return tagUserMap.get(tag);
-    }
+//    public void setUserAlias(String username,String alias){
+//    	aliasUsernameMap.put(alias, username);
+//    }
+//    public String getUsernameByAlias(String alias){
+//    	String username = aliasUsernameMap.get(alias);
+//    	return username;
+//    }
 }

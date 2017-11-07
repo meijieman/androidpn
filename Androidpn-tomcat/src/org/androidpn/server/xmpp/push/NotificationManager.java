@@ -20,7 +20,12 @@ package org.androidpn.server.xmpp.push;
 import org.androidpn.server.model.Notification;
 import org.androidpn.server.model.PushDetail;
 import org.androidpn.server.model.User;
-import org.androidpn.server.service.*;
+import org.androidpn.server.service.NotificationService;
+import org.androidpn.server.service.PushDetailService;
+import org.androidpn.server.service.ServiceLocator;
+import org.androidpn.server.service.UserNotFoundException;
+import org.androidpn.server.service.UserService;
+import org.androidpn.server.util.CommonUtil;
 import org.androidpn.server.xmpp.session.ClientSession;
 import org.androidpn.server.xmpp.session.SessionManager;
 import org.apache.commons.logging.Log;
@@ -33,7 +38,6 @@ import org.xmpp.packet.IQ;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 /**
  * This class is to manage sending the notifcations to the users.
@@ -248,25 +252,35 @@ public class NotificationManager {
     //通过别名发送通知
     public void sendNotificationByAlias(String alias, String apiKey, String title, String message,
                                         String uri, boolean shouldsave) {
-        String username = sessionManager.getUsernameByAlias(alias);
-        if (username != null) {
-            sendNotifcationToUser(apiKey, username, title, message, uri, shouldsave);
+
+        try {
+            String username = userService.getUsernameByAlias(alias);
+            if (username != null) {
+                sendNotifcationToUser(apiKey, username, title, message, uri, shouldsave);
+            }
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     public void sendNotificationByAlias(String alias, String apiKey, String title, String message,
                                         String uri, String pushTo, String pushType, boolean shouldsave) {
-        String username = sessionManager.getUsernameByAlias(alias);
-        if (username != null) {
-            sendNotifcationToUser(apiKey, username, title, message, uri, pushTo, pushType, shouldsave);
+        try {
+            String username = userService.getUsernameByAlias(alias);
+            if (username != null) {
+                sendNotifcationToUser(apiKey, username, title, message, uri, pushTo, pushType, shouldsave);
+            }
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     public void sendNotificationByTag(String tag, String apiKey, String title, String message,
                                       String uri, boolean shouldsave) {
-        Set<String> usernameSet = sessionManager.getUsernamesBytag(tag);
-        if (usernameSet != null && usernameSet.size() > 0) {
-            for (String username : usernameSet) {
+
+        List<String> usernames = userService.getUsernamesByTag(tag);
+        if (CommonUtil.isNotEmpty(usernames)) {
+            for (String username : usernames) {
                 sendNotifcationToUser(apiKey, username, title, message, uri, shouldsave);
             }
         }

@@ -57,7 +57,7 @@ public class User implements Serializable {
     @Column(name = "updated_date")
     private Date updatedDate;
 
-    @Column(name = "alias")
+    @Column(name = "alias", unique = true)
     private String alias;
 
     @Column(name = "tag")
