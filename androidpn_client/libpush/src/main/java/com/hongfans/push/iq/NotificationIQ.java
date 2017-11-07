@@ -24,6 +24,8 @@ import org.jivesoftware.smack.packet.IQ;
  */
 public class NotificationIQ extends IQ{
 
+    private String uuid;
+
     private String id;
 
     private String apiKey;
@@ -47,6 +49,14 @@ public class NotificationIQ extends IQ{
         }
         buf.append("</").append("notification").append("> ");
         return buf.toString();
+    }
+
+    public String getUuid(){
+        return uuid;
+    }
+
+    public void setUuid(String uuid){
+        this.uuid = uuid;
     }
 
     public String getId(){

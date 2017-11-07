@@ -38,6 +38,9 @@ public class NotificationIQProvider implements IQProvider{
         for(boolean done = false; !done; ){
             int eventType = parser.next();
             if(eventType == 2){
+                if("uuid".equals(parser.getName())){
+                    notification.setUuid(parser.nextText());
+                }
                 if("id".equals(parser.getName())){
                     notification.setId(parser.nextText());
                 }

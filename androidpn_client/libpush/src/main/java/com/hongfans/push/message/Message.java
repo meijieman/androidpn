@@ -9,11 +9,20 @@ import java.io.Serializable;
  */
 public class Message implements Serializable{
 
+    private String uuid; // 后台唯一键
     private String id;
     private String apiKey;
     private String clientId; // 客户端id，识别唯一客户端
     private String appId; // 应用id，需要先注册
     private String pkgName; // 应用包名，需要先注册
+
+    public String getUuid(){
+        return uuid;
+    }
+
+    public void setUuid(String uuid){
+        this.uuid = uuid;
+    }
 
     public String getId(){
         return id;
@@ -58,6 +67,7 @@ public class Message implements Serializable{
     @Override
     public String toString(){
         return "Message{" +
+               "uuid='" + uuid + '\'' +
                "id='" + id + '\'' +
                ", apiKey='" + apiKey + '\'' +
                ", clientId='" + clientId + '\'' +

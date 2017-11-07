@@ -20,7 +20,7 @@ import android.util.Log;
 
 import com.hongfans.push.HFIntentService;
 import com.hongfans.push.XmppManager;
-import com.hongfans.push.iq.DeliverConfirmIQ;
+import com.hongfans.push.iq.ReceiptIQ;
 import com.hongfans.push.iq.NotificationIQ;
 import com.hongfans.push.message.Notification;
 import com.hongfans.push.message.Payload;
@@ -63,6 +63,7 @@ public class NotificationPacketListener implements PacketListener{
 
                 Notification noti = new Notification();
                 noti.setId(notification.getId());
+                noti.setUuid(notification.getUuid());
                 noti.setApiKey(notification.getApiKey());
                 noti.setTitle(notification.getTitle());
                 noti.setMessage(notification.getMessage());
@@ -105,8 +106,8 @@ public class NotificationPacketListener implements PacketListener{
 
                 xmppManager.getContext().sendBroadcast(intent);*/
                 //发送消息回执
-                DeliverConfirmIQ deliverConfirmIQ = new DeliverConfirmIQ();
-                deliverConfirmIQ.setUuid(notificationId);
+                ReceiptIQ deliverConfirmIQ = new ReceiptIQ();
+                deliverConfirmIQ.setUuid(notification.getUuid()); // 设置消息的 uuid
                 deliverConfirmIQ.setType(IQ.Type.SET);
                 xmppManager.getConnection().sendPacket(deliverConfirmIQ);
             }
