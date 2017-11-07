@@ -25,8 +25,8 @@ public class Notification {
 	@Column(name = "api_key",length = 64)
 	private String apiKey;
 
-	@Column(name = "user_name", length = 64)
-	private String username;
+//	@Column(name = "user_name", length = 64)
+//	private String username;
 	
 	@Column(name = "title",nullable = false, length = 64)
 	private String title;
@@ -45,9 +45,6 @@ public class Notification {
 
 	@Column(name = "created_date", updatable = false)
 	private Date createdDate = new Date();
-
-	@Column(name = "delivered_date")
-	private Date deliveredDate; // 发送时间，一般和创建时间相同，离线消息发送时间稍晚
 
 	@Column(name = "valid_time")
 	private Long validTime; // 有效时间，从创建时间计算，单位 s
@@ -70,13 +67,13 @@ public class Notification {
 		this.apiKey = apiKey;
 	}
 
-	public String getUsername() {
-		return username;
-	}
+//	public String getUsername() {
+//		return username;
+//	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+//	public void setUsername(String username) {
+//		this.username = username;
+//	}
 
 	public String getTitle() {
 		return title;
@@ -132,14 +129,6 @@ public class Notification {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
-	}
-
-	public Date getDeliveredDate() {
-		return deliveredDate;
-	}
-
-	public void setDeliveredDate(Date deliveredDate) {
-		this.deliveredDate = deliveredDate;
 	}
 
 	public Long getValidTime() {

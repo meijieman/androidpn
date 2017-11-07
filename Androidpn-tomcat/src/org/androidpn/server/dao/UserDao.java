@@ -17,11 +17,11 @@
  */
 package org.androidpn.server.dao;
 
-import java.util.Date;
-import java.util.List;
-
 import org.androidpn.server.model.User;
 import org.androidpn.server.service.UserNotFoundException;
+
+import java.util.Date;
+import java.util.List;
 
 /** 
  * User DAO (Data Access Object) interface. 
@@ -46,5 +46,5 @@ public interface UserDao {
 
     String getUsernameByAlias(String alias) throws UserNotFoundException;
 
-    List<String> getUsernamesByTag(String tag);
+    List<User> getUsersByTag(String tag);
 }

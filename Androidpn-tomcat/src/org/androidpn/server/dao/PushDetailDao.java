@@ -11,4 +11,6 @@ public interface PushDetailDao {
     List<PushDetail> getPushDetails();
 
     PushDetail getPushDetail(String username, String UUID);
+
+    List<PushDetail> getPushDetailsThatFailureByUsername(String username);
 }

@@ -18,8 +18,11 @@
 package org.androidpn.server.xmpp.handler;
 
 import org.androidpn.server.model.Notification;
+import org.androidpn.server.model.PushDetail;
 import org.androidpn.server.service.NotificationService;
+import org.androidpn.server.service.PushDetailService;
 import org.androidpn.server.service.ServiceLocator;
+import org.androidpn.server.util.CommonUtil;
 import org.androidpn.server.xmpp.push.NotificationManager;
 import org.androidpn.server.xmpp.router.PacketDeliverer;
 import org.androidpn.server.xmpp.session.ClientSession;
@@ -48,6 +51,7 @@ public class PresenceUpdateHandler {
     protected SessionManager sessionManager;
     
     protected NotificationService notificationService;
+    protected PushDetailService mPushDetailService;
     
     protected NotificationManager notificationManager;
 
@@ -57,6 +61,7 @@ public class PresenceUpdateHandler {
     public PresenceUpdateHandler() {
         sessionManager = SessionManager.getInstance();
         notificationService = ServiceLocator.getNotificationService();
+        mPushDetailService = ServiceLocator.getPushDetailService();
         notificationManager = new NotificationManager();
     }
 
@@ -66,6 +71,7 @@ public class PresenceUpdateHandler {
      * @param packet the packet
      */
     public void process(Packet packet) {
+        log.info("process() 用户状态更新");
         ClientSession session = sessionManager.getSession(packet.getFrom());
 
         try {
@@ -86,21 +92,20 @@ public class PresenceUpdateHandler {
                         // initSession(session);
                         session.setInitialized(true);
                     }
-                    List<Notification> notifications = notificationService.findNotificationsByUsername(session.getUsername());
                     //发送离线消息给用户
-                    if(notifications!=null&&notifications.size()>0){
-	                    for (Notification notification : notifications) {
-//							String apiKey = notification.getApiKey();
-//							String username = notification.getUsername();
-//							String message = notification.getMessage();
-//							String uri = notification.getUri();
-//							String title = notification.getTitle();
-							// FIXME
-                            notification.setDeliveredDate(new Date());
-                            notificationManager.sendNotifcationToUser(notification, false);
-//                            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri, false);
-//							notificationService.deleteNotification(notification);
-						}
+                    List<PushDetail> details = mPushDetailService.getPushDetailsThatFailureByUsername(session.getUsername());
+                    log.info("process() 发送离线消息给用户 " + details);
+                    if (CommonUtil.isNotEmpty(details)) {
+                        for (PushDetail detail : details) {
+                            // 更新发送时间
+                            detail.setDeliveredDate(new Date());
+                            mPushDetailService.savePushDetail(detail);
+
+                            Notification notification = notificationService.getNotificationByUuid(detail.getUuid());
+
+                            // 只需要发送通知，不需要保存通知记录（之前已经保存过）
+                            notificationManager.sendNotifcationToUser(session.getUsername(), notification, false);
+                        }
                     }
                 }
 

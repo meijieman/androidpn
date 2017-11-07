@@ -43,5 +43,5 @@ public interface UserService {
 
     String getUsernameByAlias(String alias) throws UserNotFoundException;
 
-    List<String> getUsernamesByTag(String tag);
+    List<User> getUsersByTag(String tag);
 }

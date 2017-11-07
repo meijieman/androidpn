@@ -17,11 +17,6 @@
  */
 package org.androidpn.server.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityExistsException;
-
 import org.androidpn.server.dao.UserDao;
 import org.androidpn.server.model.User;
 import org.androidpn.server.service.UserExistsException;
@@ -30,6 +25,10 @@ import org.androidpn.server.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataIntegrityViolationException;
+
+import javax.persistence.EntityExistsException;
+import java.util.Date;
+import java.util.List;
 
 /** 
  * This class is the implementation of UserService.
@@ -96,8 +95,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<String> getUsernamesByTag(String tag) {
-        return userDao.getUsernamesByTag(tag);
+    public List<User> getUsersByTag(String tag) {
+        return userDao.getUsersByTag(tag);
     }
 
 }

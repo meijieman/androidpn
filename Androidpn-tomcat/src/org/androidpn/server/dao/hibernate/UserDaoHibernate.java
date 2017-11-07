@@ -53,8 +53,7 @@ public class UserDaoHibernate extends HibernateDaoSupport implements UserDao {
 
 	@SuppressWarnings("unchecked")
 	public List<User> getUsers() {
-		return getHibernateTemplate().find(
-				"from User u order by u.createdDate desc");
+		return getHibernateTemplate().find("from User u order by u.createdDate desc");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -86,8 +85,8 @@ public class UserDaoHibernate extends HibernateDaoSupport implements UserDao {
 	}
 
 	@Override
-	public List<String> getUsernamesByTag(String tag) {
-		return getHibernateTemplate().find("from User where tag like %?%", tag);
+	public List<User> getUsersByTag(String tag) {
+		return getHibernateTemplate().find("from User where tag like ?", "%" + tag + "%");
 	}
 
 	// @SuppressWarnings("unchecked")

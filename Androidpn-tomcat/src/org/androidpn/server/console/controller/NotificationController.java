@@ -17,6 +17,7 @@
  */
 package org.androidpn.server.console.controller;
 
+import org.androidpn.server.util.CommonUtil;
 import org.androidpn.server.util.Config;
 import org.androidpn.server.xmpp.push.NotificationManager;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -52,23 +53,37 @@ public class NotificationController extends MultiActionController {
         String broadcast = ServletRequestUtils.getStringParameter(request, "broadcast", "0");
         String username = ServletRequestUtils.getStringParameter(request, "username");
         String alias = ServletRequestUtils.getStringParameter(request, "alias");
+        String tags = ServletRequestUtils.getStringParameter(request, "tags");
         String title = ServletRequestUtils.getStringParameter(request, "title");
         String message = ServletRequestUtils.getStringParameter(request, "message");
         String uri = ServletRequestUtils.getStringParameter(request, "uri");
+        String pushType = ServletRequestUtils.getStringParameter(request, "pushtype", "0");
 
         String apiKey = Config.getString("apiKey", "");
         logger.debug("apiKey=" + apiKey);
 
+        String pushTypeParam = "";
+        if ("0".equalsIgnoreCase(pushType)) {
+            pushTypeParam = "notification";
+        } else if("1".equalsIgnoreCase(pushType)){
+            pushTypeParam = "payload";
+        }
+
         if (broadcast.equalsIgnoreCase("0")) { // broadcast
-            notificationManager.sendBroadcast(apiKey, title, message, uri, "broadcast", "notification");
+            notificationManager.sendBroadcast(apiKey, title, message, uri, "[broadcast]", pushTypeParam);
 //            notificationManager.sendBroadcast(apiKey, title, message, uri);
-        } else if(broadcast.equalsIgnoreCase("1")) { // by username
-            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri, "username", "payload", true);
+        } else if (broadcast.equalsIgnoreCase("1")) { // by username
+            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri, "[username]", pushTypeParam, true);
 //            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri,true);
-        }else if(broadcast.equalsIgnoreCase("2")){
-        	//别名推送
-            notificationManager.sendNotificationByAlias(alias, apiKey, title, message, uri, "alias", "payload", false);
+        } else if (broadcast.equalsIgnoreCase("2")) {
+            //别名推送
+            notificationManager.sendNotificationByAlias(alias, apiKey, title, message, uri, "[alias]" + username, pushTypeParam, true);
 //        	notificationManager.sendNotificationByAlias(alias, apiKey, title, message, uri, false);
+        } else if (broadcast.equalsIgnoreCase("3")) {
+            if (CommonUtil.isNotEmpty(tags)) {
+                String[] split = tags.split(",");
+                notificationManager.sendNotificationByTags(split[0], apiKey, title, message, uri, "[tags]" + tags, pushTypeParam, true);
+            }
         }
 
         ModelAndView mav = new ModelAndView();

@@ -32,6 +32,9 @@ public class PushDetail {
     @Column(name = "created_date")
     private Date createdDate;
 
+    @Column(name = "delivered_date")
+    private Date deliveredDate; // 发送时间，一般和创建时间相同，离线消息发送时间稍晚
+
     @Column(name = "receipt_date")
     private Date receiptDate; // 到达客户端后立即返回一个回执 IQ
 
@@ -84,6 +87,14 @@ public class PushDetail {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Date getDeliveredDate() {
+        return deliveredDate;
+    }
+
+    public void setDeliveredDate(Date deliveredDate) {
+        this.deliveredDate = deliveredDate;
     }
 
     public Date getReceiptDate() {

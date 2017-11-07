@@ -33,4 +33,9 @@ public class PushDetailServiceImpl implements PushDetailService {
         log.debug("tag_route 根据 username 和 uuid 获取发送的消息 " + dao.getPushDetail(username, UUID));
         return dao.getPushDetail(username, UUID);
     }
+
+    @Override
+    public List<PushDetail> getPushDetailsThatFailureByUsername(String username) {
+        return dao.getPushDetailsThatFailureByUsername(username);
+    }
 }

@@ -29,4 +29,9 @@ public class PushDetailDaoHibernate extends HibernateDaoSupport implements PushD
         }
         return null;
     }
+
+    @Override
+    public List<PushDetail> getPushDetailsThatFailureByUsername(String username) {
+        return getHibernateTemplate().find("from PushDetail pd where username=? and receiptDate is null", new String[]{username});
+    }
 }

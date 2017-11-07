@@ -20,11 +20,7 @@ package org.androidpn.server.xmpp.push;
 import org.androidpn.server.model.Notification;
 import org.androidpn.server.model.PushDetail;
 import org.androidpn.server.model.User;
-import org.androidpn.server.service.NotificationService;
-import org.androidpn.server.service.PushDetailService;
-import org.androidpn.server.service.ServiceLocator;
-import org.androidpn.server.service.UserNotFoundException;
-import org.androidpn.server.service.UserService;
+import org.androidpn.server.service.*;
 import org.androidpn.server.util.CommonUtil;
 import org.androidpn.server.xmpp.session.ClientSession;
 import org.androidpn.server.xmpp.session.SessionManager;
@@ -92,18 +88,10 @@ public class NotificationManager {
         }
     }
 
-    /**
-     * 判断是否有用户
-     */
-    private boolean hasUser(){
-        List<User> users = userService.getUsers();
-        return users != null && !users.isEmpty();
-    }
-
     public void sendBroadcast(String apiKey, String title, String message, String uri, String pushTo, String pushType) {
         log.debug("sendBroadcast()...");
-        if (!hasUser()) {
-            log.debug("sendBroadcast() no user, finish broadcast");
+        if (CommonUtil.isEmpty(userService.getUsers())) {
+            log.debug("sendBroadcast() no user, finish");
             return;
         }
 
@@ -118,7 +106,9 @@ public class NotificationManager {
             pd = new PushDetail();
             pd.setUuid(notif.getUuid());
             pd.setUsername(user.getUsername());
-            pd.setCreatedDate(new Date()); // fixme 每次都 new 时间
+            Date date = new Date();
+            pd.setCreatedDate(date); // fixme 每次都 new 时间
+            pd.setDeliveredDate(date);
             PushDetail pd1 = mPushDetailService.savePushDetail(pd);
             log.info("tag_pd 保存推送 pd " + pd1);
 
@@ -144,9 +134,7 @@ public class NotificationManager {
         Random random = new Random();
         String uuid = Integer.toHexString(random.nextInt());
         notif.setUuid(uuid);
-        Date date = new Date();
-        notif.setCreatedDate(date);
-        notif.setDeliveredDate(date);
+        notif.setCreatedDate(new Date());
         return notif;
     }
 
@@ -215,7 +203,9 @@ public class NotificationManager {
                 PushDetail pd = new PushDetail();
                 pd.setUuid(notif.getUuid());
                 pd.setUsername(user.getUsername());
-                pd.setCreatedDate(new Date());
+                Date date = new Date();
+                pd.setCreatedDate(date);
+                pd.setDeliveredDate(date);
                 mPushDetailService.savePushDetail(pd);
             }
         } catch (UserNotFoundException e) {
@@ -223,11 +213,11 @@ public class NotificationManager {
         }
     }
 
-    public void sendNotifcationToUser(Notification notif, boolean shouldSave) {
+    public void sendNotifcationToUser(String username, Notification notif, boolean shouldSave) {
         log.debug("sendNotifcationToUser()...");
 
         IQ notificationIQ = createNotificationIQ(notif); // 创建推送
-        ClientSession session = sessionManager.getSession(notif.getUsername());
+        ClientSession session = sessionManager.getSession(username);
         if (session != null) {
             if (session.getPresence().isAvailable()) {
                 notificationIQ.setTo(session.getAddress());
@@ -235,14 +225,16 @@ public class NotificationManager {
             }
         }
         try {
-            User user = userService.getUserByUsername(notif.getUsername());
+            User user = userService.getUserByUsername(username);
             if (user != null && shouldSave) {
                 notificationService.saveNotification(notif);
 
                 PushDetail pd = new PushDetail();
                 pd.setUuid(notif.getUuid());
                 pd.setUsername(user.getUsername());
-                pd.setCreatedDate(new Date());
+                Date date = new Date();
+                pd.setCreatedDate(date);
+                pd.setDeliveredDate(date);
                 mPushDetailService.savePushDetail(pd);
             }
         } catch (UserNotFoundException e) {
@@ -252,37 +244,49 @@ public class NotificationManager {
 
     //通过别名发送通知
     public void sendNotificationByAlias(String alias, String apiKey, String title, String message,
-                                        String uri, boolean shouldsave) {
-
-        try {
-            String username = userService.getUsernameByAlias(alias);
-            if (username != null) {
-                sendNotifcationToUser(apiKey, username, title, message, uri, shouldsave);
-            }
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void sendNotificationByAlias(String alias, String apiKey, String title, String message,
                                         String uri, String pushTo, String pushType, boolean shouldsave) {
         try {
             String username = userService.getUsernameByAlias(alias);
             if (username != null) {
-                sendNotifcationToUser(apiKey, username, title, message, uri, pushTo, pushType, shouldsave);
+                Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
+                sendNotifcationToUser(username, notif, shouldsave);
             }
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public void sendNotificationByTag(String tag, String apiKey, String title, String message,
-                                      String uri, boolean shouldsave) {
+    // 通过标签发送
+    public void sendNotificationByTags(String tag, String apiKey, String title, String message,
+                                      String uri, String pushTo, String pushType, boolean shouldsave) {
+        log.debug("sendNotificationByTags()...");
+        List<User> users = userService.getUsersByTag(tag);
+        if (CommonUtil.isEmpty(users)) {
+            log.debug("sendNotificationByTags() no user, finish");
+            return;
+        }
 
-        List<String> usernames = userService.getUsernamesByTag(tag);
-        if (CommonUtil.isNotEmpty(usernames)) {
-            for (String username : usernames) {
-                sendNotifcationToUser(apiKey, username, title, message, uri, shouldsave);
+        Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
+        notificationService.saveNotification(notif);
+
+        PushDetail pd;
+        log.info("tag_pd 将要发送推送 ");
+
+        for (User user : users) {
+            pd = new PushDetail();
+            pd.setUuid(notif.getUuid());
+            pd.setUsername(user.getUsername());
+            Date date = new Date();
+            pd.setCreatedDate(date);// fixme 每次都 new 时间
+            pd.setDeliveredDate(date);
+            PushDetail pd1 = mPushDetailService.savePushDetail(pd);
+            log.info("tag_pd 保存推送 pd " + pd1);
+
+            IQ notificationIQ = createNotificationIQ(notif);
+            ClientSession session = sessionManager.getSession(user.getUsername());
+            if (session != null && session.getPresence().isAvailable()) {
+                notificationIQ.setTo(session.getAddress());
+                session.deliver(notificationIQ);
             }
         }
     }
@@ -294,9 +298,9 @@ public class NotificationManager {
         notification.setApiKey(apiKey);
         notification.setUri(uri);
         notification.setMessage(message);
-        notification.setUsername(username);
         notification.setTitle(title);
         notification.setUuid(uuid);
+        notification.setCreatedDate(new Date());
         notificationService.saveNotification(notification);
     }
 

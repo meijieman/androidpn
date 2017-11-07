@@ -12,4 +12,5 @@ public interface PushDetailService {
 
     PushDetail getPushDetail(String username, String UUID);
 
+    List<PushDetail> getPushDetailsThatFailureByUsername(String username);
 }
