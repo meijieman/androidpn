@@ -45,6 +45,10 @@
                 <a href="/pushdetail.do"
                    class="<c:if test="${topMenu eq 'pushdetail'}"><c:out value="current" /></c:if>">Push Detail</a>
             </li>
+            <li>
+                <a href="/editor.do"
+                   class="<c:if test="${topMenu eq 'editor'}"><c:out value="current" /></c:if>">Editor</a>
+            </li>
         </ul>
         <div id="tabcontent">
             <decorator:body/>
