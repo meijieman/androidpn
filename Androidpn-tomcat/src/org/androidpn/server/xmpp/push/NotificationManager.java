@@ -110,12 +110,13 @@ public class NotificationManager {
         Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
         notificationService.saveNotification(notif);
 
-        PushDetail pd = new PushDetail();
-        pd.setUuid(notif.getUuid());
+        PushDetail pd;
 
         log.info("tag_pd 将要发送推送 ");
         List<User> users = userService.getUsers();
         for (User user : users) {
+            pd = new PushDetail();
+            pd.setUuid(notif.getUuid());
             pd.setUsername(user.getUsername());
             pd.setCreatedDate(new Date()); // fixme 每次都 new 时间
             PushDetail pd1 = mPushDetailService.savePushDetail(pd);
