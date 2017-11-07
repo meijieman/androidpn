@@ -34,12 +34,11 @@
 </tr>
 <tr>
 	<td>Title:</td>
-	<td><input type="text" id="title" name="title" value="车悦宝" style="width:380px;" /></td>
+	<td><input type="text" id="title" name="title" value="车悦宝 <fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="<%=new Date()%>" />" style="width:380px;" /></td>
 </tr>
 <tr>
 	<td>Message:</td>
-	<td><textarea id="message" name="message" style="width:380px; height:80px;" >车载在线互动娱乐平台。随车行乐，听你想听!
-<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="<%=new Date()%>" /></textarea></td>
+	<td><textarea id="message" name="message" style="width:380px; height:80px;" >车载在线互动娱乐平台。随车行乐，听你想听!</textarea></td>
 </tr>
 <%--
 <tr>
