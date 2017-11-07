@@ -24,6 +24,7 @@ import android.util.Log;
 
 import com.hongfans.push.iq.SetAliasIQ;
 import com.hongfans.push.iq.SetTagsIQ;
+import com.hongfans.push.util.CommonUtil;
 import com.hongfans.push.util.LogUtil;
 
 import org.jivesoftware.smack.packet.IQ;
@@ -203,7 +204,7 @@ public final class ServiceManager{
     //设置别名
     public void setAlias(final String alias){
         final String username = sharedPrefs.getString(Constants.XMPP_USERNAME, "");
-        if(TextUtils.isEmpty(alias) || TextUtils.isEmpty(username)){
+        if(CommonUtil.isEmpty(alias) || CommonUtil.isEmpty(username)){
             return;
         }
         new Thread(new Runnable(){
@@ -230,7 +231,7 @@ public final class ServiceManager{
                     Log.d("TAG", "authenticated");
                     SetAliasIQ setAliasIQ = new SetAliasIQ();
                     setAliasIQ.setType(IQ.Type.SET);
-                    setAliasIQ.setUsername(username);
+//                    setAliasIQ.setUsername(username);
                     setAliasIQ.setAlias(alias);
                     Log.d("TAG", "username" + username + "alias" + alias);
                     xmppManager.getConnection().sendPacket(setAliasIQ);
@@ -269,7 +270,8 @@ public final class ServiceManager{
     }
 
     public void setTags(final String[] tags){
-        if(tags == null || tags.length == 0){
+        final String username = sharedPrefs.getString(Constants.XMPP_USERNAME, "");
+        if(CommonUtil.isEmpty(tags) || CommonUtil.isEmpty(username)){
             return;
         }
 
@@ -301,7 +303,9 @@ public final class ServiceManager{
                     }
                     Log.d("TAG", "authenticated");
                     SetTagsIQ iq = new SetTagsIQ();
+                    iq.setType(IQ.Type.SET);
                     iq.setTags(tag);
+                    Log.d("TAG", "username" + username + "tags" + tag);
                     xmppManager.getConnection().sendPacket(iq);
                 }
             }
