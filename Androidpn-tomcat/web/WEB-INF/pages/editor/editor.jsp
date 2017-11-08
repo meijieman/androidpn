@@ -9,19 +9,55 @@
     <script type="text/javascript" src="<c:url value='/scripts/jquery.tablesorter.js'/>"></script>
 </head>
 <body>
-<h1>Editor</h1>
+<h1>通过标签名获取用户列表</h1>
 
+<form action="editor.do?action=add" method="post" style="margin: 0px">
+    <table width="600" cellpadding="4" cellspacing="0" border="0">
+        <tr>
+            <td width="20%">标签名：</td>
+            <td width="80%">
+                <input type="text" id="tag_name" name="tag_name" value="${tag_name}"
+                       style="width:380px;"/>
+            </td>
+            <td><input type="submit" value="Submit"/></td>
+        </tr>
+</form>
 
 <table id="tableList" class="tablesorter" cellspacing="1">
     <thead>
     <tr>
-        <th>UUID</th>
+        <th>Username</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Created</th>
+        <th>Alias</th>
+        <th>Tag</th>
     </tr>
     </thead>
     <tbody>
-
+    <c:forEach var="user" items="${userList}">
+        <tr>
+            <td><c:out value="${user.username}" /></td>
+            <td><c:out value="${user.name}" /></td>
+            <td><c:out value="${user.email}" /></td>
+            <td align="center"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${user.createdDate}" /></td>
+            <td><c:out value="${user.alias}" /></td>
+            <td><c:out value="${user.tag}" /></td>
+        </tr>
+    </c:forEach>
     </tbody>
 </table>
+
+<%
+    String message = (String) request.getAttribute("message");
+    if (message != null && !message.isEmpty()) {
+%>
+<script type="text/javascript" language="JavaScript">
+    alert("<%=message%>")
+</script>
+<%
+    }
+%>
 
 <script type="text/javascript">
     //<![CDATA[
