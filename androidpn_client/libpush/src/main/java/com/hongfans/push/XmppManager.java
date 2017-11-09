@@ -291,7 +291,7 @@ public class XmppManager{
             if(taskList.size() >= dropCount){
                 for(int i = 0; i < dropCount; i++){
                     taskList.remove(0);
-                    taskTracker.increase();
+                    taskTracker.decrease();
                 }
             }
         }
