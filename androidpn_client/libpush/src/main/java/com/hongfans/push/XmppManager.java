@@ -353,7 +353,7 @@ public class XmppManager{
     private class RegisterTask implements Runnable{
 
         final XmppManager xmppManager;
-        boolean isRegister;
+        boolean isRegisterSucceed;
         boolean hasDropTask;
 
         private RegisterTask(){
@@ -365,8 +365,9 @@ public class XmppManager{
             Log.i(LOGTAG, "RegisterTask.run()...");
 
             if(!xmppManager.isRegistered()){
-                isRegister = false;
+                isRegisterSucceed = false;
                 hasDropTask = false;
+
                 final String newUsername = newRandomUUID(); // 随机帐号密码
                 final String newPassword = newRandomUUID();
 
@@ -407,7 +408,7 @@ public class XmppManager{
                                     editor.putString(Constants.XMPP_PASSWORD,
                                             newPassword);
                                     editor.commit();
-                                    isRegister = false;
+                                    isRegisterSucceed = true;
                                     Log.i(LOGTAG, "Account registered successfully");
                                     //如果已经有任务被删除后，不能让其继续执行
                                     if(!hasDropTask){
@@ -430,14 +431,14 @@ public class XmppManager{
                 registration.addAttribute("username", newUsername);
                 registration.addAttribute("password", newPassword);
                 connection.sendPacket(registration); // 发送注册
-                //注册失败时
                 try{
                     Thread.sleep(10 * 1000);
                 } catch(InterruptedException e){
                     e.printStackTrace();
                 }
                 synchronized(xmppManager){
-                    if(isRegister){
+                    if(!isRegisterSucceed){
+                    // 10s 没有返回注册成功消息，就认为注册失败
                         xmppManager.dropTask(1);
                         hasDropTask = true;
                         xmppManager.runTask();
@@ -473,7 +474,7 @@ public class XmppManager{
                     xmppManager.getConnection().login(
                             xmppManager.getUsername(),
                             xmppManager.getPassword(), XMPP_RESOURCE_NAME);
-                    Log.d(LOGTAG, "Loggedn in successfully");
+                    Log.d(LOGTAG, "Logged in successfully");
 
                     // connection listener
                     if(xmppManager.getConnectionListener() != null){
