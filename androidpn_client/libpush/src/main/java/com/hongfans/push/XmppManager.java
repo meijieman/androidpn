@@ -474,7 +474,7 @@ public class XmppManager{
                     xmppManager.getConnection().login(
                             xmppManager.getUsername(),
                             xmppManager.getPassword(), XMPP_RESOURCE_NAME);
-                    Log.d(LOGTAG, "Loggedn in successfully");
+                    Log.d(LOGTAG, "Logged in successfully");
 
                     // connection listener
                     if(xmppManager.getConnectionListener() != null){
