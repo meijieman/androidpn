@@ -15,8 +15,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 dependencies {
-    compile project(':libpush')
+//    compile project(':libpush')
+    compile(name:'libpush-release',ext:'aar')
 }
