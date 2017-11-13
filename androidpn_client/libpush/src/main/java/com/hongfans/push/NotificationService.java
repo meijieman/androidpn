@@ -130,8 +130,9 @@ public class NotificationService extends Service{
     }
 
     @Override
-    public void onStart(Intent intent, int startId){
-        LogUtil.d("onStart()...");
+    public int onStartCommand(Intent intent, int flags, int startId){
+        LogUtil.d("onStartCommand()...");
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override

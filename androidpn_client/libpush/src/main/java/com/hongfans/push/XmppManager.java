@@ -334,7 +334,7 @@ public class XmppManager{
                             new NotificationIQProvider());
                     xmppManager.runTask(); // 执行下一个任务
                 } catch(XMPPException e){
-                    LogUtil.e("XMPP connection failed" + e);
+                    LogUtil.e("XMPP connection failed\n" + e);
                     xmppManager.dropTask(2);
                     xmppManager.runTask();
                     xmppManager.startReconnectionThread();
