@@ -27,7 +27,7 @@ public class IQSetTagsHandler extends IQHandler {
 
     public IQSetTagsHandler() {
         userService = ServiceLocator.getUserService();
-        sessionManager = sessionManager.getInstance();
+        sessionManager = SessionManager.getInstance();
     }
 
     @Override

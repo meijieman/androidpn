@@ -246,11 +246,9 @@ public class NotificationManager {
     public void sendNotificationByAlias(String alias, String apiKey, String title, String message,
                                         String uri, String pushTo, String pushType, boolean shouldsave) {
         try {
-            String username = userService.getUsernameByAlias(alias);
-            if (username != null) {
-                Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
-                sendNotifcationToUser(username, notif, shouldsave);
-            }
+            User user = userService.getUserByAlias(alias);
+            Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
+            sendNotifcationToUser(user.getUsername(), notif, shouldsave);
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }

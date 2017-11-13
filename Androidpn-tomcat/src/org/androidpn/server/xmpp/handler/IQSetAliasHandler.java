@@ -26,7 +26,7 @@ public class IQSetAliasHandler extends IQHandler {
 
     public IQSetAliasHandler() {
         userService = ServiceLocator.getUserService();
-        sessionManager = sessionManager.getInstance();
+        sessionManager = SessionManager.getInstance();
     }
 
     @Override
@@ -49,9 +49,8 @@ public class IQSetAliasHandler extends IQHandler {
                 String alias = element.elementText("alias");
                 if (/*CommonUtil.isNotEmpty(username) && */CommonUtil.isNotEmpty(alias)) {
                     try {
-                        String username = userService.getUsernameByAlias(alias);
-                        if (CommonUtil.isNotEmpty(username)) {
-                            log.warn("alias " + alias + "has been used by " + username);
+                        if (userService.existAlias(alias)) {
+                            log.warn("alias " + alias + "has been used");
                         } else {
                             User user = userService.getUserByUsername(session.getUsername());
                             user.setAlias(alias);

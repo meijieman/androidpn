@@ -90,13 +90,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getUsernameByAlias(String alias) throws UserNotFoundException {
-        return userDao.getUsernameByAlias(alias);
+    public User getUserByAlias(String alias) throws UserNotFoundException {
+        return userDao.getUserByAlias(alias);
     }
 
     @Override
     public List<User> getUsersByTag(String tag) {
         return userDao.getUsersByTag(tag);
+    }
+
+    @Override
+    public boolean existAlias(String alias) {
+        return userDao.existAlias(alias);
     }
 
 }

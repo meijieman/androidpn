@@ -20,6 +20,7 @@ package org.androidpn.server.dao.hibernate;
 import org.androidpn.server.dao.UserDao;
 import org.androidpn.server.model.User;
 import org.androidpn.server.service.UserNotFoundException;
+import org.androidpn.server.util.CommonUtil;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import java.util.Date;
@@ -27,75 +28,81 @@ import java.util.List;
 
 /**
  * This class is the implementation of UserDAO using Spring's HibernateTemplate.
- * 
+ *
  * @author Sehwan Noh (devnoh@gmail.com)
  */
 public class UserDaoHibernate extends HibernateDaoSupport implements UserDao {
 
-	public User getUser(Long id) {
-		return (User) getHibernateTemplate().get(User.class, id);
-	}
+    public User getUser(Long id) {
+        return (User) getHibernateTemplate().get(User.class, id);
+    }
 
-	public User saveUser(User user) {
-		getHibernateTemplate().saveOrUpdate(user);
-		getHibernateTemplate().flush();
-		return user;
-	}
+    public User saveUser(User user) {
+        getHibernateTemplate().saveOrUpdate(user);
+        getHibernateTemplate().flush();
+        return user;
+    }
 
-	public void removeUser(Long id) {
-		getHibernateTemplate().delete(getUser(id));
-	}
+    public void removeUser(Long id) {
+        getHibernateTemplate().delete(getUser(id));
+    }
 
-	public boolean exists(Long id) {
-		User user = (User) getHibernateTemplate().get(User.class, id);
-		return user != null;
-	}
+    public boolean exists(Long id) {
+        User user = (User) getHibernateTemplate().get(User.class, id);
+        return user != null;
+    }
 
-	@SuppressWarnings("unchecked")
-	public List<User> getUsers() {
-		return getHibernateTemplate().find("from User u order by u.createdDate desc");
-	}
+    @SuppressWarnings("unchecked")
+    public List<User> getUsers() {
+        return getHibernateTemplate().find("from User u order by u.createdDate desc");
+    }
 
-	@SuppressWarnings("unchecked")
-	public List<User> getUsersFromCreatedDate(Date createDate) {
-		return getHibernateTemplate()
-				.find("from User u where u.createdDate >= ? order by u.createdDate desc",
-						createDate);
-	}
+    @SuppressWarnings("unchecked")
+    public List<User> getUsersFromCreatedDate(Date createDate) {
+        return getHibernateTemplate()
+                .find("from User u where u.createdDate >= ? order by u.createdDate desc",
+                        createDate);
+    }
 
-	@SuppressWarnings("unchecked")
-	public User getUserByUsername(String username) throws UserNotFoundException {
-		List users = getHibernateTemplate().find("from User where username=?",
-				username);
-		if (users == null || users.isEmpty()) {
-			throw new UserNotFoundException("User '" + username + "' not found");
-		} else {
-			return (User) users.get(0);
-		}
-	}
+    @SuppressWarnings("unchecked")
+    public User getUserByUsername(String username) throws UserNotFoundException {
+        List users = getHibernateTemplate().find("from User where username=?",
+                username);
+        if (users == null || users.isEmpty()) {
+            throw new UserNotFoundException("User '" + username + "' not found");
+        } else {
+            return (User) users.get(0);
+        }
+    }
 
-	@Override
-	public String getUsernameByAlias(String alias) throws UserNotFoundException{
-		List users = getHibernateTemplate().find("from User where alias=?", alias);
-		if (users == null || users.isEmpty()) {
-			throw new UserNotFoundException("User '" + alias + "' not found");
-		} else {
-			return ((User) users.get(0)).getUsername();
-		}
-	}
+    @Override
+    public User getUserByAlias(String alias) throws UserNotFoundException {
+        List users = getHibernateTemplate().find("from User where alias=?", alias);
+        if (users == null || users.isEmpty()) {
+            throw new UserNotFoundException("User '" + alias + "' not found");
+        } else {
+            return ((User) users.get(0));
+        }
+    }
 
-	@Override
-	public List<User> getUsersByTag(String tag) {
-		// [[:<:]], [[:>:]] 这些标记表示word边界。它们分别与word的开始和结束匹配。
+    @Override
+    public List<User> getUsersByTag(String tag) {
+        // [[:<:]], [[:>:]] 这些标记表示word边界。它们分别与word的开始和结束匹配。
 //		return getHibernateTemplate().find("from User u where u.tag REGEXP '[[:<:]]" + tag + "[[:>:]]'");
-		return getHibernateTemplate().find("from User where tag like ?", "%" + tag + "%");
-	}
+        return getHibernateTemplate().find("from User where tag like ?", "%" + tag + "%");
+    }
 
-	// @SuppressWarnings("unchecked")
-	// public User findUserByUsername(String username) {
-	// List users = getHibernateTemplate().find("from User where username=?",
-	// username);
-	// return (users == null || users.isEmpty()) ? null : (User) users.get(0);
-	// }
+    @Override
+    public boolean existAlias(String alias) {
+        List<User> user = getHibernateTemplate().find("from User u where u.alias=?", alias);
+        return CommonUtil.isNotEmpty(user);
+    }
+
+    // @SuppressWarnings("unchecked")
+    // public User findUserByUsername(String username) {
+    // List users = getHibernateTemplate().find("from User where username=?",
+    // username);
+    // return (users == null || users.isEmpty()) ? null : (User) users.get(0);
+    // }
 
 }
