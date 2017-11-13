@@ -49,10 +49,15 @@ public class IQSetAliasHandler extends IQHandler {
                 String alias = element.elementText("alias");
                 if (/*CommonUtil.isNotEmpty(username) && */CommonUtil.isNotEmpty(alias)) {
                     try {
-                        User user = userService.getUserByUsername(session.getUsername());
-                        log.debug("save alias to db. user " + user);
-                        user.setAlias(alias);
-                        userService.saveUser(user);
+                        String username = userService.getUsernameByAlias(alias);
+                        if (CommonUtil.isNotEmpty(username)) {
+                            log.warn("alias " + alias + "has been used by " + username);
+                        } else {
+                            User user = userService.getUserByUsername(session.getUsername());
+                            user.setAlias(alias);
+                            userService.saveUser(user);
+                            log.info("set alias " + alias + "to " + user.getUsername() + " success");
+                        }
                     } catch (UserNotFoundException | UserExistsException e) {
                         e.printStackTrace();
                     }
