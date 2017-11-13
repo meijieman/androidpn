@@ -1,10 +1,7 @@
 package org.androidpn.server.console.controller;
 
 import org.androidpn.server.model.PushDetail;
-import org.androidpn.server.service.NotificationService;
-import org.androidpn.server.service.PushDetailService;
-import org.androidpn.server.service.ServiceLocator;
-import org.androidpn.server.service.UserService;
+import org.androidpn.server.service.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
@@ -31,8 +28,13 @@ public class PushDetailController extends MultiActionController {
         List<PushDetail> pushDetailList = mPushDetailService.getPushDetails();
 
         for (PushDetail pushDetail : pushDetailList) {
-            pushDetail.setAlias(mUserService.getUserByUsername(pushDetail.getUsername()).getAlias());
-            pushDetail.setTitle(mNotificationService.getNotificationByUuid(pushDetail.getUuid()).getTitle());
+            try {
+                pushDetail.setAlias(mUserService.getUserByUsername(pushDetail.getUsername()).getAlias());
+                pushDetail.setTitle(mNotificationService.getNotificationByUuid(pushDetail.getUuid()).getTitle());
+            } catch (UserNotFoundException e) {
+                e.printStackTrace();
+                logger.error(e);
+            }
         }
         mav.addObject("pushdetaillist", pushDetailList);
         mav.setViewName("pushdetail/list");
