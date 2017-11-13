@@ -25,7 +25,6 @@ import android.content.SharedPreferences.Editor;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import com.hongfans.push.receiver.ConnectivityReceiver;
 import com.hongfans.push.util.LogUtil;
@@ -90,7 +89,7 @@ public class NotificationService extends Service{
 
     @Override
     public void onCreate(){
-        Log.d(LOGTAG, "onCreate()...");
+        LogUtil.d("onCreate()...");
         notificationService = this;
         telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         // wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
@@ -100,7 +99,7 @@ public class NotificationService extends Service{
 
         // Get deviceId
         deviceId = telephonyManager.getDeviceId();
-        // Log.d(LOGTAG, "deviceId=" + deviceId);
+        // LogUtil.d("deviceId=" + deviceId);
         Editor editor = sharedPrefs.edit();
         editor.putString(Constants.DEVICE_ID, deviceId);
         editor.commit();
@@ -119,7 +118,7 @@ public class NotificationService extends Service{
                 editor.commit();
             }
         }
-        Log.d(LOGTAG, "deviceId=" + deviceId);
+        LogUtil.d("deviceId=" + deviceId);
 
         xmppManager = new XmppManager(this);
 
@@ -132,30 +131,30 @@ public class NotificationService extends Service{
 
     @Override
     public void onStart(Intent intent, int startId){
-        Log.d(LOGTAG, "onStart()...");
+        LogUtil.d("onStart()...");
     }
 
     @Override
     public void onDestroy(){
-        Log.d(LOGTAG, "onDestroy()...");
+        LogUtil.d("onDestroy()...");
         notificationService = null;
         stop();
     }
 
     @Override
     public IBinder onBind(Intent intent){
-        Log.d(LOGTAG, "onBind()...");
+        LogUtil.d("onBind()...");
         return null;
     }
 
     @Override
     public void onRebind(Intent intent){
-        Log.d(LOGTAG, "onRebind()...");
+        LogUtil.d("onRebind()...");
     }
 
     @Override
     public boolean onUnbind(Intent intent){
-        Log.d(LOGTAG, "onUnbind()...");
+        LogUtil.d("onUnbind()...");
         return true;
     }
 
@@ -188,7 +187,7 @@ public class NotificationService extends Service{
     }
 
     public void connect(){
-        Log.d(LOGTAG, "connect()...");
+        LogUtil.d("connect()...");
         taskSubmitter.submit(new Runnable(){
             public void run(){
                 NotificationService.this.getXmppManager().connect();
@@ -197,7 +196,7 @@ public class NotificationService extends Service{
     }
 
     public void disconnect(){
-        Log.d(LOGTAG, "disconnect()...");
+        LogUtil.d("disconnect()...");
         taskSubmitter.submit(new Runnable(){
             public void run(){
                 NotificationService.this.getXmppManager().disconnect();
@@ -218,7 +217,7 @@ public class NotificationService extends Service{
 //    }
 
     private void registerConnectivityReceiver(){
-        Log.d(LOGTAG, "registerConnectivityReceiver()...");
+        LogUtil.d("registerConnectivityReceiver()...");
         telephonyManager.listen(phoneStateListener,
                 PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
         IntentFilter filter = new IntentFilter();
@@ -228,14 +227,14 @@ public class NotificationService extends Service{
     }
 
     private void unregisterConnectivityReceiver(){
-        Log.d(LOGTAG, "unregisterConnectivityReceiver()...");
+        LogUtil.d("unregisterConnectivityReceiver()...");
         telephonyManager.listen(phoneStateListener,
                 PhoneStateListener.LISTEN_NONE);
         unregisterReceiver(connectivityReceiver);
     }
 
     private void start(){
-        Log.d(LOGTAG, "start()...");
+        LogUtil.d("start()...");
 //        registerNotificationReceiver();
         registerConnectivityReceiver();
         // Intent intent = getIntent();
@@ -244,7 +243,7 @@ public class NotificationService extends Service{
     }
 
     private void stop(){
-        Log.d(LOGTAG, "stop()...");
+        LogUtil.d("stop()...");
 //        unregisterNotificationReceiver();
         unregisterConnectivityReceiver();
         xmppManager.disconnect();
@@ -292,14 +291,14 @@ public class NotificationService extends Service{
         public void increase(){
             synchronized(notificationService.getTaskTracker()){
                 notificationService.getTaskTracker().count++;
-                Log.d(LOGTAG, "Incremented task count to " + count);
+                LogUtil.d("Incremented task count to " + count);
             }
         }
 
         public void decrease(){
             synchronized(notificationService.getTaskTracker()){
                 notificationService.getTaskTracker().count--;
-                Log.d(LOGTAG, "Decremented task count to " + count);
+                LogUtil.d("Decremented task count to " + count);
             }
         }
     }

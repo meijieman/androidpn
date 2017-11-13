@@ -15,8 +15,6 @@
  */
 package com.hongfans.push;
 
-import android.util.Log;
-
 import com.hongfans.push.util.LogUtil;
 
 import org.jivesoftware.smack.ConnectionListener;
@@ -39,12 +37,12 @@ public class PersistentConnectionListener implements ConnectionListener{
 
     @Override
     public void connectionClosed(){
-        Log.d(LOGTAG, "connectionClosed()...");
+        LogUtil.d("connectionClosed()...");
     }
 
     @Override
     public void connectionClosedOnError(Exception e){
-        Log.d(LOGTAG, "connectionClosedOnError()...");
+        LogUtil.d("connectionClosedOnError()...");
         if(xmppManager.getConnection() != null
            && xmppManager.getConnection().isConnected()){
             xmppManager.getConnection().disconnect();
@@ -54,17 +52,17 @@ public class PersistentConnectionListener implements ConnectionListener{
 
     @Override
     public void reconnectingIn(int seconds){
-        Log.d(LOGTAG, "reconnectingIn()...");
+        LogUtil.d("reconnectingIn()...");
     }
 
     @Override
     public void reconnectionSuccessful(){
-        Log.d(LOGTAG, "reconnectionSuccessful()...");
+        LogUtil.d("reconnectionSuccessful()...");
     }
 
     @Override
     public void reconnectionFailed(Exception e){
-        Log.d(LOGTAG, "reconnectionFailed()...");
+        LogUtil.d("reconnectionFailed()...");
     }
 
 }

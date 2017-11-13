@@ -17,7 +17,6 @@ package com.hongfans.push;
 
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import com.hongfans.push.util.LogUtil;
 
@@ -40,8 +39,8 @@ public class PhoneStateChangeListener extends PhoneStateListener{
     @Override
     public void onDataConnectionStateChanged(int state){
         super.onDataConnectionStateChanged(state);
-        Log.d(LOGTAG, "onDataConnectionStateChanged()...");
-        Log.d(LOGTAG, "Data Connection State = " + getState(state));
+        LogUtil.d("onDataConnectionStateChanged()...");
+        LogUtil.d("Data Connection State = " + getState(state));
 
         if(state == TelephonyManager.DATA_CONNECTED){
             notificationService.connect();

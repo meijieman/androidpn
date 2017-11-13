@@ -19,8 +19,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.hongfans.push.iq.SetAliasIQ;
 import com.hongfans.push.iq.SetTagsIQ;
@@ -62,16 +60,16 @@ public final class ServiceManager{
         this.context = context;
 
 //        if(context instanceof Activity){
-//            Log.i(LOGTAG, "Callback Activity...");
+//            LogUtil.i("Callback Activity...");
 //            Activity callbackActivity = (Activity)context;
 //            callbackActivityPackageName = callbackActivity.getPackageName();
 //            callbackActivityClassName = callbackActivity.getClass().getName();
 //        }
 
         //        apiKey = getMetaDataValue("ANDROIDPN_API_KEY");
-        //        Log.i(LOGTAG, "apiKey=" + apiKey);
+        //        LogUtil.i("apiKey=" + apiKey);
         //        //        if (apiKey == null) {
-        //        //            Log.e(LOGTAG, "Please set the androidpn api key in the manifest file.");
+        //        //            LogUtil.e("Please set the androidpn api key in the manifest file.");
         //        //            throw new RuntimeException();
         //        //        }
 
@@ -80,10 +78,10 @@ public final class ServiceManager{
         xmppHost = props.getProperty("xmppHost", "127.0.0.1");
         xmppPort = props.getProperty("xmppPort", "5222");
         version = props.getProperty("version", "0.5.0");
-        Log.i(LOGTAG, "apiKey=" + apiKey);
-        Log.i(LOGTAG, "xmppHost=" + xmppHost);
-        Log.i(LOGTAG, "xmppPort=" + xmppPort);
-        Log.i(LOGTAG, "version=" + version);
+        LogUtil.i("apiKey=" + apiKey);
+        LogUtil.i("xmppHost=" + xmppHost);
+        LogUtil.i("xmppPort=" + xmppPort);
+        LogUtil.i("version=" + version);
 
         sharedPrefs = context.getSharedPreferences(
                 Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -97,7 +95,7 @@ public final class ServiceManager{
 //        editor.putString(Constants.CALLBACK_ACTIVITY_CLASS_NAME,
 //                callbackActivityClassName);
         editor.commit();
-        // Log.i(LOGTAG, "sharedPrefs=" + sharedPrefs.toString());
+        // LogUtil.i("sharedPrefs=" + sharedPrefs.toString());
     }
 
     public void startService(){
@@ -152,10 +150,10 @@ public final class ServiceManager{
         //                props = new Properties();
         //                props.load(in);
         //            } else {
-        //                Log.e(LOGTAG, "Could not find the properties file.");
+        //                LogUtil.e("Could not find the properties file.");
         //            }
         //        } catch (IOException e) {
-        //            Log.e(LOGTAG, "Could not find the properties file.", e);
+        //            LogUtil.e("Could not find the properties file.", e);
         //        } finally {
         //            if (in != null)
         //                try {
@@ -170,7 +168,7 @@ public final class ServiceManager{
             int id = context.getResources().getIdentifier("androidpn", "raw", context.getPackageName());
             props.load(context.getResources().openRawResource(id));
         } catch(Exception e){
-            Log.e(LOGTAG, "Could not find the properties file.", e);
+            LogUtil.e("Could not find the properties file." + e);
             // e.printStackTrace();
         }
         return props;
@@ -221,19 +219,19 @@ public final class ServiceManager{
                     if(!xmppManager.isAuthenticated()){
                         synchronized(xmppManager){
                             try{
-                                Log.d("TAG", "wait for authenticate");
+                                LogUtil.d("wait for authenticate");
                                 xmppManager.wait();
                             } catch(InterruptedException e){
                                 e.printStackTrace();
                             }
                         }
                     }
-                    Log.d("TAG", "authenticated");
+                    LogUtil.d("authenticated");
                     SetAliasIQ setAliasIQ = new SetAliasIQ();
                     setAliasIQ.setType(IQ.Type.SET);
 //                    setAliasIQ.setUsername(username);
                     setAliasIQ.setAlias(alias);
-                    Log.d("TAG", "username" + username + "alias" + alias);
+                    LogUtil.d("username" + username + "alias" + alias);
                     xmppManager.getConnection().sendPacket(setAliasIQ);
                 }
             }
@@ -254,14 +252,14 @@ public final class ServiceManager{
                     if (!xmppManager.isAuthenticated()) {
                         synchronized (xmppManager) {
                             try {
-                                Log.d("TAG", "wait for authenticate");
+                                LogUtil.d("wait for authenticate");
                                 xmppManager.wait();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
                     }
-                    Log.d("TAG", "authenticated");
+                    LogUtil.d("authenticated");
 
                     xmppManager.reg(service);
                 }
@@ -294,18 +292,18 @@ public final class ServiceManager{
                     if (!xmppManager.isAuthenticated()) {
                         synchronized (xmppManager) {
                             try {
-                                Log.d("TAG", "wait for authenticate");
+                                LogUtil.d("wait for authenticate");
                                 xmppManager.wait();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
                     }
-                    Log.d("TAG", "authenticated");
+                    LogUtil.d("authenticated");
                     SetTagsIQ iq = new SetTagsIQ();
                     iq.setType(IQ.Type.SET);
                     iq.setTags(tag);
-                    Log.d("TAG", "username" + username + "tags" + tag);
+                    LogUtil.d("username" + username + "tags" + tag);
                     xmppManager.getConnection().sendPacket(iq);
                 }
             }

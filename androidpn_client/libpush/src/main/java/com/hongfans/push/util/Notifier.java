@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.hongfans.push.Constants;
@@ -58,9 +57,9 @@ public class Notifier{
     }
 
     public void notify(final com.hongfans.push.message.Notification note){
-        Log.d(LOGTAG, "notify()...");
+        LogUtil.d("notify()...");
 
-        Log.d(LOGTAG, "notification=" + note);
+        LogUtil.d("notification=" + note);
 
         if(isNotificationEnabled()){
             // Show the toast
@@ -159,7 +158,7 @@ public class Notifier{
             //            notificationManager.notify(random.nextInt(), notification);
 
         } else {
-            Log.w(LOGTAG, "Notificaitons disabled.");
+            LogUtil.w("Notificaitons disabled.");
         }
     }
 

@@ -16,7 +16,6 @@
 package com.hongfans.push.iq.listener;
 
 import android.content.Intent;
-import android.util.Log;
 
 import com.hongfans.push.HFIntentService;
 import com.hongfans.push.XmppManager;
@@ -47,8 +46,8 @@ public class NotificationPacketListener implements PacketListener{
 
     @Override
     public void processPacket(Packet packet){
-        Log.d(LOGTAG, "NotificationPacketListener.processPacket()...");
-        Log.d(LOGTAG, "packet.toXML()=" + packet.toXML());
+        LogUtil.d("NotificationPacketListener.processPacket()...");
+        LogUtil.d("packet.toXML()=" + packet.toXML());
 
         if(packet instanceof NotificationIQ){
             NotificationIQ notification = (NotificationIQ)packet;

@@ -38,4 +38,22 @@ public class LogUtil{
         }
     }
 
+    public static void d(String msg) {
+        if (mIsDebug) {
+            Log.d(TAG, msg);
+        }
+    }
+
+    public static void w(String msg) {
+        if (mIsDebug) {
+            Log.w(TAG, msg);
+        }
+    }
+
+    public static void e(String msg) {
+        if (mIsDebug) {
+            Log.e(TAG, msg);
+        }
+    }
+
 }

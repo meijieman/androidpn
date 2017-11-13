@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import com.hongfans.push.NotificationService;
 import com.hongfans.push.util.LogUtil;
@@ -42,9 +41,9 @@ public class ConnectivityReceiver extends BroadcastReceiver{
 
     @Override
     public void onReceive(Context context, Intent intent){
-        Log.d(LOGTAG, "ConnectivityReceiver.onReceive()...");
+        LogUtil.d("ConnectivityReceiver.onReceive()...");
         String action = intent.getAction();
-        Log.d(LOGTAG, "action=" + action);
+        LogUtil.d("action=" + action);
 
         ConnectivityManager connectivityManager = (ConnectivityManager)context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -52,14 +51,14 @@ public class ConnectivityReceiver extends BroadcastReceiver{
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         if(networkInfo != null){
-            Log.d(LOGTAG, "Network Type  = " + networkInfo.getTypeName());
-            Log.d(LOGTAG, "Network State = " + networkInfo.getState());
+            LogUtil.d("Network Type  = " + networkInfo.getTypeName());
+            LogUtil.d("Network State = " + networkInfo.getState());
             if(networkInfo.isConnected()){
-                Log.i(LOGTAG, "Network connected");
+                LogUtil.i("Network connected");
                 notificationService.connect();
             }
         } else {
-            Log.e(LOGTAG, "Network unavailable");
+            LogUtil.e("Network unavailable");
             notificationService.disconnect();
         }
     }

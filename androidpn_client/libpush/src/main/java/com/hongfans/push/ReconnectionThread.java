@@ -15,8 +15,6 @@
  */
 package com.hongfans.push;
 
-import android.util.Log;
-
 import com.hongfans.push.util.LogUtil;
 
 /**
@@ -41,8 +39,7 @@ public class ReconnectionThread extends Thread{
     public void run(){
         try{
             while(!isInterrupted() && !xmppManager.getConnection().isAuthenticated()){
-                Log.d(LOGTAG, "Trying to reconnect in " + waiting()
-                              + " seconds");
+                LogUtil.d("Trying to reconnect in " + waiting() + " seconds");
                 Thread.sleep((long)waiting() * 1000L);
                 xmppManager.connect();
                 waiting++;

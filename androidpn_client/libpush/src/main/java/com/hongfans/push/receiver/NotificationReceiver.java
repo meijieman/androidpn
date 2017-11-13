@@ -18,7 +18,6 @@ package com.hongfans.push.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.hongfans.push.Constants;
 import com.hongfans.push.message.Notification;
@@ -34,8 +33,7 @@ import com.hongfans.push.util.Notifier;
 @Deprecated
 public final class NotificationReceiver extends BroadcastReceiver{
 
-    private static final String LOGTAG = LogUtil
-            .makeLogTag(NotificationReceiver.class);
+    private static final String LOGTAG = LogUtil.makeLogTag(NotificationReceiver.class);
 
     //    private NotificationService notificationService;
 
@@ -48,9 +46,9 @@ public final class NotificationReceiver extends BroadcastReceiver{
 
     @Override
     public void onReceive(Context context, Intent intent){
-        Log.d(LOGTAG, "NotificationReceiver.onReceive()...");
+        LogUtil.d("NotificationReceiver.onReceive()...");
         String action = intent.getAction();
-        Log.d(LOGTAG, "action=" + action);
+        LogUtil.d("action=" + action);
 
         if(Constants.ACTION_SHOW_NOTIFICATION.equals(action)){
             String notificationId = intent
@@ -64,11 +62,11 @@ public final class NotificationReceiver extends BroadcastReceiver{
             String notificationUri = intent
                     .getStringExtra(Constants.NOTIFICATION_URI);
 
-            Log.d(LOGTAG, "notificationId=" + notificationId);
-            Log.d(LOGTAG, "notificationApiKey=" + notificationApiKey);
-            Log.d(LOGTAG, "notificationTitle=" + notificationTitle);
-            Log.d(LOGTAG, "notificationMessage=" + notificationMessage);
-            Log.d(LOGTAG, "notificationUri=" + notificationUri);
+            LogUtil.d("notificationId=" + notificationId);
+            LogUtil.d("notificationApiKey=" + notificationApiKey);
+            LogUtil.d("notificationTitle=" + notificationTitle);
+            LogUtil.d("notificationMessage=" + notificationMessage);
+            LogUtil.d("notificationUri=" + notificationUri);
 
             Notifier notifier = new Notifier(context);
             Notification note = new Notification();
