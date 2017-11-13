@@ -86,6 +86,8 @@ public class UserDaoHibernate extends HibernateDaoSupport implements UserDao {
 
 	@Override
 	public List<User> getUsersByTag(String tag) {
+		// [[:<:]], [[:>:]] 这些标记表示word边界。它们分别与word的开始和结束匹配。
+//		return getHibernateTemplate().find("from User u where u.tag REGEXP '[[:<:]]" + tag + "[[:>:]]'");
 		return getHibernateTemplate().find("from User where tag like ?", "%" + tag + "%");
 	}
 

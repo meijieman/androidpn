@@ -51,9 +51,13 @@ public class IQSetTagsHandler extends IQHandler {
                 if (CommonUtil.isNotEmpty(tag)) {
                     try {
                         User user = userService.getUserByUsername(session.getUsername());
-                        user.setTag(tag);
-                        userService.saveUser(user);
-                        log.debug("handle set tags save user success");
+                        if (user != null) {
+                            user.setTag(tag);
+                            userService.saveUser(user);
+                            log.debug("handle set tags save user success");
+                        } else {
+                            log.warn("user " + session.getUsername() + " not found, set tag failure");
+                        }
                     } catch (UserNotFoundException | UserExistsException e) {
                         e.printStackTrace();
                     }
