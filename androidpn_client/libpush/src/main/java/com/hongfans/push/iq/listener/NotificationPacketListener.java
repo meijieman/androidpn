@@ -36,8 +36,6 @@ import org.jivesoftware.smack.packet.Packet;
  */
 public class NotificationPacketListener implements PacketListener{
 
-    private static final String LOGTAG = LogUtil.makeLogTag(NotificationPacketListener.class);
-
     private final XmppManager xmppManager;
 
     public NotificationPacketListener(XmppManager xmppManager){

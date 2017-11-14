@@ -7,12 +7,6 @@ package com.hongfans.push.message;
 
 public class Notification extends Message{
 
-    public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
-    public static final String NOTIFICATION_API_KEY = "NOTIFICATION_API_KEY";
-    public static final String NOTIFICATION_TITLE = "NOTIFICATION_TITLE";
-    public static final String NOTIFICATION_MESSAGE = "NOTIFICATION_MESSAGE";
-    public static final String NOTIFICATION_URI = "NOTIFICATION_URI";
-
     private String title;
     private String message;
     private String uri;
@@ -43,7 +37,7 @@ public class Notification extends Message{
 
     @Override
     public String toString(){
-        return "Notification{" +
+        return super.toString() + "Notification{" +
                ", title='" + title + '\'' +
                ", message='" + message + '\'' +
                ", uri='" + uri + '\'' +

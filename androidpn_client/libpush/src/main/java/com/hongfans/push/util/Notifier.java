@@ -42,8 +42,6 @@ import static android.os.Looper.getMainLooper;
  */
 public class Notifier{
 
-    private static final String LOGTAG = LogUtil.makeLogTag(Notifier.class);
-
     private static final Random random = new Random(System.currentTimeMillis());
 
     private Context context;

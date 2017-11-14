@@ -52,8 +52,6 @@ import java.util.concurrent.Future;
  */
 public class XmppManager{
 
-    private static final String LOGTAG = LogUtil.makeLogTag(XmppManager.class);
-
     private static final String XMPP_RESOURCE_NAME = "AndroidpnClient";
 
     private Context context;
@@ -269,8 +267,6 @@ public class XmppManager{
                     taskTracker.decrease();
                 }
             } else {
-                //解决服务器端重启后,客户端不能成功连接androidpn服务器
-                // runTask();
                 taskList.add(runnable);
             }
         }

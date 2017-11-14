@@ -24,14 +24,11 @@ import com.hongfans.push.util.LogUtil;
  */
 public class ReconnectionThread extends Thread{
 
-    private static final String LOGTAG = LogUtil
-            .makeLogTag(ReconnectionThread.class);
-
     private final XmppManager xmppManager;
 
     private int waiting;
 
-    ReconnectionThread(XmppManager xmppManager){
+    public ReconnectionThread(XmppManager xmppManager){
         this.xmppManager = xmppManager;
         this.waiting = 0;
     }

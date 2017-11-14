@@ -65,7 +65,7 @@ public class DemoAppActivity extends Activity{
         serviceManager.setTags(new String[]{"game", "music", "computer"});
         serviceManager.registerPushIntentService(DemoIntentService.class); // 需要 startService 后 invoke
 
-        info.setText(serviceManager.getVerInfo());
+        info.setText(serviceManager.getVersion());
     }
 
     @Override

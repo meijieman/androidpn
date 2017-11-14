@@ -26,10 +26,6 @@ public class Constants{
 
     // PREFERENCE KEYS
 
-//    public static final String CALLBACK_ACTIVITY_PACKAGE_NAME = "CALLBACK_ACTIVITY_PACKAGE_NAME";
-
-//    public static final String CALLBACK_ACTIVITY_CLASS_NAME = "CALLBACK_ACTIVITY_CLASS_NAME";
-
     public static final String API_KEY = "API_KEY";
 
     public static final String VERSION = "VERSION";
@@ -73,9 +69,5 @@ public class Constants{
     // INTENT ACTIONS
 
     public static final String ACTION_SHOW_NOTIFICATION = "org.androidpn.client.SHOW_NOTIFICATION";
-
-    public static final String ACTION_NOTIFICATION_CLICKED = "org.androidpn.client.NOTIFICATION_CLICKED";
-
-    public static final String ACTION_NOTIFICATION_CLEARED = "org.androidpn.client.NOTIFICATION_CLEARED";
 
 }

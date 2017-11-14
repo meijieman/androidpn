@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 public abstract class HFIntentService extends IntentService {
 
-    public static final String ACTION_RCVD = "ACTION_RCVD";
+    public static final String ACTION_RCVD = "action_rcvd";
     public static final String TRANSMIT_DATA = "transmit_data";
 
     public HFIntentService() {

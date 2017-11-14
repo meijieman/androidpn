@@ -43,8 +43,6 @@ import java.util.concurrent.Future;
  */
 public class NotificationService extends Service{
 
-    private static final String LOGTAG = LogUtil.makeLogTag(NotificationService.class);
-
     public static final String SERVICE_NAME = "org.androidpn.client.NotificationService";
 
     private static NotificationService notificationService;

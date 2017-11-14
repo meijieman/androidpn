@@ -27,9 +27,6 @@ import com.hongfans.push.util.LogUtil;
  */
 public class PhoneStateChangeListener extends PhoneStateListener{
 
-    private static final String LOGTAG = LogUtil
-            .makeLogTag(PhoneStateChangeListener.class);
-
     private final NotificationService notificationService;
 
     public PhoneStateChangeListener(NotificationService notificationService){

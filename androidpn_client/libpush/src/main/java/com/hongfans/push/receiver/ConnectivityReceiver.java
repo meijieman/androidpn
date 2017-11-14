@@ -31,8 +31,6 @@ import com.hongfans.push.util.LogUtil;
  */
 public class ConnectivityReceiver extends BroadcastReceiver{
 
-    private static final String LOGTAG = LogUtil.makeLogTag(ConnectivityReceiver.class);
-
     private NotificationService notificationService;
 
     public ConnectivityReceiver(NotificationService notificationService){

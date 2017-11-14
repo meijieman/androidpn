@@ -33,8 +33,6 @@ import com.hongfans.push.util.Notifier;
 @Deprecated
 public final class NotificationReceiver extends BroadcastReceiver{
 
-    private static final String LOGTAG = LogUtil.makeLogTag(NotificationReceiver.class);
-
     //    private NotificationService notificationService;
 
     public NotificationReceiver(){

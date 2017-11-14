@@ -36,8 +36,6 @@ import java.util.Properties;
  */
 public final class ServiceManager{
 
-    private static final String LOGTAG = LogUtil.makeLogTag(ServiceManager.class);
-
     private Context context;
 
     private SharedPreferences sharedPrefs;

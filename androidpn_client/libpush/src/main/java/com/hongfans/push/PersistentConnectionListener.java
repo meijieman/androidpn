@@ -26,9 +26,6 @@ import org.jivesoftware.smack.ConnectionListener;
  */
 public class PersistentConnectionListener implements ConnectionListener{
 
-    private static final String LOGTAG = LogUtil
-            .makeLogTag(PersistentConnectionListener.class);
-
     private final XmppManager xmppManager;
 
     public PersistentConnectionListener(XmppManager xmppManager){
