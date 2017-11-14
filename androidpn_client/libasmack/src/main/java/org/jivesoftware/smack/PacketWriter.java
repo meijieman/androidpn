@@ -240,11 +240,11 @@ class PacketWriter{
                 try{
                     writer.write(" "); // 发送一个空格
                     writer.flush();
-                    Log.d("tag_heart_beat", "心跳包发送成功");
+                    Log.d("tag_push_heart_beat", "心跳包发送成功");
                     Thread.sleep(10 * 1000); // 心跳包间隔
                 } catch(Exception e){
                     e.printStackTrace();
-                    Log.d("tag_heart_beat", "心跳包发送异常");
+                    Log.d("tag_push_heart_beat", "心跳包发送异常");
                     if(!(done || connection.isSocketClosed())){
                         done = true;
                         // packetReader could be set to null by an concurrent disconnect() call.

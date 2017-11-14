@@ -24,7 +24,7 @@ import android.util.Log;
  */
 public class LogUtil{
 
-    public static final String TAG = "LogUtil_";
+    public static final String TAG = "tag_push";
 
     public static boolean mIsDebug = true;
 

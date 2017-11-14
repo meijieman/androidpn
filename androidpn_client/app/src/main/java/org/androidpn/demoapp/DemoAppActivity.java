@@ -36,6 +36,7 @@ import java.util.Date;
 public class DemoAppActivity extends Activity{
 
     private TextView tv;
+    private TextView info;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver(){
         @Override
@@ -51,6 +52,7 @@ public class DemoAppActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         tv = (TextView)findViewById(R.id.tv_main);
+        info = (TextView) findViewById(R.id.tv_info);
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(DemoIntentService.ACTION_PAYLOAD);
@@ -59,9 +61,11 @@ public class DemoAppActivity extends Activity{
         // Start the service
         ServiceManager serviceManager = new ServiceManager(this);
         serviceManager.startService();
-        serviceManager.setAlias("xuyusong");
+        serviceManager.setAlias("xuyusong-mi"); // 需要保证唯一，否则设置不成功
         serviceManager.setTags(new String[]{"game", "music", "computer"});
         serviceManager.registerPushIntentService(DemoIntentService.class); // 需要 startService 后 invoke
+
+        info.setText(serviceManager.getVerInfo());
     }
 
     @Override
