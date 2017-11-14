@@ -159,8 +159,9 @@ public class NotificationService extends Service{
         return true;
     }
 
-    public static Intent getIntent(){
-        return new Intent(SERVICE_NAME);
+    public static Intent getIntent(Context ctx){
+        Intent intent = new Intent(ctx, NotificationService.class);
+        return intent; // new Intent(SERVICE_NAME);
     }
 
     public ExecutorService getExecutorService(){

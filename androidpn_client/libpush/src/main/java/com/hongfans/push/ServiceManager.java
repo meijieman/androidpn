@@ -77,7 +77,7 @@ public final class ServiceManager{
         apiKey = props.getProperty("apiKey", "");
         xmppHost = props.getProperty("xmppHost", "127.0.0.1");
         xmppPort = props.getProperty("xmppPort", "5222");
-        version = props.getProperty("version", "0.5.0");
+        version = props.getProperty("version", "0.5.0") + BuildConfig.BUILD_TIMESTAMP;
         LogUtil.i("apiKey=" + apiKey);
         LogUtil.i("xmppHost=" + xmppHost);
         LogUtil.i("xmppPort=" + xmppPort);
@@ -102,7 +102,7 @@ public final class ServiceManager{
 //        Thread serviceThread = new Thread(new Runnable(){
 //            @Override
 //            public void run(){
-                Intent intent = NotificationService.getIntent();
+                Intent intent = NotificationService.getIntent(context);
                 context.startService(intent);
 //            }
 //        });
@@ -110,10 +110,13 @@ public final class ServiceManager{
     }
 
     public void stopService(){
-        Intent intent = NotificationService.getIntent();
+        Intent intent = NotificationService.getIntent(context);
         context.stopService(intent);
     }
 
+    public String getVerInfo() {
+        return version;
+    }
     //    private String getMetaDataValue(String name, String def) {
     //        String value = getMetaDataValue(name);
     //        return (value == null) ? def : value;
@@ -231,7 +234,7 @@ public final class ServiceManager{
                     setAliasIQ.setType(IQ.Type.SET);
 //                    setAliasIQ.setUsername(username);
                     setAliasIQ.setAlias(alias);
-                    LogUtil.d("username" + username + "alias" + alias);
+                    LogUtil.d("username " + username + ", alias " + alias);
                     xmppManager.getConnection().sendPacket(setAliasIQ);
                 }
             }
@@ -303,7 +306,7 @@ public final class ServiceManager{
                     SetTagsIQ iq = new SetTagsIQ();
                     iq.setType(IQ.Type.SET);
                     iq.setTags(tag);
-                    LogUtil.d("username" + username + "tags" + tag);
+                    LogUtil.d("username " + username + ", tags " + tag);
                     xmppManager.getConnection().sendPacket(iq);
                 }
             }
