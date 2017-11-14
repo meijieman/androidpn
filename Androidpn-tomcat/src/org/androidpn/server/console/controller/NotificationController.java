@@ -58,31 +58,37 @@ public class NotificationController extends MultiActionController {
         String message = ServletRequestUtils.getStringParameter(request, "message");
         String uri = ServletRequestUtils.getStringParameter(request, "uri");
         String pushType = ServletRequestUtils.getStringParameter(request, "pushtype", "0");
+        String validTime = ServletRequestUtils.getStringParameter(request, "validTime", "0");
 
         String apiKey = Config.getString("apiKey", "");
         logger.debug("apiKey=" + apiKey);
 
         String pushTypeParam = "";
+        long validTimeParam = 0L;
         if ("0".equalsIgnoreCase(pushType)) {
             pushTypeParam = "notification";
         } else if("1".equalsIgnoreCase(pushType)){
             pushTypeParam = "payload";
         }
+        try {
+            validTimeParam = Long.parseLong(validTime);
+        } catch (NumberFormatException e) {
+//            e.printStackTrace();
+            logger.error("the param validTime should be number " + validTime, e);
+        }
 
         if (broadcast.equalsIgnoreCase("0")) { // broadcast
-            notificationManager.sendBroadcast(apiKey, title, message, uri, "[broadcast]", pushTypeParam);
-//            notificationManager.sendBroadcast(apiKey, title, message, uri);
+            notificationManager.sendBroadcast(apiKey, title, message, uri, validTimeParam, "[broadcast]", pushTypeParam);
         } else if (broadcast.equalsIgnoreCase("1")) { // by username
-            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri, "[username]", pushTypeParam, true);
-//            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri,true);
+            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri, validTimeParam, "[username]", pushTypeParam, true);
         } else if (broadcast.equalsIgnoreCase("2")) {
-            //别名推送
-            notificationManager.sendNotificationByAlias(alias, apiKey, title, message, uri, "[alias]" + username, pushTypeParam, true);
-//        	notificationManager.sendNotificationByAlias(alias, apiKey, title, message, uri, false);
+            // 别名推送
+            notificationManager.sendNotificationByAlias(alias, apiKey, title, message, uri, validTimeParam, "[alias]" + username, pushTypeParam, true);
         } else if (broadcast.equalsIgnoreCase("3")) {
+            // 标签推送
             if (CommonUtil.isNotEmpty(tags)) {
                 String[] split = tags.split(",");
-                notificationManager.sendNotificationByTags(split[0], apiKey, title, message, uri, "[tags]" + tags, pushTypeParam, true);
+                notificationManager.sendNotificationByTags(split[0], apiKey, title, message, uri, validTimeParam, "[tags]" + tags, pushTypeParam, true);
             }
         }
 

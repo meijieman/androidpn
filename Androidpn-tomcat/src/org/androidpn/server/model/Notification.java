@@ -15,6 +15,8 @@ import java.util.Date;
 @Table(name = "apn_notification")
 public class Notification {
 
+	public static final String STATE_EXPIRED = "expired";
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id ;
@@ -48,6 +50,9 @@ public class Notification {
 
 	@Column(name = "valid_time")
 	private Long validTime; // 有效时间，从创建时间计算，单位 s
+
+	@Column(name = "state")
+	private String state; // 状态 默认有效，否则过期（expired）
 
 	// private String laterAction; // 点击通知栏的后续操作，启动应用，打开连接，下载应用
 
@@ -137,6 +142,14 @@ public class Notification {
 
 	public void setValidTime(Long validTime) {
 		this.validTime = validTime;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	@Override

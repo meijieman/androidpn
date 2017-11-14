@@ -13,15 +13,15 @@ public class NotificationDaoHibernate extends HibernateDaoSupport implements Not
 		getHibernateTemplate().flush();
 	}
 
-	public List<Notification> findNotificationsByUsername(String username) {
-		@SuppressWarnings("unchecked")
-		List<Notification> list = getHibernateTemplate().find("from Notification where username=?",username);
-		if(list!=null&&list.size()>0){
-			return list;
-		}else {
-			return null;
-		}
-	}
+//	public List<Notification> findNotificationsByUsername(String username) {
+//		@SuppressWarnings("unchecked")
+//		List<Notification> list = getHibernateTemplate().find("from Notification where username=?",username);
+//		if(list!=null&&list.size()>0){
+//			return list;
+//		}else {
+//			return null;
+//		}
+//	}
 	
 	public void deleteNotification(Notification notification) {
 		getHibernateTemplate().delete(notification);
@@ -42,6 +42,15 @@ public class NotificationDaoHibernate extends HibernateDaoSupport implements Not
 	@Override
 	public Notification getNotificationByUuid(String UUID) {
 		List<Notification> list = getHibernateTemplate().find("from Notification where uuid=?", UUID);
+		if (list != null && list.size() > 0) {
+			return list.get(0);
+		}
+		return null;
+	}
+
+	@Override
+	public Notification getValidNotificationByUuid(String UUID) {
+		List<Notification> list = getHibernateTemplate().find("from Notification where uuid=? and (state is NULL or state<>?)", new String[]{UUID, Notification.STATE_EXPIRED});
 		if (list != null && list.size() > 0) {
 			return list.get(0);
 		}

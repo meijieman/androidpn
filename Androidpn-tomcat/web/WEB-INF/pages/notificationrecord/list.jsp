@@ -30,6 +30,7 @@
 			<th>Title</th>
 			<th>Message</th>
 			<th>URI</th>
+			<th>State</th>
 			<th>CreatedDate</th>
 			<th>ValidTime</th>
 		</tr>
@@ -43,6 +44,7 @@
 				<td><c:out value="${notification.title}" /></td>
 				<td><c:out value="${notification.message}" /></td>
 				<td><c:out value="${notification.uri}" /></td>
+				<td><c:out value="${notification.state}" /></td>
 				<td align="center"><fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${notification.createdDate}" /></td>
 				<td><c:out value="${notification.validTime}" /></td>
 			</tr>

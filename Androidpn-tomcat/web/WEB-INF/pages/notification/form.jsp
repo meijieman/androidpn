@@ -33,6 +33,10 @@
                     <input type="radio" name="pushtype" value="1"/> Payload
                 </td>
             </tr>
+            <tr>
+                <td>Valid Time:(s)</td>
+                <td><input type="text" id="validTime" name="validTime" value="0" style="width:380px;"/></td>
+            </tr>
             <tr id="trUsername" style="display:none;">
                 <td>Username:</td>
                 <td><input type="text" id="username" name="username" value="" style="width:380px;"/></td>

@@ -14,9 +14,9 @@ public class NotificationServiceImpl implements NotificationService {
 		notificationDao.saveNotification(notification);
 	}
 
-	public List<Notification> findNotificationsByUsername(String username) {
-		return notificationDao.findNotificationsByUsername(username);
-	}
+//	public List<Notification> findNotificationsByUsername(String username) {
+//		return notificationDao.findNotificationsByUsername(username);
+//	}
 
 	public void deleteNotification(Notification notification) {
 		notificationDao.deleteNotification(notification);
@@ -42,5 +42,10 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	public Notification getNotificationByUuid(String UUID) {
 		return notificationDao.getNotificationByUuid(UUID);
+	}
+
+	@Override
+	public Notification getValidNotificationByUuid(String UUID) {
+		return notificationDao.getValidNotificationByUuid(UUID);
 	}
 }

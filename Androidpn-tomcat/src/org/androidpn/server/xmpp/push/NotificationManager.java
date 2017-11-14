@@ -88,14 +88,14 @@ public class NotificationManager {
         }
     }
 
-    public void sendBroadcast(String apiKey, String title, String message, String uri, String pushTo, String pushType) {
+    public void sendBroadcast(String apiKey, String title, String message, String uri, long validTime, String pushTo, String pushType) {
         log.debug("sendBroadcast()...");
         if (CommonUtil.isEmpty(userService.getUsers())) {
             log.debug("sendBroadcast() no user, finish");
             return;
         }
 
-        Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
+        Notification notif = createNotification(apiKey, title, message, uri, validTime, pushTo, pushType);
         notificationService.saveNotification(notif);
 
         PushDetail pd;
@@ -121,13 +121,14 @@ public class NotificationManager {
         }
     }
 
-    private Notification createNotification(String apiKey, String title, String message, String uri,
+    private Notification createNotification(String apiKey, String title, String message, String uri, long validTime,
                                             String pushTo, String pushType){
         Notification notif = new Notification();
         notif.setApiKey(apiKey);
         notif.setTitle(title);
         notif.setMessage(message);
         notif.setUri(uri);
+        notif.setValidTime(validTime);
         notif.setPushTo(pushTo);
         notif.setPushType(pushType);
 
@@ -182,10 +183,10 @@ public class NotificationManager {
         }
     }
 
-    public void sendNotifcationToUser(String apiKey, String username, String title, String message, String uri,
+    public void sendNotifcationToUser(String apiKey, String username, String title, String message, String uri, long validTime,
                                       String pushTo, String pushType, boolean shouldSave) {
         log.debug("sendNotifcationToUser()...");
-        Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
+        Notification notif = createNotification(apiKey, title, message, uri, validTime, pushTo, pushType);
 
         try {
             User user = userService.getUserByUsername(username);
@@ -244,19 +245,19 @@ public class NotificationManager {
 
     //通过别名发送通知
     public void sendNotificationByAlias(String alias, String apiKey, String title, String message,
-                                        String uri, String pushTo, String pushType, boolean shouldsave) {
+                                        String uri, long validTime, String pushTo, String pushType, boolean shouldSave) {
         try {
             User user = userService.getUserByAlias(alias);
-            Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
-            sendNotifcationToUser(user.getUsername(), notif, shouldsave);
+            Notification notif = createNotification(apiKey, title, message, uri, validTime, pushTo, pushType);
+            sendNotifcationToUser(user.getUsername(), notif, shouldSave);
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     // 通过标签发送
-    public void sendNotificationByTags(String tag, String apiKey, String title, String message,
-                                      String uri, String pushTo, String pushType, boolean shouldsave) {
+    public void sendNotificationByTags(String tag, String apiKey, String title, String message, String uri,
+                                       long validTime, String pushTo, String pushType, boolean shouldSave) {
         log.debug("sendNotificationByTags()...");
         List<User> users = userService.getUsersByTag(tag);
         if (CommonUtil.isEmpty(users)) {
@@ -264,7 +265,7 @@ public class NotificationManager {
             return;
         }
 
-        Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
+        Notification notif = createNotification(apiKey, title, message, uri, validTime, pushTo, pushType);
         notificationService.saveNotification(notif);
 
         PushDetail pd;

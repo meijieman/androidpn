@@ -98,13 +98,27 @@ public class PresenceUpdateHandler {
                     if (CommonUtil.isNotEmpty(details)) {
                         for (PushDetail detail : details) {
                             // 更新发送时间
-                            detail.setDeliveredDate(new Date());
-                            mPushDetailService.savePushDetail(detail);
+                            Notification notification = notificationService.getValidNotificationByUuid(detail.getUuid());
+                            if (notification != null) {
+                                Date date = new Date();
+                                log.info("tag_valid" + notification.getCreatedDate().getTime());
+                                log.info("tag_valid now " + date.getTime());
+                                if (notification.getValidTime() == 0L
+                                        || date.getTime() - notification.getCreatedDate().getTime() < notification.getValidTime() * 1000) {
+                                    // 消息没有过期
+                                    detail.setDeliveredDate(date);
+                                    mPushDetailService.savePushDetail(detail);
 
-                            Notification notification = notificationService.getNotificationByUuid(detail.getUuid());
-
-                            // 只需要发送通知，不需要保存通知记录（之前已经保存过）
-                            notificationManager.sendNotifcationToUser(session.getUsername(), notification, false);
+                                    // 只需要发送通知，不需要保存通知记录（之前已经保存过）
+                                    notificationManager.sendNotifcationToUser(session.getUsername(), notification, false);
+                                } else {
+                                    // 更新消息为过期状态
+                                    notification.setState(Notification.STATE_EXPIRED);
+                                    notificationService.saveNotification(notification);
+                                }
+                            } else {
+                                log.warn("uuid " + detail.getUuid() + " has no valid notification that not push");
+                            }
                         }
                     }
                 }

@@ -8,7 +8,7 @@ public interface NotificationService {
 
 	void saveNotification(Notification notification);
 
-	List<Notification> findNotificationsByUsername(String username);
+//	List<Notification> findNotificationsByUsername(String username);
 
 	void deleteNotification(Notification notification);
 
@@ -17,4 +17,6 @@ public interface NotificationService {
 	List<Notification> getNotifications();
 
 	Notification getNotificationByUuid(String UUID);
+
+	Notification getValidNotificationByUuid(String UUID);
 }

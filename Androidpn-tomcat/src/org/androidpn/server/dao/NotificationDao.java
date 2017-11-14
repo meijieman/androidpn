@@ -8,7 +8,7 @@ public interface NotificationDao {
 
 	void saveNotification(Notification notification);
 	
-	List<Notification> findNotificationsByUsername(String username);
+//	List<Notification> findNotificationsByUsername(String username);
 	
 	void deleteNotification(Notification notification);
 	
@@ -17,4 +17,6 @@ public interface NotificationDao {
 	List<Notification> getNotifications();
 
 	Notification getNotificationByUuid(String UUID);
+
+	Notification getValidNotificationByUuid(String UUID);
 }
