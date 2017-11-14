@@ -24,6 +24,9 @@ import org.jivesoftware.smack.packet.IQ;
  */
 public class NotificationIQ extends IQ{
 
+    public static final String PUSH_TYPE_NOTIFICATION = "notification";
+    public static final String PUSH_TYPE_PAYLOAD = "payload";
+
     private String uuid;
 
     private String id;
@@ -35,6 +38,8 @@ public class NotificationIQ extends IQ{
     private String message;
 
     private String uri;
+
+    private String pushType; // 推送类型 notification， payload
 
     public NotificationIQ(){
     }
@@ -99,4 +104,11 @@ public class NotificationIQ extends IQ{
         this.uri = url;
     }
 
+    public String getPushType() {
+        return pushType;
+    }
+
+    public void setPushType(String pushType) {
+        this.pushType = pushType;
+    }
 }

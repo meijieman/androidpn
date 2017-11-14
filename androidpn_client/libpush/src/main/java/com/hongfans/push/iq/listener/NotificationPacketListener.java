@@ -53,23 +53,15 @@ public class NotificationPacketListener implements PacketListener{
             NotificationIQ notification = (NotificationIQ)packet;
 
             if(notification.getChildElementXML().contains("androidpn:iq:notification")){
-                String notificationId = notification.getId();
-                /*String notificationApiKey = notification.getApiKey();
+                /*String notificationId = notification.getId();
+                String notificationApiKey = notification.getApiKey();
                 String notificationTitle = notification.getTitle();
                 String notificationMessage = notification.getMessage();
                 //                String notificationTicker = notification.getTicker();
                 String notificationUri = notification.getUri();*/
 
-                Notification noti = new Notification();
-                noti.setId(notification.getId());
-                noti.setUuid(notification.getUuid());
-                noti.setApiKey(notification.getApiKey());
-                noti.setTitle(notification.getTitle());
-                noti.setMessage(notification.getMessage());
-                noti.setUri(notification.getUri());
-
-                // 测试 payload
-                if(notification.getTitle().startsWith("payload")){
+                if (NotificationIQ.PUSH_TYPE_PAYLOAD.equalsIgnoreCase(notification.getPushType())) {
+                    // Payload
                     Payload payload = new Payload();
                     payload.setId(notification.getId());
                     payload.setApiKey(notification.getApiKey());
@@ -82,14 +74,23 @@ public class NotificationPacketListener implements PacketListener{
                         service.putExtra(HFIntentService.TRANSMIT_DATA, payload);
                         xmppManager.getContext().startService(service);
                     }
-                }
+                } else {
+                    // Notification
+                    Notification notif = new Notification();
+                    notif.setId(notification.getId());
+                    notif.setUuid(notification.getUuid());
+                    notif.setApiKey(notification.getApiKey());
+                    notif.setTitle(notification.getTitle());
+                    notif.setMessage(notification.getMessage());
+                    notif.setUri(notification.getUri());
 
-                Class<? extends HFIntentService> intentService = xmppManager.getIntentService();
-                if (intentService != null) {
-                    Intent service = new Intent(xmppManager.getContext(), intentService);
-                    service.setAction(HFIntentService.ACTION_RCVD);
-                    service.putExtra(HFIntentService.TRANSMIT_DATA, noti);
-                    xmppManager.getContext().startService(service);
+                    Class<? extends HFIntentService> intentService = xmppManager.getIntentService();
+                    if (intentService != null) {
+                        Intent service = new Intent(xmppManager.getContext(), intentService);
+                        service.setAction(HFIntentService.ACTION_RCVD);
+                        service.putExtra(HFIntentService.TRANSMIT_DATA, notif);
+                        xmppManager.getContext().startService(service);
+                    }
                 }
 
                 /*Intent intent = new Intent(Constants.ACTION_SHOW_NOTIFICATION);
