@@ -16,6 +16,7 @@
 package com.hongfans.push.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -23,9 +24,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.hongfans.push.Constants;
+import com.hongfans.push.message.Payload;
 
 import java.io.Serializable;
 import java.util.Random;
@@ -217,5 +220,23 @@ public class Notifier{
             return (com.hongfans.push.message.Notification)extra;
         }
         return null;
+    }
+
+    public void showAlertDialog(final Context context, final Payload payload) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setTitle(payload.getUuid())
+                        .setMessage(payload.getMessage())
+                        .setPositiveButton("确定", null)
+                        .create();
+                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                dialog.setCanceledOnTouchOutside(false);//点击屏幕不消失
+                if (!dialog.isShowing()) {
+                    dialog.show();
+                }
+            }
+        });
     }
 }
