@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-apply from: 'fat-aar.gradle'
+//apply from: 'fat-aar.gradle'
 
 android {
     compileSdkVersion 22
@@ -10,6 +10,8 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "String", "BUILD_TIMESTAMP", getDate()
     }
     buildTypes {
         release {
@@ -19,9 +21,14 @@ android {
     }
 }
 
-
+String getDate() {
+    Date date = new Date();
+    String dates = "\"\t" + date.toLocaleString() + "\"";
+    return dates;
+}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    embedded project(':libasmack')
+    compile project(':libasmack')
+//    embedded project(':libasmack')
 }
