@@ -216,8 +216,12 @@ public final class ServiceManager{
                 } catch(InterruptedException e){
                     e.printStackTrace();
                 }
-                NotificationService notificationService = NotificationService.getNotification();
-                XmppManager xmppManager = notificationService.getXmppManager();
+                NotificationService service = NotificationService.getNotification();
+                if (service == null) {
+                    LogUtil.e("service is null, set alias failed");
+                    return;
+                }
+                XmppManager xmppManager = service.getXmppManager();
                 if(xmppManager != null){
                     if(!xmppManager.isAuthenticated()){
                         synchronized(xmppManager){
@@ -250,7 +254,12 @@ public final class ServiceManager{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                XmppManager xmppManager = NotificationService.getNotification().getXmppManager();
+                NotificationService notificationService = NotificationService.getNotification();
+                if (notificationService == null) {
+                    LogUtil.e("service is null, register IntentService failed");
+                    return;
+                }
+                XmppManager xmppManager = notificationService.getXmppManager();
                 if (xmppManager != null) {
                     if (!xmppManager.isAuthenticated()) {
                         synchronized (xmppManager) {
@@ -290,7 +299,12 @@ public final class ServiceManager{
                 }
                 String tmp = sb.toString();
                 String tag = tmp.substring(0, tmp.length() - 1);
-                XmppManager xmppManager = NotificationService.getNotification().getXmppManager();
+                NotificationService service = NotificationService.getNotification();
+                if (service == null) {
+                    LogUtil.e("service is null, set tags failed");
+                    return;
+                }
+                XmppManager xmppManager = service.getXmppManager();
                 if (xmppManager != null) {
                     if (!xmppManager.isAuthenticated()) {
                         synchronized (xmppManager) {
