@@ -114,9 +114,6 @@ public final class ServiceManager{
         context.stopService(intent);
     }
 
-    public String getVerInfo() {
-        return version;
-    }
     //    private String getMetaDataValue(String name, String def) {
     //        String value = getMetaDataValue(name);
     //        return (value == null) ? def : value;
@@ -177,9 +174,9 @@ public final class ServiceManager{
         return props;
     }
 
-    //    public String getVersion() {
-    //        return version;
-    //    }
+    public String getVersion(){
+        return version;
+    }
     //
     //    public String getApiKey() {
     //        return apiKey;
