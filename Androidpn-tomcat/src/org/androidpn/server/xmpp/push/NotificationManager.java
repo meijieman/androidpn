@@ -187,14 +187,6 @@ public class NotificationManager {
         log.debug("sendNotifcationToUser()...");
         Notification notif = createNotification(apiKey, title, message, uri, pushTo, pushType);
 
-        IQ notificationIQ = createNotificationIQ(notif); // 创建推送
-        ClientSession session = sessionManager.getSession(username);
-        if (session != null) {
-            if (session.getPresence().isAvailable()) {
-                notificationIQ.setTo(session.getAddress());
-                session.deliver(notificationIQ); // 发送推送
-            }
-        }
         try {
             User user = userService.getUserByUsername(username);
             if (user != null && shouldSave) {
@@ -210,20 +202,20 @@ public class NotificationManager {
             }
         } catch (UserNotFoundException e) {
             e.printStackTrace();
+        }
+        IQ notificationIQ = createNotificationIQ(notif); // 创建推送
+        ClientSession session = sessionManager.getSession(username);
+        if (session != null) {
+            if (session.getPresence().isAvailable()) {
+                notificationIQ.setTo(session.getAddress());
+                session.deliver(notificationIQ); // 发送推送
+            }
         }
     }
 
     public void sendNotifcationToUser(String username, Notification notif, boolean shouldSave) {
         log.debug("sendNotifcationToUser()...");
 
-        IQ notificationIQ = createNotificationIQ(notif); // 创建推送
-        ClientSession session = sessionManager.getSession(username);
-        if (session != null) {
-            if (session.getPresence().isAvailable()) {
-                notificationIQ.setTo(session.getAddress());
-                session.deliver(notificationIQ); // 发送推送
-            }
-        }
         try {
             User user = userService.getUserByUsername(username);
             if (user != null && shouldSave) {
@@ -239,6 +231,14 @@ public class NotificationManager {
             }
         } catch (UserNotFoundException e) {
             e.printStackTrace();
+        }
+        IQ notificationIQ = createNotificationIQ(notif); // 创建推送
+        ClientSession session = sessionManager.getSession(username);
+        if (session != null) {
+            if (session.getPresence().isAvailable()) {
+                notificationIQ.setTo(session.getAddress());
+                session.deliver(notificationIQ); // 发送推送
+            }
         }
     }
 
