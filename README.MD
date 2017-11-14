@@ -1,48 +1,63 @@
 # AndroidPN
-基于Androidpn的推送服务器方案，加入断线重连、心跳包、离线推送、标签推送、富文本推送。用于实现Android推送服务，博客和知乎专栏上有详细源码解释。 
-博客：https://xuyusong.github.io/ 
-知乎专栏：https://zhuanlan.zhihu.com/c_51051095
 
-## 原项目地址
-https://github.com/xuyusong/AndroidPN
-
-原项目已实现功能
-
-基于Androidpn的推送服务器方案，加入断线重连、心跳包、离线推送、标签推送。
-
+## 原始项目地址
 https://github.com/dannytiehui/androidpn
 
+## 二次开发项目地址
+https://github.com/xuyusong/AndroidPN
 
-## 需要新增
-1. 标签推送需要增加离线推送
+二次开发项目已实现功能
+加入断线重连、心跳包、离线推送、标签推送。
+
+## 新增功能
+1. 标签推送需要增加离线推送 
+已实现
 2. 支持正则匹配推送
+
 3. 压力测试，稳定性测试，记录测试日志，重连测试，客户端耗电量测试
+
 4. 富文本推送
+
 5. 心跳机制，需要改为配置文件，获取最佳心跳间隔
+
 6. 服务端增加推送成功记录
-7. 限制推送频率，离线消息保存时长
+已实现
+7. 限制推送频率，
+
 8. 客户端增加消息提示机制，如打开 app 时才提示，屏幕点亮时才提示，wifi状态时才提示
+
 9. 穿透消息
+已实现
 10. 统计客户端查看状态
+部分实现
 11. 客户端开机启动
+
 12. 一个客户端，卸载安装后 id 不变
 
 需要修改 服务端 UserServiceImpl.saveUser(User) 保存时添加是否已存在的判断
 客户端 XmppManager.RegisterTask#run 注册时生成用户名和密码的逻辑
 
 13. 客户端服务保活
+
 14. 能不能多个客户端共存
+目前能够多个客户端，但是每个客户端的 service 是独立的
 15. 客户端网络连接的策略
+
 16. 服务端权限管理
 
 17. 客户端给服务端发送消息
-
+客户端可以给服务端发送别名，标签消息
+18. 消息推送时长
+已实现
 
 ## buglist
 1. 当服务端连续发送多条通知时，客户端都是显示同一条通知内容。
+已修改
 2. 服务端需要先保存消息，再发送到客户端。防止客户端返回消息回执比客户端保存消息早
-3. 解决服务器端重启后,客户端不能成功连接androidpn服务器
-	XmppManager#addTask 添加 runTask()
+已修改
+3. 不能在非主进程中启动服务
+
+4. 推送内容不能有表情
 
 
 bug 解决方案
@@ -53,13 +68,14 @@ https://zhuanlan.zhihu.com/p/22909985
 
 
 参考文档
-http://blog.csdn.net/banketree/article/details/8852046
-	
+* http://blog.csdn.net/banketree/article/details/8852046
+* https://zhuanlan.zhihu.com/c_51051095
 
 总结一下以 androidpn 为典型的开源 Android Push 方案会存在的问题：
 １）容量大了开源服务器实现顶不住，还是需要自己去改进开源实现，或者完全重新用新方案，开发投入与高成本是不可避免的。
 ２）协议与实现上如流量消耗、网络连接策略等，不是专门为移动 Push 优化过的，是不经济的。
 
+====================================
 
 应用被杀死
 
@@ -69,40 +85,11 @@ http://blog.csdn.net/banketree/article/details/8852046
 10-08 21:38:14.650 940-951/? W/ActivityManager: Scheduling restart of crashed service org.androidpn.demoapp/org.androidpn.client.NotificationService in 1000ms
 10-08 21:38:14.680 940-951/? I/ActivityManager:   Force stopping service ServiceRecord{421d96c8 u0 org.androidpn.demoapp/org.androidpn.client.NotificationService}
 
-
-====================================
-
-
-极光推送
-个推
-
-
-在mima中已经实现了很多事情, 
-比如： 
-使用LoggingFilter记录发送的数据内容。 
-使用ProtocolCodecFilter进行二进制内容或者POJO的对象传输。 
-使用CompressionFilter对数据内容进行压缩。 
-用SSLFilter对传输数据进行加密。 
-
-mina框架详解
-http://blog.csdn.net/ljx8928358/article/details/7759024/
-
-
-XMPP协议
-
-
-Iq是(Info/Query)的缩写, 是三种通讯原语之一，其他两个为message和presence. 
-该原语应用于”请求-应答”机制。 
-
-com.kenai.jbosh：XMPP BOSH规范的Java实现
-
+----------
 
 MyEclipse 需要使用 jdk7的，使用8的有问题
 
-
-
-
-
+----------
 
 idea
 问题：成功运行 tomcat 但没有初始化 spring
@@ -111,10 +98,38 @@ idea
 java.lang.RuntimeException: Configuration loading error: config.xml
 Projcet Structure -> Modules -> Web -> Source Roots 需要勾选 resources
 
+---------
 
 问题：java.lang.RuntimeException: Configuration loading error: config.xml
 
 解决办法：由于当前项目 resources/ 与 src/ 同一级别，导致生成 artifacts 时没有将 resources/ 编译，需要在 Projcet Structure ->aritfacts -> WEB-INF -> classes -> 点击添加，添加 Directory Contents -> 指向 resources/
 
 resource(s)目录也是classpath，和src目录一样，里面的文件都会放在classes目录下面
+
+---------
+idea 打包 war
+
+Build -> build artifacts... -> edit... -> Type 选择 Web Application:Archive -> OK
+Build -> build artifacts... -> Rebuild -- 之后会默认在 out/artifacts/androidpn_war_exploded 生成 war 包
+
+---------
+C:\Users\Administrator>mysql -u root -p
+Enter password: ****
+ERROR 2003 (HY000): Can't connect to MySQL server on 'localhost' (10061)
+
+未启动 mysql 服务
+
+
+解决方法：进入mysql的安装目录下的bin目录，打开DOS命令窗口，输入命令：mysqld --install，提示安装服务成功。
+如果要卸载服务，可以输入如下命令：mysqld --remove
+
+---------
+错误
+
+org.springframework.web.util.NestedServletException: Request processing failed; nested exception is org.springframework.jdbc.UncategorizedSQLException: Hibernate operation: could not insert: [org.androidpn.server.model.Notification]; uncategorized SQLException for SQL [/* insert org.androidpn.server.model.Notification */ insert into apn_notification (api_key, message, title, uri, user_name, uuid) values (?, ?, ?, ?, ?, ?)]; SQL state [HY000]; error code [1366]; Incorrect string value: '\xE6\xB6\x88\xE6\x81\xAF...' for column 'message' at row 1; nested exception is java.sql.SQLException: Incorrect string value: '\xE6\xB6\x88\xE6\x81\xAF...' for column 'message' at row 1
+
+mysql 字符集错误，应为 utf8
+
+
+----------
 
