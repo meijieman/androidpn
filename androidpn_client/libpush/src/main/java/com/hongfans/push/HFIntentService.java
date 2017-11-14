@@ -29,7 +29,7 @@ public abstract class HFIntentService extends IntentService {
         if(intent != null){
             final String action = intent.getAction();
             if(action != null){
-                if(ACTION_RCVD.equals(action)){
+                if(ACTION_RCVD.equalsIgnoreCase(action)){
                     Serializable extra = intent.getSerializableExtra(TRANSMIT_DATA);
                     if(extra instanceof Notification){
                         onReceiveNotification(this, (Notification)extra);
