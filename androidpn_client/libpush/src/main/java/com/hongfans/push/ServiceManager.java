@@ -50,13 +50,17 @@ public final class ServiceManager{
 
     private String xmppPort;
 
+    private Class<? extends HFIntentService> service;
+
 //    private String callbackActivityPackageName;
 
 //    private String callbackActivityClassName;
 
-    public ServiceManager(Context context){
+    public ServiceManager(Context context, Class<? extends HFIntentService> service){
         this.context = context;
-
+        // 需要将 IntentService 从 ServiceManager 通过 NotificationService 传递到 XmppManager，
+        // 然后 NotificationPacketListener 持有 XmppManager 引用进而调用到 IntentService
+        this.service = service;
 //        if(context instanceof Activity){
 //            LogUtil.i("Callback Activity...");
 //            Activity callbackActivity = (Activity)context;
@@ -100,6 +104,7 @@ public final class ServiceManager{
 //        Thread serviceThread = new Thread(new Runnable(){
 //            @Override
 //            public void run(){
+                NotificationService.setIntentService(service);
                 Intent intent = NotificationService.getIntent(context);
                 context.startService(intent);
 //            }
@@ -240,7 +245,7 @@ public final class ServiceManager{
         }).start();
     }
 
-    public <T extends HFIntentService> void registerPushIntentService(final Class<T> service) {
+   /* public <T extends HFIntentService> void registerPushIntentService(final Class<T> service) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -272,7 +277,7 @@ public final class ServiceManager{
                 }
             }
         }).start();
-    }
+    }*/
 
     public void setTags(final String[] tags){
         final String username = sharedPrefs.getString(Constants.XMPP_USERNAME, "");

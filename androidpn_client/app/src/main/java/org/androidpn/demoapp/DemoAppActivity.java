@@ -59,11 +59,11 @@ public class DemoAppActivity extends Activity{
         registerReceiver(mReceiver, filter);
 
         // Start the service
-        ServiceManager serviceManager = new ServiceManager(this);
+        ServiceManager serviceManager = new ServiceManager(this, DemoIntentService.class);
         serviceManager.startService();
         serviceManager.setAlias("xuyusong-mi"); // 需要保证唯一，否则设置不成功
         serviceManager.setTags(new String[]{"game", "music", "computer"});
-        serviceManager.registerPushIntentService(DemoIntentService.class); // 需要 startService 后 invoke
+//        serviceManager.registerPushIntentService(DemoIntentService.class); // 需要 startService 后 invoke
 
         info.setText(serviceManager.getVersion());
     }

@@ -46,6 +46,7 @@ public class NotificationService extends Service{
     public static final String SERVICE_NAME = "org.androidpn.client.NotificationService";
 
     private static NotificationService notificationService;
+    private static Class<? extends HFIntentService> service;
 
     private TelephonyManager telephonyManager;
 
@@ -155,6 +156,14 @@ public class NotificationService extends Service{
     public boolean onUnbind(Intent intent){
         LogUtil.d("onUnbind()...");
         return true;
+    }
+
+    public static void setIntentService(Class<? extends HFIntentService> clazz){
+        service = clazz;
+    }
+
+    public static Class<? extends HFIntentService> getIntentService(){
+        return service;
     }
 
     public static Intent getIntent(Context ctx){
