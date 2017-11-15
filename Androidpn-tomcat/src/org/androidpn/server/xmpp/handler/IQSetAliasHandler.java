@@ -5,7 +5,6 @@ import org.androidpn.server.service.ServiceLocator;
 import org.androidpn.server.service.UserExistsException;
 import org.androidpn.server.service.UserNotFoundException;
 import org.androidpn.server.service.UserService;
-import org.androidpn.server.util.CommonUtil;
 import org.androidpn.server.xmpp.UnauthorizedException;
 import org.androidpn.server.xmpp.session.ClientSession;
 import org.androidpn.server.xmpp.session.Session;
@@ -47,7 +46,7 @@ public class IQSetAliasHandler extends IQHandler {
                 Element element = packet.getChildElement();
 //                String username = element.elementText("username");
                 String alias = element.elementText("alias");
-                if (/*CommonUtil.isNotEmpty(username) && */CommonUtil.isNotEmpty(alias)) {
+//                if (/*CommonUtil.isNotEmpty(username) && */CommonUtil.isNotEmpty(alias)) {
                     try {
                         if (userService.existAlias(alias)) {
                             log.warn("alias " + alias + "has been used");
@@ -60,7 +59,7 @@ public class IQSetAliasHandler extends IQHandler {
                     } catch (UserNotFoundException | UserExistsException e) {
                         e.printStackTrace();
                     }
-                }
+//                }
             }
         }
         return null;
