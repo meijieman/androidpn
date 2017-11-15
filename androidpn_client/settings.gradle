@@ -1,1 +1,1 @@
-include ':app', ':libasmack', ':libpush'
+include ':app', ':libasmack', ':libpush','pushTest'
