@@ -121,6 +121,7 @@ public class NotificationService extends Service{
         }
         LogUtil.d("deviceId=" + deviceId);
 
+        startForeground(0, null);
         xmppManager = new XmppManager(this);
 
         taskSubmitter.submit(new Runnable(){
@@ -149,6 +150,7 @@ public class NotificationService extends Service{
     @Override
     public void onDestroy(){
         LogUtil.d("onDestroy()...");
+        stopForeground(false);
         notificationService = null;
         stop();
     }
