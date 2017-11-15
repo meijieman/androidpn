@@ -41,9 +41,8 @@ public interface UserService {
 
     void removeUser(Long userId);
 
-    User getUserByAlias(String alias) throws UserNotFoundException;
+    List<User> getUsersByAlias(String alias);
 
     List<User> getUsersByTag(String tag);
 
-    boolean existAlias(String alias);
 }

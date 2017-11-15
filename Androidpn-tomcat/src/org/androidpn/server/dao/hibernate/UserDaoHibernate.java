@@ -20,7 +20,6 @@ package org.androidpn.server.dao.hibernate;
 import org.androidpn.server.dao.UserDao;
 import org.androidpn.server.model.User;
 import org.androidpn.server.service.UserNotFoundException;
-import org.androidpn.server.util.CommonUtil;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import java.util.Date;
@@ -76,13 +75,8 @@ public class UserDaoHibernate extends HibernateDaoSupport implements UserDao {
     }
 
     @Override
-    public User getUserByAlias(String alias) throws UserNotFoundException {
-        List users = getHibernateTemplate().find("from User where alias=?", alias);
-        if (users == null || users.isEmpty()) {
-            throw new UserNotFoundException("User '" + alias + "' not found");
-        } else {
-            return ((User) users.get(0));
-        }
+    public List<User> getUsersByAlias(String alias){
+        return getHibernateTemplate().find("from User where alias=?", alias);
     }
 
     @Override
@@ -90,12 +84,6 @@ public class UserDaoHibernate extends HibernateDaoSupport implements UserDao {
         // [[:<:]], [[:>:]] 这些标记表示word边界。它们分别与word的开始和结束匹配。
 //		return getHibernateTemplate().find("from User u where u.tag REGEXP '[[:<:]]" + tag + "[[:>:]]'");
         return getHibernateTemplate().find("from User where tag like ?", "%" + tag + "%");
-    }
-
-    @Override
-    public boolean existAlias(String alias) {
-        List<User> user = getHibernateTemplate().find("from User u where u.alias=?", alias);
-        return CommonUtil.isNotEmpty(user);
     }
 
     // @SuppressWarnings("unchecked")

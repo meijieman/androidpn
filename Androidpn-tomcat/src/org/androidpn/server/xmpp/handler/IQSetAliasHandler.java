@@ -5,13 +5,17 @@ import org.androidpn.server.service.ServiceLocator;
 import org.androidpn.server.service.UserExistsException;
 import org.androidpn.server.service.UserNotFoundException;
 import org.androidpn.server.service.UserService;
+import org.androidpn.server.util.CommonUtil;
 import org.androidpn.server.xmpp.UnauthorizedException;
+import org.androidpn.server.xmpp.push.NotificationManager;
 import org.androidpn.server.xmpp.session.ClientSession;
 import org.androidpn.server.xmpp.session.Session;
 import org.androidpn.server.xmpp.session.SessionManager;
 import org.dom4j.Element;
 import org.xmpp.packet.IQ;
 import org.xmpp.packet.PacketError;
+
+import java.util.List;
 
 /**
  * 设置别名，一个名字对应一个别名，别名不能重复
@@ -23,9 +27,12 @@ public class IQSetAliasHandler extends IQHandler {
     private SessionManager sessionManager;
     private UserService userService;
 
+    protected NotificationManager notificationManager;
+
     public IQSetAliasHandler() {
         userService = ServiceLocator.getUserService();
         sessionManager = SessionManager.getInstance();
+        notificationManager = new NotificationManager();
     }
 
     @Override
@@ -48,8 +55,12 @@ public class IQSetAliasHandler extends IQHandler {
                 String alias = element.elementText("alias");
 //                if (/*CommonUtil.isNotEmpty(username) && */CommonUtil.isNotEmpty(alias)) {
                     try {
-                        if (userService.existAlias(alias)) {
-                            log.warn("alias " + alias + "has been used");
+                        List<User> users = userService.getUsersByAlias(alias);
+                        if (CommonUtil.isNotEmpty(users)) {
+                            log.info("already exist " + users + " count bind alias " + alias);
+                            // 已经有其他设备绑定了该 alias（已用业务帐号登录了），需要通知其他设备有新的绑定（当前有新设备被登录业务帐号），以让其他设备做处理（下线）
+                            // TODO: 2017/11/16
+//                            notificationManager.send
                         } else {
                             User user = userService.getUserByUsername(session.getUsername());
                             user.setAlias(alias);
@@ -57,7 +68,8 @@ public class IQSetAliasHandler extends IQHandler {
                             log.info("set alias " + alias + "to " + user.getUsername() + " success");
                         }
                     } catch (UserNotFoundException | UserExistsException e) {
-                        e.printStackTrace();
+//                        e.printStackTrace();
+                        log.error("set alias error " + e);
                     }
 //                }
             }

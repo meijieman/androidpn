@@ -246,12 +246,38 @@ public class NotificationManager {
     //通过别名发送通知
     public void sendNotificationByAlias(String alias, String apiKey, String title, String message,
                                         String uri, long validTime, String pushTo, String pushType, boolean shouldSave) {
-        try {
-            User user = userService.getUserByAlias(alias);
+        log.debug("sendNotificationByAlias()...");
+        List<User> users = userService.getUsersByAlias(alias);
+        // 一般情况下一个别名对应一个用户，当出现一个别名对应多个用户时，正常逻辑是多终端同时登录了
+        if (CommonUtil.isNotEmpty(users)) {
+            if (users.size() > 1) {
+                log.info("multi user with alias " + alias);
+            }
             Notification notif = createNotification(apiKey, title, message, uri, validTime, pushTo, pushType);
-            sendNotifcationToUser(user.getUsername(), notif, shouldSave);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
+            if (shouldSave) {
+                notificationService.saveNotification(notif);
+            }
+            PushDetail pd;
+
+            for (User user : users) {
+                pd = new PushDetail();
+                pd.setUuid(notif.getUuid());
+                pd.setUsername(user.getUsername());
+                Date date = new Date();
+                pd.setCreatedDate(date); // fixme 每次都 new 时间
+                pd.setDeliveredDate(date);
+                PushDetail pd1 = mPushDetailService.savePushDetail(pd);
+                log.info("tag_pd 保存推送 pd " + pd1);
+
+                IQ notificationIQ = createNotificationIQ(notif);
+                ClientSession session = sessionManager.getSession(user.getUsername());
+                if (session != null && session.getPresence().isAvailable()) {
+                    notificationIQ.setTo(session.getAddress());
+                    session.deliver(notificationIQ);
+                }
+            }
+        } else {
+            log.error("do not found user with alias " + alias);
         }
     }
 
