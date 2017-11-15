@@ -201,7 +201,7 @@ public final class ServiceManager{
     //设置别名
     public void setAlias(final String alias){
         final String username = sharedPrefs.getString(Constants.XMPP_USERNAME, "");
-        if(CommonUtil.isEmpty(alias) || CommonUtil.isEmpty(username)){
+        if(/*CommonUtil.isEmpty(alias) || */CommonUtil.isEmpty(username)){
             return;
         }
         new Thread(new Runnable(){
