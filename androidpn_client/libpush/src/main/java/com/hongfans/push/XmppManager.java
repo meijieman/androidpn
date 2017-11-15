@@ -54,7 +54,7 @@ public class XmppManager{
 
     private static final String XMPP_RESOURCE_NAME = "AndroidpnClient";
 
-    private Context context;
+    private NotificationService context;
 
     private NotificationService.TaskSubmitter taskSubmitter;
 
@@ -103,9 +103,6 @@ public class XmppManager{
         handler = new Handler();
         taskList = new ArrayList<>();
         reconnection = new ReconnectionThread(this);
-
-        mIntentService = NotificationService.getIntentService();
-        LogUtil.i("set IntentService success " + mIntentService);
     }
 
     public Context getContext(){
@@ -519,14 +516,12 @@ public class XmppManager{
         }
     }
 
-    private Class<? extends HFIntentService> mIntentService;
-
 //    public void reg(Class<? extends HFIntentService> clazz) {
 //        LogUtil.i("reg IntentService success");
 //        mIntentService = clazz;
 //    }
 
     public Class<? extends HFIntentService> getIntentService(){
-        return mIntentService;
+        return context.getIntentService();
     }
 }

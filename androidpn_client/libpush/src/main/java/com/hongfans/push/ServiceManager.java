@@ -50,17 +50,14 @@ public final class ServiceManager{
 
     private String xmppPort;
 
-    private Class<? extends HFIntentService> service;
-
 //    private String callbackActivityPackageName;
 
 //    private String callbackActivityClassName;
 
-    public ServiceManager(Context context, Class<? extends HFIntentService> service){
+    public ServiceManager(Context context){
         this.context = context;
         // 需要将 IntentService 从 ServiceManager 通过 NotificationService 传递到 XmppManager，
         // 然后 NotificationPacketListener 持有 XmppManager 引用进而调用到 IntentService
-        this.service = service;
 //        if(context instanceof Activity){
 //            LogUtil.i("Callback Activity...");
 //            Activity callbackActivity = (Activity)context;
@@ -104,7 +101,6 @@ public final class ServiceManager{
 //        Thread serviceThread = new Thread(new Runnable(){
 //            @Override
 //            public void run(){
-                NotificationService.setIntentService(service);
                 Intent intent = NotificationService.getIntent(context);
                 context.startService(intent);
 //            }
@@ -245,39 +241,12 @@ public final class ServiceManager{
         }).start();
     }
 
-   /* public <T extends HFIntentService> void registerPushIntentService(final Class<T> service) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                NotificationService notificationService = NotificationService.getNotification();
-                if (notificationService == null) {
-                    LogUtil.e("service is null, register IntentService failed");
-                    return;
-                }
-                XmppManager xmppManager = notificationService.getXmppManager();
-                if (xmppManager != null) {
-                    if (!xmppManager.isAuthenticated()) {
-                        synchronized (xmppManager) {
-                            try {
-                                LogUtil.d("wait for authenticate");
-                                xmppManager.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                    LogUtil.d("authenticated");
-
-                    xmppManager.reg(service);
-                }
-            }
-        }).start();
-    }*/
+    public <T extends HFIntentService> void registerPushIntentService(final Class<T> service){
+        String name = service.getName();
+        Intent intent = new Intent(context.getApplicationContext(), NotificationService.class);
+        intent.putExtra("uis", name);
+        context.getApplicationContext().startService(intent);
+    }
 
     public void setTags(final String[] tags){
         final String username = sharedPrefs.getString(Constants.XMPP_USERNAME, "");

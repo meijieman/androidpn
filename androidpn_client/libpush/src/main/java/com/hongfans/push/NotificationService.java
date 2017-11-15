@@ -27,6 +27,7 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import com.hongfans.push.receiver.ConnectivityReceiver;
+import com.hongfans.push.util.CommonUtil;
 import com.hongfans.push.util.LogUtil;
 
 import java.util.Random;
@@ -46,7 +47,8 @@ public class NotificationService extends Service{
     public static final String SERVICE_NAME = "org.androidpn.client.NotificationService";
 
     private static NotificationService notificationService;
-    private static Class<? extends HFIntentService> service;
+
+    private Class<? extends HFIntentService> service;
 
     private TelephonyManager telephonyManager;
 
@@ -129,8 +131,18 @@ public class NotificationService extends Service{
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId){
+    public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtil.d("onStartCommand()...");
+        String uis = intent.getStringExtra("uis");
+        if (CommonUtil.isNotEmpty(uis)) {
+            try {
+                service = (Class<HFIntentService>) Class.forName(uis);
+                LogUtil.i("获取到了用户定义的 IntentService " + service);
+            } catch (ClassNotFoundException e) {
+//                e.printStackTrace();
+                LogUtil.e("do not set IntentService");
+            }
+        }
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -158,11 +170,7 @@ public class NotificationService extends Service{
         return true;
     }
 
-    public static void setIntentService(Class<? extends HFIntentService> clazz){
-        service = clazz;
-    }
-
-    public static Class<? extends HFIntentService> getIntentService(){
+    public Class<? extends HFIntentService> getIntentService(){
         return service;
     }
 
