@@ -263,11 +263,10 @@ public final class ServiceManager{
                     e.printStackTrace();
                 }
                 StringBuilder sb = new StringBuilder();
+                sb.append(","); // 标签分割规则 ,标签1,标签2,标签3
                 for(String tag : tags){
                     sb.append(tag).append(",");
                 }
-                String tmp = sb.toString();
-                String tag = tmp.substring(0, tmp.length() - 1);
                 NotificationService service = NotificationService.getNotification();
                 if (service == null) {
                     LogUtil.e("service is null, set tags failed");
@@ -288,8 +287,8 @@ public final class ServiceManager{
                     LogUtil.d("authenticated");
                     SetTagsIQ iq = new SetTagsIQ();
                     iq.setType(IQ.Type.SET);
-                    iq.setTags(tag);
-                    LogUtil.d("username " + username + ", tags " + tag);
+                    iq.setTags(sb.toString());
+                    LogUtil.d("username " + username + ", tags " + sb.toString());
                     xmppManager.getConnection().sendPacket(iq);
                 }
             }
