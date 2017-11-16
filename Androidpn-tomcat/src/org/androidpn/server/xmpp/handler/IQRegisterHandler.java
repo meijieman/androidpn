@@ -17,9 +17,6 @@
  */
 package org.androidpn.server.xmpp.handler;
 
-import gnu.inet.encoding.Stringprep;
-import gnu.inet.encoding.StringprepException;
-
 import org.androidpn.server.model.User;
 import org.androidpn.server.service.ServiceLocator;
 import org.androidpn.server.service.UserExistsException;
@@ -35,7 +32,10 @@ import org.xmpp.packet.IQ;
 import org.xmpp.packet.JID;
 import org.xmpp.packet.PacketError;
 
-/** 
+import gnu.inet.encoding.Stringprep;
+import gnu.inet.encoding.StringprepException;
+
+/**
  * This class is to handle the TYPE_IQ jabber:iq:register protocol.
  *
  * @author Sehwan Noh (devnoh@gmail.com)
@@ -63,7 +63,7 @@ public class IQRegisterHandler extends IQHandler {
 
     /**
      * Handles the received IQ packet.
-     * 
+     *
      * @param packet the packet
      * @return the response to send back
      * @throws UnauthorizedException if the user is not authorized
@@ -103,6 +103,9 @@ public class IQRegisterHandler extends IQHandler {
                     String email = query.elementText("email");
                     String name = query.elementText("name");
 
+                    log.info("注册用户 username " + username + ", password " + password
+                            + ", email " + email + ", name " + name);
+
                     // Verify the username
                     if (username != null) {
                         Stringprep.nodeprep(username);
@@ -137,6 +140,7 @@ public class IQRegisterHandler extends IQHandler {
                     user.setEmail(email);
                     user.setName(name);
                     userService.saveUser(user);
+                    log.info("注册成功，保存用户 " + user);
 
                     reply = IQ.createResultIQ(packet); // 响应
                 }
@@ -167,7 +171,7 @@ public class IQRegisterHandler extends IQHandler {
 
     /**
      * Returns the namespace of the handler.
-     * 
+     *
      * @return the namespace
      */
     public String getNamespace() {
