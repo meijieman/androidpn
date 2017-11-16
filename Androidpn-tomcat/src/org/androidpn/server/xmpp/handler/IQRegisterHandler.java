@@ -17,6 +17,8 @@
  */
 package org.androidpn.server.xmpp.handler;
 
+import gnu.inet.encoding.Stringprep;
+import gnu.inet.encoding.StringprepException;
 import org.androidpn.server.model.User;
 import org.androidpn.server.service.ServiceLocator;
 import org.androidpn.server.service.UserExistsException;
@@ -31,9 +33,6 @@ import org.dom4j.QName;
 import org.xmpp.packet.IQ;
 import org.xmpp.packet.JID;
 import org.xmpp.packet.PacketError;
-
-import gnu.inet.encoding.Stringprep;
-import gnu.inet.encoding.StringprepException;
 
 /**
  * This class is to handle the TYPE_IQ jabber:iq:register protocol.
@@ -133,7 +132,12 @@ public class IQRegisterHandler extends IQHandler {
 //                        user = userService.getUser(session.getUsername());
                         user = userService.getUserByUsername(session.getUsername());
                     } else {
-                        user = new User();
+                        try {
+                            user = userService.getUserByUsername(username);
+                        } catch (UserNotFoundException e) {
+                            // e.printStackTrace();
+                            user = new User();
+                        }
                     }
                     user.setUsername(username);
                     user.setPassword(password);
