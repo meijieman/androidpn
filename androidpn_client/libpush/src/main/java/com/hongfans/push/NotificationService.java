@@ -37,7 +37,7 @@ import java.util.concurrent.Future;
 
 /**
  * Service that continues to run in background and respond to the push
- * notification events from the server. This should be registered as service
+ * notification events from the server. This should be registered as mIntentService
  * in AndroidManifest.xml.
  *
  * @author Sehwan Noh (devnoh@gmail.com)
@@ -48,7 +48,7 @@ public class NotificationService extends Service{
 
     private static NotificationService notificationService;
 
-    private Class<? extends HFIntentService> service;
+    private Class<? extends HFIntentService> mIntentService;
 
     private TelephonyManager telephonyManager;
 
@@ -73,6 +73,7 @@ public class NotificationService extends Service{
     private SharedPreferences sharedPrefs;
 
     private String deviceId;
+    private String mClientDeviceID;
 
     public NotificationService(){
 //        notificationReceiver = new NotificationReceiver();
@@ -123,26 +124,34 @@ public class NotificationService extends Service{
 
         startForeground(0, null);
         xmppManager = new XmppManager(this);
-
-        taskSubmitter.submit(new Runnable(){
-            public void run(){
-                NotificationService.this.start();
-            }
-        });
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtil.d("onStartCommand()...");
+        String clientDeviceID = intent.getStringExtra("clientDeviceID");
+        if (CommonUtil.isNotEmpty(clientDeviceID)) {
+            mClientDeviceID = clientDeviceID;
+            LogUtil.i("获取到客户端认为的唯一标识 " + mClientDeviceID);
+        }
         String uis = intent.getStringExtra("uis");
         if (CommonUtil.isNotEmpty(uis)) {
             try {
-                service = (Class<HFIntentService>) Class.forName(uis);
-                LogUtil.i("获取到了用户定义的 IntentService " + service);
+                mIntentService = (Class<HFIntentService>) Class.forName(uis);
+                LogUtil.i("获取到了用户定义的 IntentService " + mIntentService);
             } catch (ClassNotFoundException e) {
 //                e.printStackTrace();
                 LogUtil.e("do not set IntentService");
             }
+        }
+        String action = intent.getStringExtra("action");
+        if ("1".equals(action)) {
+            //　启动登录流程
+            taskSubmitter.submit(new Runnable(){
+                public void run(){
+                    start();
+                }
+            });
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -173,7 +182,12 @@ public class NotificationService extends Service{
     }
 
     public Class<? extends HFIntentService> getIntentService(){
-        return service;
+        return mIntentService;
+    }
+
+    public String getClientDeviceID(){
+        LogUtil.i("获取　getClientDeviceID " + mClientDeviceID);
+        return mClientDeviceID;
     }
 
     public static Intent getIntent(Context ctx){

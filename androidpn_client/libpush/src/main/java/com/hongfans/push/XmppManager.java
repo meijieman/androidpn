@@ -393,10 +393,8 @@ public class XmppManager{
                                     LogUtil.d("password=" + newPassword);
 
                                     Editor editor = sharedPrefs.edit();
-                                    editor.putString(Constants.XMPP_USERNAME,
-                                            newUsername);
-                                    editor.putString(Constants.XMPP_PASSWORD,
-                                            newPassword);
+                                    editor.putString(Constants.XMPP_USERNAME, newUsername);
+                                    editor.putString(Constants.XMPP_PASSWORD, newPassword);
                                     editor.commit();
                                     isRegisterSucceed = true;
                                     LogUtil.i("Account registered successfully");
@@ -420,6 +418,8 @@ public class XmppManager{
                 // registration.setAttributes(attributes);
                 registration.addAttribute("username", newUsername);
                 registration.addAttribute("password", newPassword);
+                registration.addAttribute("name", getClientDeviceID());
+                LogUtil.i("发送注册　username " + newUsername + ", password " + newPassword);
                 connection.sendPacket(registration); // 发送注册
                 try{
                     Thread.sleep(10 * 1000);
@@ -523,5 +523,9 @@ public class XmppManager{
 
     public Class<? extends HFIntentService> getIntentService(){
         return context.getIntentService();
+    }
+
+    public String getClientDeviceID() {
+        return context.getClientDeviceID();
     }
 }

@@ -97,15 +97,15 @@ public final class ServiceManager{
         // LogUtil.i("sharedPrefs=" + sharedPrefs.toString());
     }
 
-    public void startService(){
-//        Thread serviceThread = new Thread(new Runnable(){
-//            @Override
-//            public void run(){
-                Intent intent = NotificationService.getIntent(context);
-                context.startService(intent);
-//            }
-//        });
-//        serviceThread.start();
+    /**
+     * 启动推送服务
+     * @param clientDeviceID push sdk　所在应用认为的设备唯一ID
+     */
+    public void startService(String clientDeviceID) {
+        Intent intent = NotificationService.getIntent(context);
+        intent.putExtra("clientDeviceID", clientDeviceID);
+        intent.putExtra("action", "1"); // 启动 push
+        context.getApplicationContext().startService(intent);
     }
 
     public void stopService(){
@@ -243,7 +243,7 @@ public final class ServiceManager{
 
     public <T extends HFIntentService> void registerPushIntentService(final Class<T> service){
         String name = service.getName();
-        Intent intent = new Intent(context.getApplicationContext(), NotificationService.class);
+        Intent intent = NotificationService.getIntent(context);
         intent.putExtra("uis", name);
         context.getApplicationContext().startService(intent);
     }
@@ -293,5 +293,13 @@ public final class ServiceManager{
                 }
             }
         }).start();
+    }
+
+    /**
+     * 清空用户本地信息
+     */
+    public void clearUserInfo() {
+        stopService();
+        sharedPrefs.edit().clear().commit();
     }
 }

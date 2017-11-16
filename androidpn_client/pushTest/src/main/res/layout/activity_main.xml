@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:text="停止推送"/>
-    
+
     <Button
         android:id="@+id/btn_set_alias"
         android:layout_width="wrap_content"
@@ -42,4 +42,9 @@
         android:padding="16dp"
         android:text="设置标签"/>
 
+    <Button android:id="@+id/btn_clear_sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="清除用户信息"
+            android:visibility="gone"/>
 </LinearLayout>

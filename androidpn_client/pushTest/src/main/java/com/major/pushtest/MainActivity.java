@@ -29,6 +29,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         findViewById(R.id.btn_stop).setOnClickListener(this);
         findViewById(R.id.btn_set_alias).setOnClickListener(this);
         findViewById(R.id.btn_set_tags).setOnClickListener(this);
+        findViewById(R.id.btn_clear_sp).setOnClickListener(this);
 
         serviceManager = new ServiceManager(this);
         String msg = "sdk 版本: " + serviceManager.getVersion();
@@ -40,7 +41,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         switch(v.getId()) {
             case R.id.btn_start:
                 LogUtil.i("启动 push");
-                serviceManager.startService();
+                serviceManager.startService("HFWL0000000000");
                 serviceManager.registerPushIntentService(DemoIntentService.class);
                 break;
             case R.id.btn_stop:
@@ -94,6 +95,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
                         .show();
                 break;
             }
+            case R.id.btn_clear_sp:
+//                serviceManager.clearUserInfo();
+                break;
         }
     }
 }
