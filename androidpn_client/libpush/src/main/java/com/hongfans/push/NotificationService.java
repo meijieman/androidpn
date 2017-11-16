@@ -101,7 +101,7 @@ public class NotificationService extends Service{
 
         // Get deviceId
         deviceId = telephonyManager.getDeviceId();
-        // LogUtil.d("deviceId=" + deviceId);
+        LogUtil.d("deviceId=" + deviceId);
         Editor editor = sharedPrefs.edit();
         editor.putString(Constants.DEVICE_ID, deviceId);
         editor.commit();
@@ -110,17 +110,15 @@ public class NotificationService extends Service{
         if(deviceId == null || deviceId.trim().length() == 0
            || deviceId.matches("0+")){
             if(sharedPrefs.contains("EMULATOR_DEVICE_ID")){
-                deviceId = sharedPrefs.getString(Constants.EMULATOR_DEVICE_ID,
-                        "");
+                deviceId = sharedPrefs.getString(Constants.EMULATOR_DEVICE_ID, "");
             } else {
-                deviceId = (new StringBuilder("EMU")).append(
-                        (new Random(System.currentTimeMillis())).nextLong())
-                                                     .toString();
+                deviceId = (new StringBuilder("EMU"))
+                        .append((new Random(System.currentTimeMillis())).nextLong())
+                        .toString();
                 editor.putString(Constants.EMULATOR_DEVICE_ID, deviceId);
                 editor.commit();
             }
         }
-        LogUtil.d("deviceId=" + deviceId);
 
         startForeground(0, null);
         xmppManager = new XmppManager(this);
@@ -132,13 +130,13 @@ public class NotificationService extends Service{
         String clientDeviceID = intent.getStringExtra("clientDeviceID");
         if (CommonUtil.isNotEmpty(clientDeviceID)) {
             mClientDeviceID = clientDeviceID;
-            LogUtil.i("获取到客户端认为的唯一标识 " + mClientDeviceID);
+            LogUtil.i("获取到应用端定义的唯一标识 " + mClientDeviceID);
         }
         String uis = intent.getStringExtra("uis");
         if (CommonUtil.isNotEmpty(uis)) {
             try {
                 mIntentService = (Class<HFIntentService>) Class.forName(uis);
-                LogUtil.i("获取到了用户定义的 IntentService " + mIntentService);
+                LogUtil.i("获取到应用端定义的 IntentService " + mIntentService);
             } catch (ClassNotFoundException e) {
 //                e.printStackTrace();
                 LogUtil.e("do not set IntentService");

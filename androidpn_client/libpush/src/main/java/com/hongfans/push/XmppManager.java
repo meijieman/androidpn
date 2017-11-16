@@ -363,8 +363,8 @@ public class XmppManager{
                 isRegisterSucceed = false;
                 hasDropTask = false;
 
-                final String newUsername = newRandomUUID(); // 随机帐号密码
-                final String newPassword = newRandomUUID();
+                final String newUsername = sharedPrefs.getString(Constants.DEVICE_ID, ""); // newRandomUUID(); // 随机帐号密码
+                final String newPassword = "imbest"; // newRandomUUID();
 
                 Registration registration = new Registration(); // Registration -> IQ -> Packet
 
@@ -382,8 +382,9 @@ public class XmppManager{
                             if(packet instanceof IQ){
                                 IQ response = (IQ)packet;
                                 if(response.getType() == IQ.Type.ERROR){
-                                    if(!response.getError().toString().contains(
-                                            "409")){
+                                    if(!response.getError().toString().contains("409")){
+                                        LogUtil.e("Unknown error while registering XMPP account! " + response.getError().getCondition());
+                                    } else {
                                         LogUtil.e("Unknown error while registering XMPP account! " + response.getError().getCondition());
                                     }
                                 } else if(response.getType() == IQ.Type.RESULT){
