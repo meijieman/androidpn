@@ -204,6 +204,10 @@ public class Notifier{
         sharedPrefs.edit().putInt(Constants.NOTIFICATION_ICON, iconId).commit();
     }
 
+    public void setAutoStart(boolean autoStart){
+        sharedPrefs.edit().putBoolean(Constants.SETTINGS_AUTO_START, autoStart).commit();
+    }
+
     private Class mOpen; // 点击时打开的 activity
 
     public void setOpen(Class<? extends Activity> open){

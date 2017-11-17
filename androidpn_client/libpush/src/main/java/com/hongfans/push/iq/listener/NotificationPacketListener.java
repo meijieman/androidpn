@@ -71,6 +71,8 @@ public class NotificationPacketListener implements PacketListener{
                         service.setAction(HFIntentService.ACTION_RCVD);
                         service.putExtra(HFIntentService.TRANSMIT_DATA, payload);
                         xmppManager.getContext().startService(service);
+                    } else {
+                        LogUtil.e("TODO Payload 未设置接收器");
                     }
                 } else {
                     // Notification
@@ -88,6 +90,8 @@ public class NotificationPacketListener implements PacketListener{
                         service.setAction(HFIntentService.ACTION_RCVD);
                         service.putExtra(HFIntentService.TRANSMIT_DATA, notif);
                         xmppManager.getContext().startService(service);
+                    } else {
+                        LogUtil.e("TODO Notification 未设置接收器");
                     }
                 }
 

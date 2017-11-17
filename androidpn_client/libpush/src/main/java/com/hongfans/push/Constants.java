@@ -40,9 +40,13 @@ public class Constants{
 
     // public static final String USER_KEY = "USER_KEY";
 
-    public static final String DEVICE_ID = "DEVICE_ID";
+    public static final String DEVICE_ID = "DEVICE_ID"; // push　认为的设备id
 
     public static final String EMULATOR_DEVICE_ID = "EMULATOR_DEVICE_ID";
+
+    public static final String CLIENT_DEVICE_ID = "CLIENT_DEVICE_ID"; // 应用端设置的设备id
+
+    public static final String INTENT_SERVICE_NAME = "INTENT_SERVICE_NAME"; // 应用端设置的回调
 
     public static final String NOTIFICATION_ICON = "NOTIFICATION_ICON";
 
@@ -53,6 +57,7 @@ public class Constants{
     public static final String SETTINGS_VIBRATE_ENABLED = "SETTINGS_VIBRATE_ENABLED";
 
     public static final String SETTINGS_TOAST_ENABLED = "SETTINGS_TOAST_ENABLED";
+    public static final String SETTINGS_AUTO_START = "SETTINGS_AUTO_START";
 
     // NOTIFICATION FIELDS
 

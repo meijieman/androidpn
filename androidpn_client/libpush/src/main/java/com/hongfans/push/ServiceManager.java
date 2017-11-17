@@ -102,6 +102,19 @@ public final class ServiceManager{
      * @param clientDeviceID push sdk　所在应用认为的设备唯一ID
      */
     public void startService(String clientDeviceID) {
+        LogUtil.i("启动 push");
+        //　如果有传入 clientDeviceID，使用传入的，否则获取上一次设置的，如果没有则提示异常
+        if (CommonUtil.isNotEmpty(clientDeviceID)) {
+            sharedPrefs.edit().putString(Constants.CLIENT_DEVICE_ID, clientDeviceID).commit();
+        } else {
+            clientDeviceID = sharedPrefs.getString(Constants.CLIENT_DEVICE_ID, "");
+        }
+
+        if (CommonUtil.isEmpty(clientDeviceID)) {
+            LogUtil.e("传入的 clientDeviceID 为空");
+        } else {
+            LogUtil.i("传入的 clientDeviceID " + clientDeviceID);
+        }
         Intent intent = NotificationService.getIntent(context);
         intent.putExtra("clientDeviceID", clientDeviceID);
         intent.putExtra("action", "1"); // 启动 push
@@ -111,6 +124,24 @@ public final class ServiceManager{
     public void stopService(){
         Intent intent = NotificationService.getIntent(context);
         context.stopService(intent);
+    }
+
+    public <T extends HFIntentService> void registerPushIntentService(final Class<T> service){
+        String name;
+        if (service == null) {
+            name = sharedPrefs.getString(Constants.INTENT_SERVICE_NAME, "");
+        } else {
+            name = service.getName();
+            sharedPrefs.edit().putString(Constants.INTENT_SERVICE_NAME, name).commit();
+        }
+        if (CommonUtil.isEmpty(name)) {
+            LogUtil.e("传入的 service 为空");
+        } else {
+            LogUtil.i("传入的 service " + name);
+        }
+        Intent intent = NotificationService.getIntent(context);
+        intent.putExtra("uis", name);
+        context.getApplicationContext().startService(intent);
     }
 
     //    private String getMetaDataValue(String name, String def) {
@@ -239,13 +270,6 @@ public final class ServiceManager{
                 }
             }
         }).start();
-    }
-
-    public <T extends HFIntentService> void registerPushIntentService(final Class<T> service){
-        String name = service.getName();
-        Intent intent = NotificationService.getIntent(context);
-        intent.putExtra("uis", name);
-        context.getApplicationContext().startService(intent);
     }
 
     public void setTags(final String[] tags){
