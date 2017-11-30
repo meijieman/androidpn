@@ -21,32 +21,32 @@
     <div id="content">
         <ul id="tabmenu">
             <li>
-                <a href="/index.do"
+                <a href="${pageContext.request.contextPath}/index.do"
                    class="<c:if test="${topMenu eq 'home'}"><c:out value="current" /></c:if>">Home</a>
             </li>
             <li>
-                <a href="/user.do"
+                <a href="${pageContext.request.contextPath}/user.do"
                    class="<c:if test="${topMenu eq 'user'}"><c:out value="current" /></c:if>">Users</a>
             </li>
             <li>
-                <a href="/session.do"
+                <a href="${pageContext.request.contextPath}/session.do"
                    class="<c:if test="${topMenu eq 'session'}"><c:out value="current" /></c:if>">Sessions</a>
             </li>
             <li>
-                <a href="/notification.do"
+                <a href="${pageContext.request.contextPath}/notification.do"
                    class="<c:if test="${topMenu eq 'notification'}"><c:out value="current" /></c:if>">Notifications</a>
             </li>
             <li>
-                <a href="/notificationrecord.do"
+                <a href="${pageContext.request.contextPath}/notificationrecord.do"
                    class="<c:if test="${topMenu eq 'notificationrecord'}"><c:out value="current" /></c:if>">Notification
                     Record</a>
             </li>
             <li>
-                <a href="/pushdetail.do"
+                <a href="${pageContext.request.contextPath}/pushdetail.do"
                    class="<c:if test="${topMenu eq 'pushdetail'}"><c:out value="current" /></c:if>">Push Detail</a>
             </li>
             <li>
-                <a href="/editor.do"
+                <a href="${pageContext.request.contextPath}/editor.do"
                    class="<c:if test="${topMenu eq 'editor'}"><c:out value="current" /></c:if>">Editor</a>
             </li>
         </ul>
