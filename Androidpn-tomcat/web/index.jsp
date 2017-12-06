@@ -13,7 +13,7 @@
 <h1>Welcome!</h1>
 
 <div style="text-align:center">
-    <img src="/images/androidpn.png" border="0"/>
+    <img src="${pageContext.request.contextPath}/images/androidpn.png" border="0"/>
 </div>
 
 </body>
