@@ -7,10 +7,22 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			/WEB-INF/applicationContext*.xml
-        </param-value>
+		<param-value>/WEB-INF/applicationContext*.xml</param-value>
 	</context-param>
+
+	<!--设置 log4j.xml 中需要用到的 webApp.root 的路径-->
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>webApp.root</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>classpath:log4j.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	<!--设置 log4j.xml 中需要用到的 webApp.root 的路径-->
 
 	<filter>
 		<filter-name>encodingFilter</filter-name>

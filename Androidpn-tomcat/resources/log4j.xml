@@ -16,7 +16,8 @@
 		<param name="MaxFileSize" value="1024KB" />
 		<param name="MaxBackupIndex" value="5" />
 		<param name="ImmediateFlush" value="true" />
-		<param name="File" value="../logs/adnroidpn.log" />
+		<!--在项目所在的目录下创建 logs 目录，存放日志文件， 注意在 web.xml 配置 webApp.root 路径-->
+		<param name="File" value="${webApp.root}/logs/androidpn.log"/>
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="{%-5p} [%d] &lt;%c&gt; : %m%n" />
 		</layout>
@@ -59,6 +60,7 @@
 	</logger>
 
 	<root>
+		<priority value="debug"/>
 		<appender-ref ref="console" />
 		<appender-ref ref="logfile" />
 	</root>
