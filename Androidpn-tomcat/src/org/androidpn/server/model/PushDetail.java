@@ -27,7 +27,7 @@ public class PushDetail {
     private String username;  // User username
 
     @Transient
-    private String alias;
+    private String alias; // 设备最近绑定的 alias，一台设备一般会绑定过多个 alias
 
     @Column(name = "created_date")
     private Date createdDate;

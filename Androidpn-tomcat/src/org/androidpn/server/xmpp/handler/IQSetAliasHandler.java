@@ -98,7 +98,7 @@ public class IQSetAliasHandler extends IQHandler {
                     // 给当前用户发送一个设置失败穿透消息
                     if (user != null) {
                         String message = "用户" + user.getUsername() + "设置别名" + alias + "失败";
-                        notificationManager.sendNotifcationToUser("", user.getUsername(), "", message, "", 0, "[username]", "payload", true);
+                        notificationManager.sendNotifcationToUser("", user.getUsername(), "", message, "", 0, "[username]" + user.getUsername(), "payload", true);
                     }
                 }
             }

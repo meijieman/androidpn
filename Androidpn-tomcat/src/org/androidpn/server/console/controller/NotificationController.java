@@ -40,8 +40,7 @@ public class NotificationController extends MultiActionController {
         notificationManager = new NotificationManager();
     }
 
-    public ModelAndView list(HttpServletRequest request,
-            HttpServletResponse response) throws Exception {
+    public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws Exception {
         ModelAndView mav = new ModelAndView();
         // mav.addObject("list", null);
         mav.setViewName("notification/form");
@@ -80,10 +79,10 @@ public class NotificationController extends MultiActionController {
         if (broadcast.equalsIgnoreCase("0")) { // broadcast
             notificationManager.sendBroadcast(apiKey, title, message, uri, validTimeParam, "[broadcast]", pushTypeParam);
         } else if (broadcast.equalsIgnoreCase("1")) { // by username
-            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri, validTimeParam, "[username]", pushTypeParam, true);
+            notificationManager.sendNotifcationToUser(apiKey, username, title, message, uri, validTimeParam, "[username]" + username, pushTypeParam, true);
         } else if (broadcast.equalsIgnoreCase("2")) {
             // 别名推送
-            notificationManager.sendNotificationByAlias(alias, apiKey, title, message, uri, validTimeParam, "[alias]" + username, pushTypeParam, true);
+            notificationManager.sendNotificationByAlias(alias, apiKey, title, message, uri, validTimeParam, "[alias]" + alias + username, pushTypeParam, true);
         } else if (broadcast.equalsIgnoreCase("3")) {
             // 标签推送
             if (CommonUtil.isNotEmpty(tags)) {
