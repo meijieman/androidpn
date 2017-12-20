@@ -11,7 +11,7 @@
 
 <body>
 
-<h1>Send Notifications</h1>
+<h1>Push Notifications</h1>
 
 <%--<div style="background:#eee; margin:20px 0px; padding:20px; width:500px; border:solid 1px #999;">--%>
 <div style="margin:20px 0px;">
@@ -29,7 +29,7 @@
             <tr>
                 <td width="20%">Push Type:</td>
                 <td width="80%">
-                    <input type="radio" name="pushtype" value="0" checked="checked"/> Notification
+                    <input type="radio" name="pushtype" value="0" checked="checked"/> Notifications
                     <input type="radio" name="pushtype" value="1"/> Payload
                 </td>
             </tr>
@@ -123,6 +123,13 @@
             $('#trAlias').hide();
             $('#trTags').show();
         }
+        $('input[name=pushtype]').click(function () {
+            if ($('input[name=pushtype]')[0].checked) {
+                $('#message').val("车载在线互动娱乐平台。随车行乐，听你想听!"); // jQuery语句
+            } else if ($('input[name=pushtype]')[1].checked) {
+                $('#message').val("{'action':1,'foo':'major'}");
+            }
+        })
     });
 
     //]]>

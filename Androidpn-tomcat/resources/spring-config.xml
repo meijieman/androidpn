@@ -53,15 +53,15 @@
 	<!-- =============================================================== -->
 
 	<bean id="userDao" class="org.androidpn.server.dao.hibernate.UserDaoHibernate">
-		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	
 	<bean id="notificationDao" class = "org.androidpn.server.dao.hibernate.NotificationDaoHibernate">
-	 	<property name="sessionFactory" ref="sessionFactory"></property>
+	 	<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 
 	<bean id="pushDetailDao" class="org.androidpn.server.dao.hibernate.PushDetailDaoHibernate">
-		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	<!-- =============================================================== -->
 	<!-- Services                                                        -->

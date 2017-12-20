@@ -7,153 +7,142 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * 通知推送，穿透消息
- * @author xuyusong
+ * 通知（推送通知栏消息，穿透消息）
  *
+ * @author xuyusong
  */
 @Entity
 @Table(name = "apn_notification")
 public class Notification {
 
-	public static final String STATE_EXPIRED = "expired";
+    public static final String STATE_EXPIRED = "expired";
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id ;
-	
-	@Column(name ="uuid",length=64, nullable = false, unique = true)
-	private String uuid;
-	
-	@Column(name = "api_key",length = 64)
-	private String apiKey;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
-//	@Column(name = "user_name", length = 64)
-//	private String username;
-	
-	@Column(name = "title",nullable = false, length = 64)
-	private String title;
-	
-	@Column(name = "message", nullable = false,length = 1000)
-	private String message;
-	
-	@Column(name = "uri", length = 256)
-	private String uri;
+    @Column(name = "uuid", length = 64, nullable = false, unique = true)
+    private String uuid;
 
-	@Column(name = "push_to")
-	private String pushTo; // 推送目标用户 all 全部，tag 标签，username 指定，group 分组
+    @Column(name = "api_key", length = 64)
+    private String apiKey;
 
-	@Column(name = "push_Type")
-	private String pushType; // 推送类型 notification， payload
+    @Column(name = "title", nullable = false, length = 64)
+    private String title;
 
-	@Column(name = "created_date", updatable = false)
-	private Date createdDate = new Date();
+    @Column(name = "message", nullable = false, length = 1000)
+    private String message; // 详情
 
-	@Column(name = "valid_time")
-	private Long validTime; // 有效时间，从创建时间计算，单位 s
+    @Column(name = "uri", length = 256)
+    private String uri;
 
-	@Column(name = "state")
-	private String state; // 状态 默认有效，否则过期（expired）
+    @Column(name = "push_to")
+    private String pushTo; // 推送目标用户 all 全部，tag 标签，username 指定，group 分组
 
-	// private String laterAction; // 点击通知栏的后续操作，启动应用，打开连接，下载应用
+    @Column(name = "push_Type")
+    private String pushType; // 推送类型 notification， payload
 
-	public long getId() {
-		return id;
-	}
+    @Column(name = "created_date", updatable = false)
+    private Date createdDate = new Date();
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    @Column(name = "valid_time")
+    private Long validTime; // 有效时间，从创建时间计算，单位 s
 
-	public String getApiKey() {
-		return apiKey;
-	}
+    @Column(name = "state")
+    private String state; // 状态 默认有效，否则过期（expired）
 
-	public void setApiKey(String apiKey) {
-		this.apiKey = apiKey;
-	}
+    // private String laterAction; // 点击通知栏的后续操作，启动应用，打开连接，下载应用
 
-//	public String getUsername() {
-//		return username;
-//	}
+    public long getId() {
+        return id;
+    }
 
-//	public void setUsername(String username) {
-//		this.username = username;
-//	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getApiKey() {
+        return apiKey;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getUri() {
-		return uri;
-	}
+    public String getMessage() {
+        return message;
+    }
 
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-	public String getUuid() {
-		return uuid;
-	}
+    public String getUri() {
+        return uri;
+    }
 
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
 
-	public String getPushTo() {
-		return pushTo;
-	}
+    public String getUuid() {
+        return uuid;
+    }
 
-	public void setPushTo(String pushTo) {
-		this.pushTo = pushTo;
-	}
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
-	public String getPushType() {
-		return pushType;
-	}
+    public String getPushTo() {
+        return pushTo;
+    }
 
-	public void setPushType(String pushType) {
-		this.pushType = pushType;
-	}
+    public void setPushTo(String pushTo) {
+        this.pushTo = pushTo;
+    }
 
-	public Date getCreatedDate() {
-		return createdDate;
-	}
+    public String getPushType() {
+        return pushType;
+    }
 
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
+    public void setPushType(String pushType) {
+        this.pushType = pushType;
+    }
 
-	public Long getValidTime() {
-		return validTime;
-	}
+    public Date getCreatedDate() {
+        return createdDate;
+    }
 
-	public void setValidTime(Long validTime) {
-		this.validTime = validTime;
-	}
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
 
-	public String getState() {
-		return state;
-	}
+    public Long getValidTime() {
+        return validTime;
+    }
 
-	public void setState(String state) {
-		this.state = state;
-	}
+    public void setValidTime(Long validTime) {
+        this.validTime = validTime;
+    }
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-	}
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 }
