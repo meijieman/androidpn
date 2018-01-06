@@ -54,13 +54,9 @@
             android:text="清除log"/>
     </LinearLayout>
 
-    <ScrollView
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/tv_log"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </ScrollView>
+        android:divider="@null"
+        android:id="@+id/lv_log"
+        android:layout_height="match_parent"/>
 </LinearLayout>

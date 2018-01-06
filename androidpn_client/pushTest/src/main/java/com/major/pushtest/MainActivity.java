@@ -8,8 +8,9 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hongfans.push.ServiceManager;
@@ -17,17 +18,23 @@ import com.hongfans.push.util.CommonUtil;
 
 import org.jivesoftware.smack.util.LogUtil;
 
-public class MainActivity extends Activity implements View.OnClickListener{
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends Activity implements View.OnClickListener {
 
     private ServiceManager serviceManager;
-    private TextView mLog;
+    private ArrayAdapter<Spanned> mAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mLog = (TextView)findViewById(R.id.tv_log);
+        final ListView listView = (ListView)findViewById(R.id.lv_log);
+        final List<Spanned> data = new ArrayList<>();
+        mAdapter = new ArrayAdapter<>(this, R.layout.list_item, android.R.id.text1, data);
+        listView.setAdapter(mAdapter);
 
         findViewById(R.id.btn_start).setOnClickListener(this);
         findViewById(R.id.btn_stop).setOnClickListener(this);
@@ -36,26 +43,27 @@ public class MainActivity extends Activity implements View.OnClickListener{
         findViewById(R.id.btn_clear_sp).setOnClickListener(this);
         findViewById(R.id.btn_clear_log).setOnClickListener(this);
 
-        LogUtil.setLogListener(new LogUtil.LogListener(){
+        LogUtil.setLogListener(new LogUtil.LogListener() {
             @Override
-            public void log(final String level, final Object msg, final String timestamp){
+            public void log(final String level, final Object msg, final String timestamp) {
                 String color = "#DDDDDD";
-                if("d".equalsIgnoreCase(level)){
+                if ("d".equalsIgnoreCase(level)) {
                     color = "#BBBBBB";
-                } else if("i".equalsIgnoreCase(level)){
+                } else if ("i".equalsIgnoreCase(level)) {
                     color = "#36BB1D";
-                } else if("w".equalsIgnoreCase(level)){
+                } else if ("w".equalsIgnoreCase(level)) {
                     color = "#BB9C22";
-                } else if("e".equalsIgnoreCase(level)){
+                } else if ("e".equalsIgnoreCase(level)) {
                     color = "#FF6B68";
                 }
 
                 final Spanned spanned = Html.fromHtml("<font color=\"" + color + "\">" + level + ": " + timestamp + " " + msg + "</font>");
-                runOnUiThread(new Runnable(){
+                runOnUiThread(new Runnable() {
                     @Override
-                    public void run(){
-                        mLog.append(spanned);
-                        mLog.append("\n");
+                    public void run() {
+                        data.add(spanned);
+                        mAdapter.notifyDataSetChanged();
+                        listView.smoothScrollToPosition(mAdapter.getCount());
                     }
                 });
             }
@@ -65,7 +73,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
     }
 
     @Override
-    public void onClick(View v){
+    public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btn_start:
                 LogUtil.i("启动 push");
@@ -84,9 +92,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
                         .setTitle("设置")
                         .setView(et)
                         .setCancelable(false)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener(){
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which){
+                            public void onClick(DialogInterface dialog, int which) {
                                 String trim = et.getText().toString().trim();
                                 serviceManager.setAlias(trim); // trim 为空则为删除别名
                             }
@@ -103,11 +111,11 @@ public class MainActivity extends Activity implements View.OnClickListener{
                         .setTitle("设置")
                         .setView(et)
                         .setCancelable(false)
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener(){
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which){
+                            public void onClick(DialogInterface dialog, int which) {
                                 String trim = et.getText().toString().trim();
-                                if(CommonUtil.isNotEmpty(trim)){
+                                if (CommonUtil.isNotEmpty(trim)) {
                                     String[] split = trim.split(",");
                                     serviceManager.setTags(split);
                                     Toast.makeText(MainActivity.this, "设置标签成功", Toast.LENGTH_SHORT).show();
@@ -122,7 +130,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 //                serviceManager.clearUserInfo();
                 break;
             case R.id.btn_clear_log:
-                mLog.setText("");
+                mAdapter.clear();
                 break;
         }
     }
