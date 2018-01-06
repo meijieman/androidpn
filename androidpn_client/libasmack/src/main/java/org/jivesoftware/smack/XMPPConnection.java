@@ -29,6 +29,7 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.XMPPError;
 import org.jivesoftware.smack.parsing.ParsingExceptionCallback;
+import org.jivesoftware.smack.util.LogUtil;
 import org.jivesoftware.smack.util.StringUtils;
 import org.jivesoftware.smack.util.dns.HostAddress;
 
@@ -65,6 +66,8 @@ import javax.net.ssl.SSLSocket;
  * @see Connection
  */
 public class XMPPConnection extends Connection{
+
+    public static final String PENDING_START_ALARM_ACTION = "PENDING_START_ALARM_ACTION";
 
     /**
      * The socket which is used for this connection.
@@ -452,6 +455,7 @@ public class XMPPConnection extends Connection{
         // In most cases the close() should be successful, so set
         // connected to false here.
         connected = false;
+        LogUtil.i("设置连接为 false line 458");
 
         reader = null;
         writer = null;
@@ -681,6 +685,7 @@ public class XMPPConnection extends Connection{
             chatManager = null;
             authenticated = false;
             connected = false;
+            LogUtil.i("设置连接为 false line 688");
 
             throw ex;        // Everything stoppped. Now throw the exception.
         }
@@ -1077,6 +1082,12 @@ public class XMPPConnection extends Connection{
     public void startHeartBeat(){
         if(packetWriter != null){
             packetWriter.startHeartBeatThread();
+        }
+    }
+
+    public void sendHeartBeatPacket(){
+        if (packetWriter != null) {
+            packetWriter.sendHeartBeatSpace();
         }
     }
 }

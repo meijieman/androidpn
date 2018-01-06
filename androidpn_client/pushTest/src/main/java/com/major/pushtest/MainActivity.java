@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,20 +39,22 @@ public class MainActivity extends Activity implements View.OnClickListener{
         LogUtil.setLogListener(new LogUtil.LogListener(){
             @Override
             public void log(final String level, final Object msg, final String timestamp){
+                String color = "#DDDDDD";
+                if("d".equalsIgnoreCase(level)){
+                    color = "#BBBBBB";
+                } else if("i".equalsIgnoreCase(level)){
+                    color = "#36BB1D";
+                } else if("w".equalsIgnoreCase(level)){
+                    color = "#BB9C22";
+                } else if("e".equalsIgnoreCase(level)){
+                    color = "#FF6B68";
+                }
+
+                final Spanned spanned = Html.fromHtml("<font color=\"" + color + "\">" + level + ": " + timestamp + " " + msg + "</font>");
                 runOnUiThread(new Runnable(){
                     @Override
                     public void run(){
-                        String color = "#DDDDDD";
-                        if("d".equalsIgnoreCase(level)){
-                            color = "#BBBBBB";
-                        } else if("i".equalsIgnoreCase(level)){
-                            color = "#36BB1D";
-                        } else if("w".equalsIgnoreCase(level)){
-                            color = "#BB9C22";
-                        } else if("e".equalsIgnoreCase(level)){
-                            color = "#FF6B68";
-                        }
-                        mLog.append(Html.fromHtml("<font color=\"" + color + "\">" + level + ": " + timestamp + " " + msg + "</font>"));
+                        mLog.append(spanned);
                         mLog.append("\n");
                     }
                 });
@@ -59,9 +62,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
         });
 
         serviceManager = new ServiceManager(this);
-        String msg = getString(R.string.app_name) + " sdk: " + serviceManager.getVersion();
-        setTitle(msg);
-
     }
 
     @Override

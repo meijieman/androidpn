@@ -17,25 +17,16 @@
  */
 package org.androidpn.server.xmpp.session;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.androidpn.server.model.User;
 import org.androidpn.server.xmpp.XmppServer;
 import org.androidpn.server.xmpp.net.Connection;
 import org.androidpn.server.xmpp.net.ConnectionCloseListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.mina.util.ConcurrentHashSet;
 import org.xmpp.packet.JID;
 
-import antlr.collections.impl.Vector;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /** 

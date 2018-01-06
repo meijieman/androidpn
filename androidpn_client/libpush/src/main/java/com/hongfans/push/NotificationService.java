@@ -27,6 +27,8 @@ import android.telephony.TelephonyManager;
 
 import com.hongfans.push.receiver.ConnectivityReceiver;
 import com.hongfans.push.util.CommonUtil;
+
+import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.util.LogUtil;
 
 import java.util.concurrent.ExecutorService;
@@ -120,11 +122,18 @@ public class NotificationService extends Service{
 
         startForeground(0, null);
         xmppManager = new XmppManager(this);
+
+//        registerNotificationReceiver();
+        registerConnectivityReceiver();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         LogUtil.d("onStartCommand()...");
+        if(XMPPConnection.PENDING_START_ALARM_ACTION.equals(intent.getAction())) {
+            LogUtil.i("收到心跳广播");
+            xmppManager.broadcastHeartBeat();
+        }
         String clientDeviceID = intent.getStringExtra("clientDeviceID");
         if (CommonUtil.isNotEmpty(clientDeviceID)) {
             mClientDeviceID = clientDeviceID;
@@ -158,6 +167,9 @@ public class NotificationService extends Service{
         stopForeground(false);
         notificationService = null;
         stop();
+//        unregisterNotificationReceiver();
+        unregisterConnectivityReceiver();
+        super.onDestroy();
     }
 
     @Override
@@ -247,8 +259,7 @@ public class NotificationService extends Service{
 
     private void registerConnectivityReceiver(){
         LogUtil.d("registerConnectivityReceiver()...");
-        telephonyManager.listen(phoneStateListener,
-                PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
         IntentFilter filter = new IntentFilter();
         // filter.addAction(android.net.wifi.WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
@@ -257,15 +268,12 @@ public class NotificationService extends Service{
 
     private void unregisterConnectivityReceiver(){
         LogUtil.d("unregisterConnectivityReceiver()...");
-        telephonyManager.listen(phoneStateListener,
-                PhoneStateListener.LISTEN_NONE);
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
         unregisterReceiver(connectivityReceiver);
     }
 
     private void start(){
         LogUtil.d("start()...");
-//        registerNotificationReceiver();
-        registerConnectivityReceiver();
         // Intent intent = getIntent();
         // startService(intent);
         xmppManager.connect();
@@ -273,8 +281,6 @@ public class NotificationService extends Service{
 
     private void stop(){
         LogUtil.d("stop()...");
-//        unregisterNotificationReceiver();
-        unregisterConnectivityReceiver();
         xmppManager.disconnect();
         executorService.shutdown();
     }

@@ -228,8 +228,28 @@ class PacketWriter{
      * 发送心跳包
      */
     public void startHeartBeatThread(){
-        HeartBeatThread heartBeatThread = new HeartBeatThread();
-        heartBeatThread.start();
+//        HeartBeatThread heartBeatThread = new HeartBeatThread();
+//        heartBeatThread.start();
+    }
+
+    // 发送心跳空格
+    public void sendHeartBeatSpace(){
+        try {
+            writer.write(" "); // 发送一个空格
+            writer.flush();
+            LogUtil.i("心跳包发送成功 ");
+        } catch(IOException e) {
+            e.printStackTrace();
+            LogUtil.e("心跳包发送异常");
+            if (!done && !connection.isSocketClosed()) {
+                done = true;
+                // packetReader could be set to null by an concurrent disconnect() call.
+                // Therefore Prevent NPE exceptions by checking packetReader.
+                if (connection.packetReader != null) {
+                    connection.notifyConnectionError(e);
+                }
+            }
+        }
     }
 
     private class HeartBeatThread extends Thread{
@@ -239,11 +259,11 @@ class PacketWriter{
                 try{
                     writer.write(" "); // 发送一个空格
                     writer.flush();
-                    LogUtil.d("heart_beat", "心跳包发送成功");
+                    LogUtil.i("心跳包发送成功");
                     Thread.sleep(10 * 1000); // 心跳包间隔
                 } catch(Exception e){
                     e.printStackTrace();
-                    LogUtil.d("heart_beat", "心跳包发送异常");
+                    LogUtil.e("心跳包发送异常");
                     if(!(done || connection.isSocketClosed())){
                         done = true;
                         // packetReader could be set to null by an concurrent disconnect() call.
@@ -254,6 +274,7 @@ class PacketWriter{
                     }
                 }
             }
+            LogUtil.w("连接结束，心跳包发送停止");
         }
     }
 }
