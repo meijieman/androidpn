@@ -44,6 +44,9 @@ import java.util.concurrent.Future;
  */
 public class NotificationService extends Service{
 
+    public static final String ACTION_SET_CLIENT_DEVICE_ID = "action_set_client_device_id";
+    public static final String ACTION_SET_UIS = "action_set_uis";
+
     public static final String SERVICE_NAME = "org.androidpn.client.NotificationService";
 
     private static NotificationService notificationService;
@@ -129,35 +132,34 @@ public class NotificationService extends Service{
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        LogUtil.d("onStartCommand()...");
-        if(XMPPConnection.PENDING_START_ALARM_ACTION.equals(intent.getAction())) {
-            LogUtil.i("收到心跳广播");
+        LogUtil.d("onStartCommand()... " + intent.getAction());
+        if (XMPPConnection.PENDING_START_ALARM_ACTION.equals(intent.getAction())) {
             xmppManager.broadcastHeartBeat();
-        }
-        String clientDeviceID = intent.getStringExtra("clientDeviceID");
-        if (CommonUtil.isNotEmpty(clientDeviceID)) {
-            mClientDeviceID = clientDeviceID;
-            LogUtil.i("获取到应用端定义的唯一标识 " + mClientDeviceID);
-        }
-        String uis = intent.getStringExtra("uis");
-        if (CommonUtil.isNotEmpty(uis)) {
-            try {
-                mIntentService = (Class<HFIntentService>) Class.forName(uis);
-                LogUtil.i("获取到应用端定义的 IntentService " + mIntentService);
-            } catch (ClassNotFoundException e) {
+        } else if (NotificationService.ACTION_SET_UIS.equalsIgnoreCase(intent.getAction())) {
+            String uis = intent.getStringExtra("uis");
+            if (CommonUtil.isNotEmpty(uis)) {
+                try {
+                    mIntentService = (Class<HFIntentService>)Class.forName(uis);
+                    LogUtil.i("获取到应用端定义的 IntentService " + mIntentService);
+                } catch(ClassNotFoundException e) {
 //                e.printStackTrace();
-                LogUtil.e("do not set IntentService");
+                    LogUtil.e("do not set IntentService");
+                }
             }
-        }
-        String action = intent.getStringExtra("action");
-        if ("1".equals(action)) {
+        } else if (NotificationService.ACTION_SET_CLIENT_DEVICE_ID.equalsIgnoreCase(intent.getAction())) {
+            String clientDeviceID = intent.getStringExtra("clientDeviceID");
+            if (CommonUtil.isNotEmpty(clientDeviceID)) {
+                mClientDeviceID = clientDeviceID;
+                LogUtil.i("获取到应用端定义的唯一标识 " + mClientDeviceID);
+            }
             //　启动登录流程
-            taskSubmitter.submit(new Runnable(){
-                public void run(){
+            taskSubmitter.submit(new Runnable() {
+                public void run() {
                     start();
                 }
             });
         }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -198,8 +200,11 @@ public class NotificationService extends Service{
         return mClientDeviceID;
     }
 
-    public static Intent getIntent(Context ctx){
+    public static Intent getIntent(Context ctx, String action){
         Intent intent = new Intent(ctx, NotificationService.class);
+        if (action != null) {
+            intent.setAction(action);
+        }
         return intent; // new Intent(SERVICE_NAME);
     }
 

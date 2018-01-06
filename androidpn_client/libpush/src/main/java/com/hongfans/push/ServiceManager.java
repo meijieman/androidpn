@@ -23,9 +23,9 @@ import android.content.SharedPreferences.Editor;
 import com.hongfans.push.iq.SetAliasIQ;
 import com.hongfans.push.iq.SetTagsIQ;
 import com.hongfans.push.util.CommonUtil;
-import org.jivesoftware.smack.util.LogUtil;
 
 import org.jivesoftware.smack.packet.IQ;
+import org.jivesoftware.smack.util.LogUtil;
 
 import java.util.Properties;
 
@@ -102,8 +102,7 @@ public final class ServiceManager{
      * @param clientDeviceID push sdk　所在应用认为的设备唯一ID
      */
     public void startService(String clientDeviceID) {
-        LogUtil.i("启动 push");
-        //　如果有传入 clientDeviceID，使用传入的，否则获取上一次设置的，如果没有则提示异常
+        //　如果有传入 clientDeviceID，使用传入的，否则获取上一次设置的
         if (CommonUtil.isNotEmpty(clientDeviceID)) {
             sharedPrefs.edit().putString(Constants.CLIENT_DEVICE_ID, clientDeviceID).commit();
         } else {
@@ -115,20 +114,20 @@ public final class ServiceManager{
         } else {
             LogUtil.i("传入的 clientDeviceID " + clientDeviceID);
         }
-        Intent intent = NotificationService.getIntent(context);
+        Intent intent = NotificationService.getIntent(context, NotificationService.ACTION_SET_CLIENT_DEVICE_ID);
         intent.putExtra("clientDeviceID", clientDeviceID);
-        intent.putExtra("action", "1"); // 启动 push
         context.getApplicationContext().startService(intent);
     }
 
     public void stopService(){
-        Intent intent = NotificationService.getIntent(context);
+        Intent intent = NotificationService.getIntent(context, null);
         context.stopService(intent);
     }
 
     public <T extends HFIntentService> void registerPushIntentService(final Class<T> service){
         String name;
         if (service == null) {
+            // 获取已存在的 service
             name = sharedPrefs.getString(Constants.INTENT_SERVICE_NAME, "");
         } else {
             name = service.getName();
@@ -139,7 +138,7 @@ public final class ServiceManager{
         } else {
             LogUtil.i("传入的 service " + name);
         }
-        Intent intent = NotificationService.getIntent(context);
+        Intent intent = NotificationService.getIntent(context, NotificationService.ACTION_SET_UIS);
         intent.putExtra("uis", name);
         context.getApplicationContext().startService(intent);
     }
