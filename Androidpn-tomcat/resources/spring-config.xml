@@ -63,6 +63,10 @@
 	<bean id="pushDetailDao" class="org.androidpn.server.dao.hibernate.PushDetailDaoHibernate">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
+
+	<bean id="operationLogDao" class="org.androidpn.server.dao.hibernate.OperationLogDaoHibernate">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
 	<!-- =============================================================== -->
 	<!-- Services                                                        -->
 	<!-- =============================================================== -->
@@ -76,6 +80,10 @@
 
 	<bean id="pushDetailService" class="org.androidpn.server.service.impl.PushDetailServiceImpl">
 		<property name="pushDetailDao" ref="pushDetailDao"/>
+	</bean>
+
+	<bean id="operationLogService" class="org.androidpn.server.service.impl.OperationLogServiceImpl">
+		<property name="operationLogDao" ref="operationLogDao"/>
 	</bean>
 
 	<!-- =============================================================== -->

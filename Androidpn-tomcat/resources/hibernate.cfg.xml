@@ -39,6 +39,7 @@
         <mapping class="org.androidpn.server.model.User"/>
         <mapping class="org.androidpn.server.model.Notification"/>
         <mapping class="org.androidpn.server.model.PushDetail"/>
+        <mapping class="org.androidpn.server.model.OperationLog"/>
 
     </session-factory>
 </hibernate-configuration>
