@@ -40,7 +40,7 @@ public class Constants{
 
     // public static final String USER_KEY = "USER_KEY";
 
-    public static final String DEVICE_ID = "DEVICE_ID"; // push　认为的设备id
+//    public static final String DEVICE_ID = "DEVICE_ID"; // push　认为的设备id
 
     public static final String EMULATOR_DEVICE_ID = "EMULATOR_DEVICE_ID";
 

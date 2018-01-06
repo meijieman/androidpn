@@ -22,7 +22,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.hongfans.push.NotificationService;
-import com.hongfans.push.util.LogUtil;
+import org.jivesoftware.smack.util.LogUtil;
 
 /**
  * A broadcast receiver to handle the changes in network connectiion states.

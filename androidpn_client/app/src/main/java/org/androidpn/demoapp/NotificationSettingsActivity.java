@@ -22,10 +22,10 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.util.Log;
 
 import com.hongfans.push.Constants;
-import com.hongfans.push.util.LogUtil;
+
+import org.jivesoftware.smack.util.LogUtil;
 
 /**
  * Activity for displaying the notification setting view.
@@ -35,8 +35,7 @@ import com.hongfans.push.util.LogUtil;
 @Deprecated
 public class NotificationSettingsActivity extends PreferenceActivity{
 
-    private static final String LOGTAG = LogUtil
-            .makeLogTag(NotificationSettingsActivity.class);
+    private static final String LOGTAG = LogUtil.makeLogTag(NotificationSettingsActivity.class);
 
     public NotificationSettingsActivity(){
     }
@@ -57,7 +56,7 @@ public class NotificationSettingsActivity extends PreferenceActivity{
     }
 
     private PreferenceScreen createPreferenceHierarchy(){
-        Log.d(LOGTAG, "createSettingsPreferenceScreen()...");
+        LogUtil.d(LOGTAG, "createSettingsPreferenceScreen()...");
 
         PreferenceManager preferenceManager = getPreferenceManager();
         preferenceManager

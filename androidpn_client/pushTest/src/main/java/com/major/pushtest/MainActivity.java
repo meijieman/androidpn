@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,28 +13,55 @@ import android.widget.Toast;
 
 import com.hongfans.push.ServiceManager;
 import com.hongfans.push.util.CommonUtil;
-import com.hongfans.push.util.LogUtil;
+
+import org.jivesoftware.smack.util.LogUtil;
 
 public class MainActivity extends Activity implements View.OnClickListener{
 
     private ServiceManager serviceManager;
+    private TextView mLog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView text = (TextView)findViewById(R.id.tv_version);
+        mLog = (TextView)findViewById(R.id.tv_log);
 
         findViewById(R.id.btn_start).setOnClickListener(this);
         findViewById(R.id.btn_stop).setOnClickListener(this);
         findViewById(R.id.btn_set_alias).setOnClickListener(this);
         findViewById(R.id.btn_set_tags).setOnClickListener(this);
         findViewById(R.id.btn_clear_sp).setOnClickListener(this);
+        findViewById(R.id.btn_clear_log).setOnClickListener(this);
+
+        LogUtil.setLogListener(new LogUtil.LogListener(){
+            @Override
+            public void log(final String level, final Object msg, final String timestamp){
+                runOnUiThread(new Runnable(){
+                    @Override
+                    public void run(){
+                        String color = "#DDDDDD";
+                        if("d".equalsIgnoreCase(level)){
+                            color = "#BBBBBB";
+                        } else if("i".equalsIgnoreCase(level)){
+                            color = "#36BB1D";
+                        } else if("w".equalsIgnoreCase(level)){
+                            color = "#BB9C22";
+                        } else if("e".equalsIgnoreCase(level)){
+                            color = "#FF6B68";
+                        }
+                        mLog.append(Html.fromHtml("<font color=\"" + color + "\">" + level + ": " + timestamp + " " + msg + "</font>"));
+                        mLog.append("\n");
+                    }
+                });
+            }
+        });
 
         serviceManager = new ServiceManager(this);
-        String msg = "sdk 版本: " + serviceManager.getVersion();
-        text.setText(msg);
+        String msg = getString(R.string.app_name) + " sdk: " + serviceManager.getVersion();
+        setTitle(msg);
+
     }
 
     @Override
@@ -61,11 +89,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
                             public void onClick(DialogInterface dialog, int which){
                                 String trim = et.getText().toString().trim();
                                 serviceManager.setAlias(trim); // trim 为空则为删除别名
-                                if(CommonUtil.isNotEmpty(trim)){
-                                    Toast.makeText(MainActivity.this, "设置别名成功", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(MainActivity.this, "删除别名成功", Toast.LENGTH_SHORT).show();
-                                }
                             }
                         })
                         .setNegativeButton("取消", null)
@@ -97,6 +120,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
             }
             case R.id.btn_clear_sp:
 //                serviceManager.clearUserInfo();
+                break;
+            case R.id.btn_clear_log:
+                mLog.setText("");
                 break;
         }
     }

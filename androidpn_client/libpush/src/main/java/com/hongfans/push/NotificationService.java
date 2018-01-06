@@ -21,16 +21,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import com.hongfans.push.receiver.ConnectivityReceiver;
 import com.hongfans.push.util.CommonUtil;
-import com.hongfans.push.util.LogUtil;
+import org.jivesoftware.smack.util.LogUtil;
 
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -72,7 +70,7 @@ public class NotificationService extends Service{
 
     private SharedPreferences sharedPrefs;
 
-    private String deviceId;
+//    private String deviceId;
     private String mClientDeviceID;
 
     public NotificationService(){
@@ -100,25 +98,25 @@ public class NotificationService extends Service{
         sharedPrefs = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
 
         // Get deviceId
-        deviceId = telephonyManager.getDeviceId();
-        LogUtil.d("deviceId=" + deviceId);
-        Editor editor = sharedPrefs.edit();
-        editor.putString(Constants.DEVICE_ID, deviceId);
-        editor.commit();
-
-        // If running on an emulator
-        if(deviceId == null || deviceId.trim().length() == 0
-           || deviceId.matches("0+")){
-            if(sharedPrefs.contains("EMULATOR_DEVICE_ID")){
-                deviceId = sharedPrefs.getString(Constants.EMULATOR_DEVICE_ID, "");
-            } else {
-                deviceId = (new StringBuilder("EMU"))
-                        .append((new Random(System.currentTimeMillis())).nextLong())
-                        .toString();
-                editor.putString(Constants.EMULATOR_DEVICE_ID, deviceId);
-                editor.commit();
-            }
-        }
+//        deviceId = telephonyManager.getDeviceId();
+//        LogUtil.d("deviceId=" + deviceId);
+//        Editor editor = sharedPrefs.edit();
+//        editor.putString(Constants.DEVICE_ID, deviceId);
+//        editor.commit();
+//
+//        // If running on an emulator
+//        if(deviceId == null || deviceId.trim().length() == 0
+//           || deviceId.matches("0+")){
+//            if(sharedPrefs.contains("EMULATOR_DEVICE_ID")){
+//                deviceId = sharedPrefs.getString(Constants.EMULATOR_DEVICE_ID, "");
+//            } else {
+//                deviceId = (new StringBuilder("EMU"))
+//                        .append((new Random(System.currentTimeMillis())).nextLong())
+//                        .toString();
+//                editor.putString(Constants.EMULATOR_DEVICE_ID, deviceId);
+//                editor.commit();
+//            }
+//        }
 
         startForeground(0, null);
         xmppManager = new XmppManager(this);
@@ -213,9 +211,9 @@ public class NotificationService extends Service{
         return sharedPrefs;
     }
 
-    public String getDeviceId(){
-        return deviceId;
-    }
+//    public String getDeviceId(){
+//        return deviceId;
+//    }
 
     public void connect(){
         LogUtil.d("connect()...");

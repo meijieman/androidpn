@@ -36,6 +36,6 @@ public interface WriterListener{
      *
      * @param str the written string
      */
-    public abstract void write(String str);
+    void write(String str);
 
 }

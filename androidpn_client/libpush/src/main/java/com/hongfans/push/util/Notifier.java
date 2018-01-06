@@ -30,6 +30,8 @@ import android.widget.Toast;
 import com.hongfans.push.Constants;
 import com.hongfans.push.message.Payload;
 
+import org.jivesoftware.smack.util.LogUtil;
+
 import java.io.Serializable;
 import java.util.Random;
 

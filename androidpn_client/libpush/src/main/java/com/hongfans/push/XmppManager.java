@@ -23,7 +23,8 @@ import android.os.Handler;
 import com.hongfans.push.iq.NotificationIQ;
 import com.hongfans.push.iq.listener.NotificationPacketListener;
 import com.hongfans.push.iq.provider.NotificationIQProvider;
-import com.hongfans.push.util.LogUtil;
+import com.hongfans.push.util.DeviceUuidFactory;
+import org.jivesoftware.smack.util.LogUtil;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
@@ -363,7 +364,7 @@ public class XmppManager{
                 isRegisterSucceed = false;
                 hasDropTask = false;
 
-                final String newUsername = sharedPrefs.getString(Constants.DEVICE_ID, ""); // newRandomUUID(); // 随机帐号密码
+                final String newUsername = new DeviceUuidFactory(context).getDeviceUuid().toString(); // newRandomUUID(); // 随机帐号密码
                 final String newPassword = "imbest"; // newRandomUUID();
 
                 Registration registration = new Registration(); // Registration -> IQ -> Packet

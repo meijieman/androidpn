@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -28,8 +27,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hongfans.push.message.Notification;
-import com.hongfans.push.util.LogUtil;
 import com.hongfans.push.util.Notifier;
+
+import org.jivesoftware.smack.util.LogUtil;
 
 /**
  * Activity for displaying the notification details view.
@@ -70,12 +70,12 @@ public class NotificationDetailsActivity extends Activity{
 //        String notificationUri = intent
 //                .getStringExtra(Constants.NOTIFICATION_URI);
         Notification notification = Notifier.getNotification(getIntent());
-        Log.d(LOGTAG, "notification=" + notification);
-//        Log.d(LOGTAG, "notificationId=" + notificationId);
-//        Log.d(LOGTAG, "notificationApiKey=" + notificationApiKey);
-//        Log.d(LOGTAG, "notificationTitle=" + notificationTitle);
-//        Log.d(LOGTAG, "notificationMessage=" + notificationMessage);
-//        Log.d(LOGTAG, "notificationUri=" + notificationUri);
+       LogUtil.d(LOGTAG, "notification=" + notification);
+//       LogUtil.d(LOGTAG, "notificationId=" + notificationId);
+//       LogUtil.d(LOGTAG, "notificationApiKey=" + notificationApiKey);
+//       LogUtil.d(LOGTAG, "notificationTitle=" + notificationTitle);
+//       LogUtil.d(LOGTAG, "notificationMessage=" + notificationMessage);
+//       LogUtil.d(LOGTAG, "notificationUri=" + notificationUri);
 
         //        Display display = getWindowManager().getDefaultDisplay();
         //        View rootView;

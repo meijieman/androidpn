@@ -23,7 +23,7 @@ import android.content.SharedPreferences.Editor;
 import com.hongfans.push.iq.SetAliasIQ;
 import com.hongfans.push.iq.SetTagsIQ;
 import com.hongfans.push.util.CommonUtil;
-import com.hongfans.push.util.LogUtil;
+import org.jivesoftware.smack.util.LogUtil;
 
 import org.jivesoftware.smack.packet.IQ;
 
