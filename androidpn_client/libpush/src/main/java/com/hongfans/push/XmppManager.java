@@ -364,7 +364,7 @@ public class XmppManager{
                 isRegisterSucceed = false;
                 hasDropTask = false;
 
-                final String newUsername = new DeviceUuidFactory(context).getDeviceUuid().toString(); // newRandomUUID(); // 随机帐号密码
+                final String newUsername = new DeviceUuidFactory(context).getDeviceUuid().toString().replaceAll("-", ""); // newRandomUUID(); // 随机帐号密码
                 final String newPassword = "imbest"; // newRandomUUID();
 
                 Registration registration = new Registration(); // Registration -> IQ -> Packet
