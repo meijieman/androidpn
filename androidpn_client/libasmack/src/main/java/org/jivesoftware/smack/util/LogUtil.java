@@ -56,7 +56,7 @@ public class LogUtil{
 
     public static void d(String tag, Object msg){
         if(mIsDebug){
-            Log.d(TAG + "_", tag + msg);
+            Log.d(TAG + "_" + tag, "" + msg);
         }
         if(sListener != null){
             sListener.log("d", tag + msg, getTimestamp());
