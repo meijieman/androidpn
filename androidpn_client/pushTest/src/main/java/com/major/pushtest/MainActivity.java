@@ -9,6 +9,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.btn_set_tags).setOnClickListener(this);
         findViewById(R.id.btn_clear_sp).setOnClickListener(this);
         findViewById(R.id.btn_clear_log).setOnClickListener(this);
+        final CheckBox cb = (CheckBox)findViewById(R.id.cb_auto_scroll);
 
         LogUtil.setLogListener(new LogUtil.LogListener() {
             @Override
@@ -63,7 +65,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     public void run() {
                         data.add(spanned);
                         mAdapter.notifyDataSetChanged();
-                        listView.smoothScrollToPosition(mAdapter.getCount());
+                        if (cb.isChecked()) {
+                            listView.smoothScrollToPosition(mAdapter.getCount());
+                        }
                     }
                 });
             }
