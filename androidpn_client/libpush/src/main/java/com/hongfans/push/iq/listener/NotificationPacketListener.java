@@ -23,7 +23,7 @@ import com.hongfans.push.iq.ReceiptIQ;
 import com.hongfans.push.iq.NotificationIQ;
 import com.hongfans.push.message.Notification;
 import com.hongfans.push.message.Payload;
-import com.hongfans.push.util.LogUtil;
+import org.jivesoftware.smack.util.LogUtil;
 
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.IQ;

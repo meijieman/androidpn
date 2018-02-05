@@ -13,6 +13,8 @@ https://github.com/xuyusong/AndroidPN
 1. 标签推送需要增加离线推送 
 已实现
 2. 支持正则匹配推送
+标签推送多个情况
+A&B, A|B, ^A
 
 3. 压力测试，稳定性测试，记录测试日志，重连测试，客户端耗电量测试
 
@@ -31,23 +33,26 @@ https://github.com/xuyusong/AndroidPN
 10. 统计客户端查看状态
 部分实现
 11. 客户端开机启动
-
+已实现
 12. 一个客户端，卸载安装后 id 不变
-
 需要修改 服务端 UserServiceImpl.saveUser(User) 保存时添加是否已存在的判断
 客户端 XmppManager.RegisterTask#run 注册时生成用户名和密码的逻辑
 
+
 13. 客户端服务保活
 
-14. 能不能多个客户端共存
+14. 多个客户端共存
 目前能够多个客户端，但是每个客户端的 service 是独立的
+
 15. 客户端网络连接的策略
 
 16. 服务端权限管理
 
-17. 客户端给服务端发送消息
+17. 客户端给服务端发送消息，且有回调
 客户端可以给服务端发送别名，标签消息
-18. 消息推送时长
+已实现
+
+18. 消息推送有效期
 已实现
 
 ## buglist
@@ -70,6 +75,12 @@ https://zhuanlan.zhihu.com/p/22909985
 参考文档
 * http://blog.csdn.net/banketree/article/details/8852046
 * https://zhuanlan.zhihu.com/c_51051095
+* Android推送技术研究
+https://www.jianshu.com/p/584707554ed7
+* Android微信智能心跳方案
+https://mp.weixin.qq.com/s?__biz=MzAwNDY1ODY2OQ==&mid=207243549&idx=1&sn=4ebe4beb8123f1b5ab58810ac8bc5994
+
+
 
 总结一下以 androidpn 为典型的开源 Android Push 方案会存在的问题：
 １）容量大了开源服务器实现顶不住，还是需要自己去改进开源实现，或者完全重新用新方案，开发投入与高成本是不可避免的。

@@ -17,14 +17,20 @@
  */
 package org.androidpn.server.xmpp;
 
+import org.androidpn.server.model.OperationLog;
+import org.androidpn.server.service.OperationLogService;
+import org.androidpn.server.service.ServiceLocator;
 import org.androidpn.server.util.Config;
+import org.androidpn.server.util.DateUtil;
 import org.androidpn.server.xmpp.session.SessionManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-/** 
+import java.util.Date;
+
+/**
  * This class starts the server as a standalone application using Spring configuration.
  *
  * @author Sehwan Noh (devnoh@gmail.com)
@@ -96,6 +102,8 @@ public class XmppServer {
             log.info("XmppServer started: " + serverName);
             log.info("Androidpn Server v" + version);
 
+            new OperationLogThread().start();
+            log.info("启动运行日志");
         } catch (Exception e) {
             e.printStackTrace();
             shutdownServer();
@@ -116,7 +124,7 @@ public class XmppServer {
      * Returns a Spring bean that has the given bean name.
      *  
      * @param beanName
-     * @return a Srping bean 
+     * @return a Srping bean
      */
     public Object getBean(String beanName) {
         return context.getBean(beanName);
@@ -124,7 +132,7 @@ public class XmppServer {
 
     /**
      * Returns the server name.
-     * 
+     *
      * @return the server name
      */
     public String getServerName() {
@@ -210,4 +218,35 @@ public class XmppServer {
         }
     }
 
+    // 记录运行时长
+    private class OperationLogThread extends Thread {
+
+        private OperationLogService operationLogService;
+        private OperationLog operationLog;
+
+        public OperationLogThread() {
+            operationLogService = ServiceLocator.getOperationLogService();
+        }
+
+        @Override
+        public void run() {
+            operationLog = new OperationLog();
+            operationLogService.saveOperationLog(operationLog);
+            log.info("创建运行日志：" + DateUtil.format(operationLog.getCreatedDate()));
+
+            while (true) {
+                try {
+                    Thread.sleep(1000 * 60);
+                    operationLog.setUpdateDate(new Date());
+                    operationLogService.saveOperationLog(operationLog);
+
+                    String start = DateUtil.format(operationLog.getCreatedDate());
+                    String end = DateUtil.format(operationLog.getUpdateDate());
+                    log.info("更新运行日志，已运行：" + DateUtil.dateDiff(start, end, "yyyy-MM-dd HH:mm:ss"));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

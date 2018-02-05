@@ -17,8 +17,12 @@
  */
 package org.androidpn.server.console.controller;
 
+import org.androidpn.server.model.OperationLog;
+import org.androidpn.server.service.OperationLogService;
+import org.androidpn.server.service.ServiceLocator;
 import org.androidpn.server.util.CommonUtil;
 import org.androidpn.server.util.Config;
+import org.androidpn.server.util.DateUtil;
 import org.androidpn.server.xmpp.push.NotificationManager;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,6 +30,7 @@ import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /** 
  * A controller class to process the notification related requests.  
@@ -35,14 +40,26 @@ import javax.servlet.http.HttpServletResponse;
 public class NotificationController extends MultiActionController {
 
     private NotificationManager notificationManager;
+    private OperationLogService operationLogService;
 
     public NotificationController() {
         notificationManager = new NotificationManager();
+        operationLogService = ServiceLocator.getOperationLogService();
     }
 
     public ModelAndView list(HttpServletRequest request, HttpServletResponse response) throws Exception {
         ModelAndView mav = new ModelAndView();
         // mav.addObject("list", null);
+        // 设置已运行时间
+        List<OperationLog> operationLogs = operationLogService.getOperationLogs();
+        String interval = "已运行: ";
+        if (!operationLogs.isEmpty()) {
+            OperationLog operationLog = operationLogs.get(operationLogs.size() - 1);
+            String start = DateUtil.format(operationLog.getCreatedDate());
+            String end = DateUtil.format(operationLog.getUpdateDate());
+            interval += DateUtil.dateDiff(start, end, DateUtil.YYYY_MM_DD_HH_MM_SS);
+        }
+        mav.addObject("operation_time", interval);
         mav.setViewName("notification/form");
         return mav;
     }

@@ -21,16 +21,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
 import com.hongfans.push.receiver.ConnectivityReceiver;
 import com.hongfans.push.util.CommonUtil;
-import com.hongfans.push.util.LogUtil;
 
-import java.util.Random;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.util.LogUtil;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -43,6 +43,9 @@ import java.util.concurrent.Future;
  * @author Sehwan Noh (devnoh@gmail.com)
  */
 public class NotificationService extends Service{
+
+    public static final String ACTION_SET_CLIENT_DEVICE_ID = "action_set_client_device_id";
+    public static final String ACTION_SET_UIS = "action_set_uis";
 
     public static final String SERVICE_NAME = "org.androidpn.client.NotificationService";
 
@@ -72,7 +75,7 @@ public class NotificationService extends Service{
 
     private SharedPreferences sharedPrefs;
 
-    private String deviceId;
+//    private String deviceId;
     private String mClientDeviceID;
 
     public NotificationService(){
@@ -100,57 +103,63 @@ public class NotificationService extends Service{
         sharedPrefs = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
 
         // Get deviceId
-        deviceId = telephonyManager.getDeviceId();
-        LogUtil.d("deviceId=" + deviceId);
-        Editor editor = sharedPrefs.edit();
-        editor.putString(Constants.DEVICE_ID, deviceId);
-        editor.commit();
-
-        // If running on an emulator
-        if(deviceId == null || deviceId.trim().length() == 0
-           || deviceId.matches("0+")){
-            if(sharedPrefs.contains("EMULATOR_DEVICE_ID")){
-                deviceId = sharedPrefs.getString(Constants.EMULATOR_DEVICE_ID, "");
-            } else {
-                deviceId = (new StringBuilder("EMU"))
-                        .append((new Random(System.currentTimeMillis())).nextLong())
-                        .toString();
-                editor.putString(Constants.EMULATOR_DEVICE_ID, deviceId);
-                editor.commit();
-            }
-        }
+//        deviceId = telephonyManager.getDeviceId();
+//        LogUtil.d("deviceId=" + deviceId);
+//        Editor editor = sharedPrefs.edit();
+//        editor.putString(Constants.DEVICE_ID, deviceId);
+//        editor.commit();
+//
+//        // If running on an emulator
+//        if(deviceId == null || deviceId.trim().length() == 0
+//           || deviceId.matches("0+")){
+//            if(sharedPrefs.contains("EMULATOR_DEVICE_ID")){
+//                deviceId = sharedPrefs.getString(Constants.EMULATOR_DEVICE_ID, "");
+//            } else {
+//                deviceId = (new StringBuilder("EMU"))
+//                        .append((new Random(System.currentTimeMillis())).nextLong())
+//                        .toString();
+//                editor.putString(Constants.EMULATOR_DEVICE_ID, deviceId);
+//                editor.commit();
+//            }
+//        }
 
         startForeground(0, null);
         xmppManager = new XmppManager(this);
+
+//        registerNotificationReceiver();
+        registerConnectivityReceiver();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        LogUtil.d("onStartCommand()...");
-        String clientDeviceID = intent.getStringExtra("clientDeviceID");
-        if (CommonUtil.isNotEmpty(clientDeviceID)) {
-            mClientDeviceID = clientDeviceID;
-            LogUtil.i("获取到应用端定义的唯一标识 " + mClientDeviceID);
-        }
-        String uis = intent.getStringExtra("uis");
-        if (CommonUtil.isNotEmpty(uis)) {
-            try {
-                mIntentService = (Class<HFIntentService>) Class.forName(uis);
-                LogUtil.i("获取到应用端定义的 IntentService " + mIntentService);
-            } catch (ClassNotFoundException e) {
+        LogUtil.d("onStartCommand()... " + intent.getAction());
+        if (XMPPConnection.PENDING_START_ALARM_ACTION.equals(intent.getAction())) {
+            xmppManager.broadcastHeartBeat();
+        } else if (NotificationService.ACTION_SET_UIS.equalsIgnoreCase(intent.getAction())) {
+            String uis = intent.getStringExtra("uis");
+            if (CommonUtil.isNotEmpty(uis)) {
+                try {
+                    mIntentService = (Class<HFIntentService>)Class.forName(uis);
+                    LogUtil.i("获取到应用端定义的 IntentService " + mIntentService);
+                } catch(ClassNotFoundException e) {
 //                e.printStackTrace();
-                LogUtil.e("do not set IntentService");
+                    LogUtil.e("do not set IntentService");
+                }
             }
-        }
-        String action = intent.getStringExtra("action");
-        if ("1".equals(action)) {
+        } else if (NotificationService.ACTION_SET_CLIENT_DEVICE_ID.equalsIgnoreCase(intent.getAction())) {
+            String clientDeviceID = intent.getStringExtra("clientDeviceID");
+            if (CommonUtil.isNotEmpty(clientDeviceID)) {
+                mClientDeviceID = clientDeviceID;
+                LogUtil.i("获取到应用端定义的唯一标识 " + mClientDeviceID);
+            }
             //　启动登录流程
-            taskSubmitter.submit(new Runnable(){
-                public void run(){
+            taskSubmitter.submit(new Runnable() {
+                public void run() {
                     start();
                 }
             });
         }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -160,6 +169,9 @@ public class NotificationService extends Service{
         stopForeground(false);
         notificationService = null;
         stop();
+//        unregisterNotificationReceiver();
+        unregisterConnectivityReceiver();
+        super.onDestroy();
     }
 
     @Override
@@ -188,8 +200,11 @@ public class NotificationService extends Service{
         return mClientDeviceID;
     }
 
-    public static Intent getIntent(Context ctx){
+    public static Intent getIntent(Context ctx, String action){
         Intent intent = new Intent(ctx, NotificationService.class);
+        if (action != null) {
+            intent.setAction(action);
+        }
         return intent; // new Intent(SERVICE_NAME);
     }
 
@@ -213,9 +228,9 @@ public class NotificationService extends Service{
         return sharedPrefs;
     }
 
-    public String getDeviceId(){
-        return deviceId;
-    }
+//    public String getDeviceId(){
+//        return deviceId;
+//    }
 
     public void connect(){
         LogUtil.d("connect()...");
@@ -249,8 +264,7 @@ public class NotificationService extends Service{
 
     private void registerConnectivityReceiver(){
         LogUtil.d("registerConnectivityReceiver()...");
-        telephonyManager.listen(phoneStateListener,
-                PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
         IntentFilter filter = new IntentFilter();
         // filter.addAction(android.net.wifi.WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(android.net.ConnectivityManager.CONNECTIVITY_ACTION);
@@ -259,15 +273,12 @@ public class NotificationService extends Service{
 
     private void unregisterConnectivityReceiver(){
         LogUtil.d("unregisterConnectivityReceiver()...");
-        telephonyManager.listen(phoneStateListener,
-                PhoneStateListener.LISTEN_NONE);
+        telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
         unregisterReceiver(connectivityReceiver);
     }
 
     private void start(){
         LogUtil.d("start()...");
-//        registerNotificationReceiver();
-        registerConnectivityReceiver();
         // Intent intent = getIntent();
         // startService(intent);
         xmppManager.connect();
@@ -275,8 +286,6 @@ public class NotificationService extends Service{
 
     private void stop(){
         LogUtil.d("stop()...");
-//        unregisterNotificationReceiver();
-        unregisterConnectivityReceiver();
         xmppManager.disconnect();
         executorService.shutdown();
     }

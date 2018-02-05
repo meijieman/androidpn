@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import com.hongfans.push.message.Notification;
 import com.hongfans.push.message.Payload;
-import com.hongfans.push.util.LogUtil;
+import org.jivesoftware.smack.util.LogUtil;
 
 import java.io.Serializable;
 

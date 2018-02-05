@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 
 import com.hongfans.push.Constants;
 import com.hongfans.push.ServiceManager;
-import com.hongfans.push.util.LogUtil;
+import org.jivesoftware.smack.util.LogUtil;
 
 /**
  * TODO

@@ -18,7 +18,7 @@ package com.hongfans.push;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
-import com.hongfans.push.util.LogUtil;
+import org.jivesoftware.smack.util.LogUtil;
 
 /**
  * A listener class for monitoring changes in phone connection states.

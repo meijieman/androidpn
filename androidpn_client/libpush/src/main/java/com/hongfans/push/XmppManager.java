@@ -15,15 +15,20 @@
  */
 package com.hongfans.push;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Handler;
+import android.os.SystemClock;
 
 import com.hongfans.push.iq.NotificationIQ;
 import com.hongfans.push.iq.listener.NotificationPacketListener;
 import com.hongfans.push.iq.provider.NotificationIQProvider;
-import com.hongfans.push.util.LogUtil;
+import com.hongfans.push.util.DeviceUuidFactory;
 
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionConfiguration.SecurityMode;
@@ -39,6 +44,7 @@ import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Registration;
 import org.jivesoftware.smack.provider.ProviderManager;
+import org.jivesoftware.smack.util.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +91,7 @@ public class XmppManager{
     private Future<?> futureTask;
 
     private Thread reconnection;
+    private HeartBeatAlarmManager mHeartBeatAlarmManager;
 
     public XmppManager(NotificationService notificationService){
         context = notificationService;
@@ -117,6 +124,9 @@ public class XmppManager{
     public void disconnect(){
         LogUtil.d("disconnect()...");
         terminatePersistentConnection();
+        if (mHeartBeatAlarmManager != null) {
+            mHeartBeatAlarmManager.stop();
+        }
     }
 
     public void terminatePersistentConnection(){
@@ -363,7 +373,7 @@ public class XmppManager{
                 isRegisterSucceed = false;
                 hasDropTask = false;
 
-                final String newUsername = sharedPrefs.getString(Constants.DEVICE_ID, ""); // newRandomUUID(); // 随机帐号密码
+                final String newUsername = new DeviceUuidFactory(context).getDeviceUuid().toString().replaceAll("-", ""); // newRandomUUID(); // 随机帐号密码
                 final String newPassword = "imbest"; // newRandomUUID();
 
                 Registration registration = new Registration(); // Registration -> IQ -> Packet
@@ -482,7 +492,11 @@ public class XmppManager{
                     connection.addPacketListener(packetListener, packetFilter); // 过滤推送消息
                     //心跳包的发送
                     LogUtil.i("启动心跳线程");
-                    connection.startHeartBeat();
+//                    connection.startHeartBeat(context);
+                    if (mHeartBeatAlarmManager == null) {
+                        mHeartBeatAlarmManager = new HeartBeatAlarmManager(context);
+                    }
+                    mHeartBeatAlarmManager.start();
                     //释放xmppManager
                     synchronized(xmppManager){
                         xmppManager.notifyAll();
@@ -514,6 +528,38 @@ public class XmppManager{
                 xmppManager.runTask();
             }
 
+        }
+    }
+
+    public void broadcastHeartBeat(){
+        if (isConnected()) {
+          connection.sendHeartBeatPacket();
+        } else {
+            LogUtil.i("未连接，发送心跳失败");
+        }
+    }
+
+    private class HeartBeatAlarmManager{
+        AlarmManager mManager;
+        private PendingIntent mIntent;
+
+        public HeartBeatAlarmManager(Service service){
+            Context context = service.getApplicationContext();
+            mManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+            Intent intent2 = new Intent(context, service.getClass()).setAction(XMPPConnection.PENDING_START_ALARM_ACTION);
+            mIntent = PendingIntent.getService(context, 0, intent2, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+
+        public void start(){
+            LogUtil.i("启动 HeartBeatAlarmManager");
+            int interval = 10 * 1000; // android 5.1 最少 60000
+            mManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), interval, mIntent);
+        }
+
+        public void stop(){
+            LogUtil.i("停止 HeartBeatAlarmManager");
+            mManager.cancel(mIntent);
         }
     }
 

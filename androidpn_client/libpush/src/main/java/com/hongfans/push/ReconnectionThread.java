@@ -15,7 +15,7 @@
  */
 package com.hongfans.push;
 
-import com.hongfans.push.util.LogUtil;
+import org.jivesoftware.smack.util.LogUtil;
 
 /**
  * A thread class for recennecting the server.

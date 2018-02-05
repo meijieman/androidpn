@@ -30,6 +30,7 @@ import org.jivesoftware.smack.parsing.UnparsablePacket;
 import org.jivesoftware.smack.sasl.SASLMechanism.Challenge;
 import org.jivesoftware.smack.sasl.SASLMechanism.Failure;
 import org.jivesoftware.smack.sasl.SASLMechanism.Success;
+import org.jivesoftware.smack.util.LogUtil;
 import org.jivesoftware.smack.util.PacketParserUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -102,6 +103,7 @@ class PacketReader{
             int eventType = parser.getEventType();
             do {
                 if(eventType == XmlPullParser.START_TAG){
+                    LogUtil.i("eventType equals start tag");
                     int parserDepth = parser.getDepth();
                     ParsingExceptionCallback callback = connection.getParsingExceptionCallback();
                     if(parser.getName().equals("message")){
@@ -219,6 +221,7 @@ class PacketReader{
                         resetParser();
                     }
                 } else if(eventType == XmlPullParser.END_TAG){
+                    LogUtil.w("eventType equals end tag");
                     if(parser.getName().equals("stream")){
                         // Disconnect the connection
                         connection.disconnect();

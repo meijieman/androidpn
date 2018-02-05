@@ -11,7 +11,8 @@
 
 <body>
 
-<h1>Push Notifications</h1>
+<h1>Notifications</h1>
+<h3>${operation_time}</h3>
 
 <%--<div style="background:#eee; margin:20px 0px; padding:20px; width:500px; border:solid 1px #999;">--%>
 <div style="margin:20px 0px;">
