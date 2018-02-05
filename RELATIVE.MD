@@ -15,6 +15,9 @@ http://blog.csdn.net/z69183787/article/details/41416189
 http://jinnianshilongnian.iteye.com/blog/1594806
 
 
+## MobileIMSDK 一个专为移动端开发的原创即时通讯框架
+https://github.com/JackJiang2011/MobileIMSDK
+
 
 极光推送
 个推
